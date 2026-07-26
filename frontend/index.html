@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Data Analyst — 智能运营分析平台</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --primary: #4f6ef7;
+    --text: #2c3e50;
+    --text-secondary: #7f8c9b;
+    --border: #e8ecf1;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    --radius: 12px;
+    --success: #27ae60;
+    --warning: #f39c12;
+    --danger: #e74c3c;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ---- Header ---- */
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff;
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .header .badge {
+    background: rgba(255,255,255,0.15);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #a0b4f0;
+  }
+
+  /* ---- Query Bar ---- */
+  .query-bar {
+    max-width: 1200px;
+    margin: -20px auto 0;
+    padding: 0 24px;
+    position: relative;
+    z-index: 10;
+  }
+  .query-bar form {
+    display: flex;
+    gap: 12px;
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .query-bar input {
+    flex: 1;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .query-bar input:focus {
+    border-color: var(--primary);
+  }
+  .query-bar button {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .query-bar button:hover { background: #3d5bd9; }
+  .query-bar button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .quick-links {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .quick-links a {
+    font-size: 13px;
+    color: var(--primary);
+    text-decoration: none;
+    padding: 4px 12px;
+    background: rgba(79,110,247,0.08);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .quick-links a:hover { background: rgba(79,110,247,0.16); }
+
+  /* ---- Main Layout ---- */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+  .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 28px 0 16px;
+    padding-left: 12px;
+    border-left: 3px solid var(--primary);
+  }
+
+  /* ---- Status Cards ---- */
+  .status-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .status-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .status-card .label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  .status-card .value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .status-card .value.green { color: var(--success); }
+  .status-card .value.yellow { color: var(--warning); }
+  .status-card .value.red { color: var(--danger); }
+
+  /* ---- Chart Grid ---- */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 20px;
+  }
+  .chart-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .chart-card .chart-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .chart-container {
+    width: 100%;
+    height: 360px;
+  }
+  .chart-container.tall { height: 420px; }
+
+  /* ---- Report ---- */
+  .report-box {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+    line-height: 1.8;
+    font-size: 15px;
+  }
+  .report-box h2 { font-size: 18px; margin: 24px 0 12px; color: #1a1a2e; }
+  .report-box h3 { font-size: 16px; margin: 18px 0 8px; color: #333; }
+  .report-box ul, .report-box ol { padding-left: 22px; margin: 8px 0; }
+  .report-box li { margin: 4px 0; }
+  .report-box strong { color: var(--primary); }
+  .report-box table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12px 0;
+  }
+  .report-box th, .report-box td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 14px;
+  }
+  .report-box th { background: #f8f9fb; font-weight: 600; }
+
+  /* ---- Loading ---- */
+  .loading {
+    text-align: center;
+    padding: 60px;
+    color: var(--text-secondary);
+  }
+  .loading .spinner {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-secondary);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+
+  /* ---- Error ---- */
+  .error-bar {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: var(--danger);
+    border-radius: var(--radius);
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 768px) {
+    .header { padding: 20px; }
+    .query-bar form { flex-direction: column; }
+    .chart-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div>
+    <h1>📊 AI Data Analyst — 智能运营分析平台</h1>
+    <div style="margin-top:6px;font-size:13px;color:#8892b0;">
+      基于 LangGraph 的多智能体协同 · Text2SQL · RFM · XGBoost · Prophet
+    </div>
+  </div>
+  <span class="badge" id="healthBadge">● 检测中...</span>
+</div>
+
+<!-- Query Bar -->
+<div class="query-bar">
+  <form id="queryForm">
+    <input type="text" id="queryInput"
+           placeholder="输入你的问题，例如：分析客户价值并预测流失风险，生成综合报告"
+           value="对客户做 RFM 分析和流失预测，生成综合经营报告">
+    <button type="submit" id="submitBtn">🚀 开始分析</button>
+  </form>
+  <div class="quick-links">
+    <span style="font-size:13px;color:var(--text-secondary);padding:4px 0;">快速提问：</span>
+    <a onclick="quickQuery('查询中国区GMV最高的10个客户')">中国区GMV Top10</a>
+    <a onclick="quickQuery('各品类的营收分布和退货率')">品类营收与退货</a>
+    <a onclick="quickQuery('对客户做 RFM 分析和流失预测，生成综合经营报告')">RFM+流失+报告</a>
+    <a onclick="quickQuery('预测未来6个月的销售趋势')">销售趋势预测</a>
+    <a onclick="quickQuery('分析客户价值并进行客户聚类')">客户聚类分析</a>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main" id="mainContent">
+  <div class="empty-state">
+    <div class="icon">🔍</div>
+    <div style="font-size:18px;font-weight:600;margin-bottom:8px;">输入你的分析问题开始探索</div>
+    <div style="font-size:14px;">支持自然语言查询数据库、客户分析、流失预测、经营报告等功能</div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 全局状态
+// ============================================================
+const API = '/query';
+let chartInstances = {};
+
+// ============================================================
+// 初始化
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  checkHealth();
+  document.getElementById('queryForm').addEventListener('submit', handleQuery);
+});
+
+async function checkHealth() {
+  try {
+    const res = await fetch('/health');
+    const data = await res.json();
+    const badge = document.getElementById('healthBadge');
+    if (data.status === 'ok') {
+      badge.innerHTML = '● 系统就绪';
+      badge.style.color = '#4ade80';
+    } else {
+      badge.innerHTML = '● 部分降级';
+      badge.style.color = '#fbbf24';
+    }
+  } catch(e) {
+    document.getElementById('healthBadge').innerHTML = '● 连接失败';
+    document.getElementById('healthBadge').style.color = '#f87171';
+  }
+}
+
+// ============================================================
+// 查询处理
+// ============================================================
+async function handleQuery(e) {
+  e.preventDefault();
+  const input = document.getElementById('queryInput');
+  const btn = document.getElementById('submitBtn');
+  const query = input.value.trim();
+  if (!query) return;
+
+  btn.disabled = true;
+  btn.textContent = '⏳ 分析中...';
+  showLoading();
+
+  try {
+    const res = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: query }),
+    });
+    const data = await res.json();
+    renderResults(data);
+  } catch(err) {
+    showError('请求失败: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 开始分析';
+  }
+}
+
+function quickQuery(text) {
+  document.getElementById('queryInput').value = text;
+  document.getElementById('queryForm').dispatchEvent(new Event('submit'));
+}
+
+// ============================================================
+// 渲染结果
+// ============================================================
+function showLoading() {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <div>正在调用多智能体链路分析数据...</div>
+    </div>`;
+}
+
+function showError(msg) {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="error-bar">⚠ ${msg}</div>
+    <div class="empty-state"><div class="icon">🔄</div><div>请重试或检查后端日志</div></div>`;
+}
+
+function renderResults(data) {
+  destroyAllCharts();
+  let html = '';
+
+  // 错误
+  if (data.error) {
+    html += `<div class="error-bar">⚠ ${escapeHtml(data.error)}</div>`;
+  }
+
+  // 状态卡片
+  html += renderStatusCards(data);
+
+  // 治理结果
+  if (data.governance_result && data.governance_result.quality_score) {
+    html += renderGovernance(data.governance_result);
+  }
+
+  // 报告
+  if (data.report) {
+    html += `<div class="section-title">📝 经营洞察报告</div>`;
+    html += `<div class="report-box">${markdownToHtml(data.report)}</div>`;
+  }
+
+  // 图表
+  if (data.charts && data.charts.length > 0) {
+    html += `<div class="section-title">📈 数据可视化</div>`;
+    html += `<div class="chart-grid">`;
+    data.charts.forEach((chart, i) => {
+      const chartId = `chart_${chart.id || i}`;
+      const heightClass = (chart.type === 'line' && chart.id === 'sales_forecast') ? 'tall' : '';
+      html += `
+        <div class="chart-card">
+          <div class="chart-title">${escapeHtml(chart.title)}</div>
+          <div class="chart-container ${heightClass}" id="${chartId}"></div>
+        </div>`;
+    });
+    html += `</div>`;
+
+    // 延迟渲染图表（等 DOM 就绪）
+    setTimeout(() => {
+      data.charts.forEach((chart, i) => {
+        const chartId = `chart_${chart.id || i}`;
+        renderChart(chartId, chart);
+      });
+    }, 100);
+  }
+
+  // SQL 展示
+  if (data.sql) {
+    html += `<div class="section-title">🔧 生成的 SQL</div>`;
+    html += `<div class="report-box"><pre style="background:#f8f9fb;padding:16px;border-radius:8px;overflow-x:auto;font-size:13px;">${escapeHtml(data.sql)}</pre></div>`;
+  }
+
+  // 无内容
+  if (!data.report && (!data.charts || data.charts.length === 0) && !data.error) {
+    html += `<div class="empty-state"><div class="icon">✅</div><div>查询完成，但无可视化输出</div></div>`;
+  }
+
+  document.getElementById('mainContent').innerHTML = html;
+}
+
+// ============================================================
+// 状态卡片
+// ============================================================
+function renderStatusCards(data) {
+  const intent = data.intent || '未知';
+  const gov = data.governance_result || {};
+  const score = gov.overall ? gov.overall.score : null;
+  const scoreClass = score >= 80 ? 'green' : score >= 60 ? 'yellow' : 'red';
+
+  let cards = `<div class="status-row">`;
+  cards += `<div class="status-card"><div class="label">意图识别</div><div class="value" style="font-size:20px;">${intentLabel(intent)}</div></div>`;
+
+  if (score !== null) {
+    cards += `<div class="status-card"><div class="label">数据质量评分</div><div class="value ${scoreClass}">${score}/100</div></div>`;
+  }
+
+  const analysis = data.analysis_result || {};
+  const metrics = analysis.metrics || {};
+  if (metrics.gmv_usd) {
+    cards += `<div class="status-card"><div class="label">GMV</div><div class="value" style="font-size:20px;">$${(metrics.gmv_usd/1000000).toFixed(2)}M</div></div>`;
+  }
+  if (metrics.churn_rate !== undefined) {
+    cards += `<div class="status-card"><div class="label">流失率</div><div class="value ${metrics.churn_rate > 0.1 ? 'yellow' : 'green'}" style="font-size:20px;">${(metrics.churn_rate*100).toFixed(1)}%</div></div>`;
+  }
+
+  const pred = data.prediction_result || {};
+  const churn = pred.churn || {};
+  if (churn.auc) {
+    cards += `<div class="status-card"><div class="label">流失预测 AUC</div><div class="value" style="font-size:20px;">${churn.auc}</div></div>`;
+  }
+  const sales = pred.sales || {};
+  if (sales.mape_pct !== undefined) {
+    cards += `<div class="status-card"><div class="label">销售预测 MAPE</div><div class="value" style="font-size:20px;">${sales.mape_pct}%</div></div>`;
+  }
+
+  cards += `</div>`;
+  return cards;
+}
+
+function intentLabel(intent) {
+  const map = {
+    'sql_query': '🔍 数据查询',
+    'analysis': '📊 数据分析',
+    'prediction': '🔮 预测分析',
+    'mixed': '📋 综合分析',
+  };
+  return map[intent] || intent;
+}
+
+// ============================================================
+// 数据治理
+// ============================================================
+function renderGovernance(gov) {
+  let html = `<div class="section-title">🛡 数据质量评估</div>`;
+  html += `<div class="report-box" style="padding:16px 24px;">`;
+  html += `<strong>评分:</strong> ${gov.quality_score} | `;
+  html += `<strong>评估行数:</strong> ${gov.row_count || 0} | `;
+  html += `<strong>字段数:</strong> ${gov.column_count || 0}`;
+
+  const warnings = gov.warnings || [];
+  if (warnings.length > 0) {
+    html += `<ul style="margin-top:8px;">`;
+    warnings.forEach(w => {
+      html += `<li style="color:var(--warning);">⚠ ${escapeHtml(w)}</li>`;
+    });
+    html += `</ul>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+// ============================================================
+// 图表渲染
+// ============================================================
+function renderChart(domId, chartDef) {
+  const dom = document.getElementById(domId);
+  if (!dom) return;
+
+  const chart = echarts.init(dom);
+  chartInstances[domId] = chart;
+
+  // 如果是 dashboard 类型（KPI），使用特殊渲染
+  if (chartDef.type === 'dashboard') {
+    renderKpiDashboard(dom, chartDef);
+    return;
+  }
+
+  // 基础 option + 自定义
+  const baseOption = {
+    tooltip: { trigger: chartDef.type === 'pie' ? 'item' : 'axis' },
+    legend: { bottom: 0, textStyle: { fontSize: 12 } },
+    grid: { left: '3%', right: '4%', bottom: '15%', containLabel: true },
+  };
+
+  const option = Object.assign({}, baseOption, chartDef.option || {});
+
+  // 饼图默认居中
+  if (chartDef.type === 'pie') {
+    option.legend = option.legend || {};
+    option.legend.orient = 'vertical';
+    option.legend.left = 'left';
+    option.legend.top = 'center';
+    option.grid = undefined;
+  }
+
+  // 颜色主题
+  const colors = ['#4f6ef7', '#36cfc9', '#b37feb', '#ffc53d', '#ff7a45', '#52c41a', '#f759ab', '#597ef7'];
+  option.color = option.color || colors;
+
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+}
+
+function renderKpiDashboard(dom, chartDef) {
+  const data = chartDef.option || {};
+  const gmv = (data.gmv_usd / 1000000).toFixed(2);
+  const aov = data.avg_order_value_usd ? data.avg_order_value_usd.toFixed(2) : '-';
+  const repeat = data.repeat_purchase_rate ? (data.repeat_purchase_rate * 100).toFixed(1) + '%' : '-';
+  const churn = data.churn_rate ? (data.churn_rate * 100).toFixed(1) + '%' : '-';
+
+  dom.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px;">
+      <div style="text-align:center;">
+        <div style="font-size:32px;font-weight:700;color:#4f6ef7;">$${gmv}M</div>
+        <div style="font-size:13px;color:#7f8c9b;">总 GMV</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:32px;font-weight:700;color:#36cfc9;">$${aov}</div>
+        <div style="font-size:13px;color:#7f8c9b;">客单价</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:32px;font-weight:700;color:#b37feb;">${repeat}</div>
+        <div style="font-size:13px;color:#7f8c9b;">复购率</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:32px;font-weight:700;color:#ff7a45;">${churn}</div>
+        <div style="font-size:13px;color:#7f8c9b;">流失率</div>
+      </div>
+    </div>`;
+}
+
+function destroyAllCharts() {
+  Object.values(chartInstances).forEach(c => c.dispose());
+  chartInstances = {};
+}
+
+// ============================================================
+// 简易 Markdown → HTML
+// ============================================================
+function markdownToHtml(md) {
+  if (!md) return '';
+  let html = md;
+
+  // 标题
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^# (.+)$/gm, '<h2>$1</h2>');
+
+  // 粗体
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+  // 列表
+  html = html.replace(/^  - (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
+
+  // 编号列表
+  html = html.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
+
+  // 段落
+  html = html.replace(/\n\n/g, '</p><p>');
+  html = '<p>' + html + '</p>';
+
+  // 清理空标签
+  html = html.replace(/<p>\s*<\/p>/g, '');
+  html = html.replace(/<p><h/g, '<h');
+  html = html.replace(/<\/h\d><\/p>/g, '</h$1>');
+  html = html.replace(/<p><ul>/g, '<ul>');
+  html = html.replace(/<\/ul><\/p>/g, '</ul>');
+
+  return html;
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>

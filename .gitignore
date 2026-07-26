@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# 虚拟环境
+venv/
+.venv/
+env/
+
+# 环境变量（含 API Key）
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 数据文件
+data/raw/*.csv
+data/processed/*
+# 保留评估报告（论文证据）和 injection_report
+!data/processed/eval_*.json
+!data/processed/evaluation_summary.json
+!data/processed/injection_report.json
+!data/raw/injection_report.json
+!data/processed/.gitkeep
+
+# ChromaDB 持久化
+data/chromadb/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Docker
+mysql_data/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code local settings
+.claude/
+
+# API key 文件
+api key.txt
+
+# 日志
+*.log

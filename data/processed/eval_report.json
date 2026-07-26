@@ -1,0 +1,282 @@
+{
+  "summary": {
+    "total": 5,
+    "generated": 5,
+    "avg_char_count": 4706,
+    "avg_structure_completeness": 100.0,
+    "judge_scores": {
+      "completeness": {
+        "mean": 7.8,
+        "min": 7,
+        "max": 9,
+        "count": 5
+      },
+      "insightfulness": {
+        "mean": 8.4,
+        "min": 8,
+        "max": 9,
+        "count": 5
+      },
+      "actionability": {
+        "mean": 8.4,
+        "min": 8,
+        "max": 9,
+        "count": 5
+      },
+      "readability": {
+        "mean": 9.0,
+        "min": 9,
+        "max": 9,
+        "count": 5
+      },
+      "data_accuracy": {
+        "mean": 7.2,
+        "min": 6,
+        "max": 8,
+        "count": 5
+      }
+    }
+  },
+  "details": [
+    {
+      "id": "R1",
+      "query": "分析客户价值并预测流失风险，生成综合经营报告",
+      "report_length": 4745,
+      "structure": {
+        "total_expected": 6,
+        "found_count": 6,
+        "found_sections": [
+          "核心发现",
+          "客户价值分析",
+          "运营绩效",
+          "预测预警",
+          "策略建议",
+          "数据质量"
+        ],
+        "missing_sections": [],
+        "completeness_pct": 100.0
+      },
+      "heuristics": {
+        "char_count": 4745,
+        "paragraph_count": 36,
+        "suggestion_count": 23,
+        "number_mentions": 159,
+        "too_short": false,
+        "too_long": false,
+        "has_numbers": true
+      },
+      "judge_scores": {
+        "completeness": 8,
+        "insightfulness": 8,
+        "actionability": 9,
+        "readability": 9,
+        "data_accuracy": 7,
+        "overall_comment": "报告结构清晰、洞察深入、建议可执行性强，但数据引用存在少量不一致，且部分分析深度可进一步提升。",
+        "strengths": [
+          "结构完整，从核心发现到策略建议层层递进，逻辑清晰",
+          "洞察深刻，能解释数据背后的业务含义，如复购率与流失率的关联分析",
+          "策略建议具体可落地，包含量化预期效果，如提升复购率至40%以上",
+          "可读性高，语言流畅，适合管理层阅读"
+        ],
+        "weaknesses": [
+          "数据引用存在不一致，如核心发现中高价值客户占比22.9%，但后文未明确对应RFM分段中的哪个群体",
+          "部分分析深度不足，如K-Means聚类效果一般（轮廓系数0.20），但未深入探讨原因或替代方案",
+          "报告末尾被截断，customer_rating缺失率问题未完整展开"
+        ]
+      },
+      "error": null
+    },
+    {
+      "id": "R2",
+      "query": "对当前经营状况做全面诊断，给出改善建议",
+      "report_length": 4540,
+      "structure": {
+        "total_expected": 6,
+        "found_count": 6,
+        "found_sections": [
+          "核心发现",
+          "客户价值分析",
+          "运营绩效",
+          "预测预警",
+          "策略建议",
+          "数据质量"
+        ],
+        "missing_sections": [],
+        "completeness_pct": 100.0
+      },
+      "heuristics": {
+        "char_count": 4540,
+        "paragraph_count": 36,
+        "suggestion_count": 27,
+        "number_mentions": 131,
+        "too_short": false,
+        "too_long": false,
+        "has_numbers": true
+      },
+      "judge_scores": {
+        "completeness": 7,
+        "insightfulness": 8,
+        "actionability": 8,
+        "readability": 9,
+        "data_accuracy": 8,
+        "overall_comment": "报告结构清晰，洞察深入，建议具体，但部分数据引用与输入数据存在不一致，且对缺失数据的处理略显不足。",
+        "strengths": [
+          "报告结构清晰，逻辑性强，适合管理层阅读。",
+          "对客户价值分析深入，指出了‘哑铃型’结构和复购率短板。",
+          "策略建议具体、可落地，并给出了量化预期效果。",
+          "对模型可信度进行了明确标注，体现了严谨性。"
+        ],
+        "weaknesses": [
+          "数据引用存在不一致：输入数据中GMV为$3,250,000，但报告未明确说明来源；复购率35%与输入数据一致，但流失率9%未在输入数据中明确给出。",
+          "部分分析（如K-Means聚类）因数据质量低而参考价值有限，但报告仍占用较多篇幅。",
+          "对品类和会员分析的数据缺失问题，建议补充分析，但未给出具体的数据采集或修复方案。"
+        ]
+      },
+      "error": null
+    },
+    {
+      "id": "R3",
+      "query": "做客户流失分析并预测未来销售趋势，输出详细报告",
+      "report_length": 4611,
+      "structure": {
+        "total_expected": 6,
+        "found_count": 6,
+        "found_sections": [
+          "核心发现",
+          "客户价值分析",
+          "运营绩效",
+          "预测预警",
+          "策略建议",
+          "数据质量"
+        ],
+        "missing_sections": [],
+        "completeness_pct": 100.0
+      },
+      "heuristics": {
+        "char_count": 4611,
+        "paragraph_count": 22,
+        "suggestion_count": 17,
+        "number_mentions": 115,
+        "too_short": false,
+        "too_long": false,
+        "has_numbers": true
+      },
+      "judge_scores": {
+        "completeness": 9,
+        "insightfulness": 9,
+        "actionability": 9,
+        "readability": 9,
+        "data_accuracy": 8,
+        "overall_comment": "报告结构完整、洞察深刻，策略建议具体可执行，但数据引用存在少量不一致，且部分分析深度可进一步挖掘。",
+        "strengths": [
+          "核心发现摘要清晰，按可信度分级，便于管理层快速把握重点",
+          "客户价值分析结合RFM和聚类，深入解读了客户结构失衡问题",
+          "策略建议按优先级排序，并给出了量化预期效果，可执行性强",
+          "对模型局限性（如轮廓系数、AUC、MAPE）进行了诚实评估，增强了报告可信度"
+        ],
+        "weaknesses": [
+          "数据引用存在不一致：报告提到流失率9.0%，但策略建议中又说当前流失率9%已是不小的数字，前后表述略有矛盾",
+          "部分分析（如会员等级分布）指出数据缺失，但未提供替代方案或进一步建议",
+          "报告未提及用户原始问题中的‘预测未来销售趋势’的具体数值预测（如各月预测值），仅给出了趋势描述"
+        ]
+      },
+      "error": null
+    },
+    {
+      "id": "R4",
+      "query": "综合评估客户生命周期价值，给出提升复购率的策略报告",
+      "report_length": 4671,
+      "structure": {
+        "total_expected": 6,
+        "found_count": 6,
+        "found_sections": [
+          "核心发现",
+          "客户价值分析",
+          "运营绩效",
+          "预测预警",
+          "策略建议",
+          "数据质量"
+        ],
+        "missing_sections": [],
+        "completeness_pct": 100.0
+      },
+      "heuristics": {
+        "char_count": 4671,
+        "paragraph_count": 25,
+        "suggestion_count": 23,
+        "number_mentions": 111,
+        "too_short": false,
+        "too_long": false,
+        "has_numbers": true
+      },
+      "judge_scores": {
+        "completeness": 7,
+        "insightfulness": 8,
+        "actionability": 8,
+        "readability": 9,
+        "data_accuracy": 6,
+        "overall_comment": "报告结构清晰、洞察深入，策略建议具体且可执行，但数据引用存在多处不一致和编造问题，影响了整体可信度。",
+        "strengths": [
+          "报告结构完整，从核心发现到策略建议层层递进，逻辑清晰",
+          "洞察深度较好，如对‘哑铃型’客户结构和‘高流失+低复购’组合的解读，揭示了业务本质",
+          "策略建议具体且按优先级排序，包含量化预期效果，可执行性强",
+          "可读性优秀，语言流畅，适合管理层阅读"
+        ],
+        "weaknesses": [
+          "数据引用准确性差：报告中的GMV（$3,250,000）、平均客单价（$130.50）、复购率（35%）、流失率（9%）等关键数字与用户问题中未提供的数据不一致，属于编造",
+          "完整性不足：用户问题要求‘综合评估客户生命周期价值’，但报告未给出LTV的具体数值或计算，也未分析客户获取成本（CAC）等关键指标",
+          "部分分析基于未提供的数据（如会员等级分布、月度营收趋势），导致结论缺乏支撑"
+        ]
+      },
+      "error": null
+    },
+    {
+      "id": "R5",
+      "query": "生成一份包含客户分群、运营指标和未来预测的完整经营分析报告",
+      "report_length": 4965,
+      "structure": {
+        "total_expected": 6,
+        "found_count": 6,
+        "found_sections": [
+          "核心发现",
+          "客户价值分析",
+          "运营绩效",
+          "预测预警",
+          "策略建议",
+          "数据质量"
+        ],
+        "missing_sections": [],
+        "completeness_pct": 100.0
+      },
+      "heuristics": {
+        "char_count": 4965,
+        "paragraph_count": 32,
+        "suggestion_count": 27,
+        "number_mentions": 109,
+        "too_short": false,
+        "too_long": false,
+        "has_numbers": true
+      },
+      "judge_scores": {
+        "completeness": 8,
+        "insightfulness": 9,
+        "actionability": 8,
+        "readability": 9,
+        "data_accuracy": 7,
+        "overall_comment": "报告结构清晰、洞察深刻，策略建议具体且可执行，但在数据引用准确性和部分维度覆盖上存在不足。",
+        "strengths": [
+          "核心发现摘要高度凝练，直接点出关键问题，适合管理层快速决策",
+          "对客户分群和流失预警模型的局限性进行了诚实解读，避免了过度依赖",
+          "策略建议按优先级排序，并给出了量化预期效果，可执行性强",
+          "语言流畅，结构层次分明，可读性优秀"
+        ],
+        "weaknesses": [
+          "报告中多次提到数据未提供（如品类收入分布、会员等级分布），影响了完整性",
+          "部分数据引用与用户输入不一致（如用户输入中复购率为35%，但报告未明确说明数据来源），且未提供原始数据验证",
+          "K-Means聚类解读部分因轮廓系数低而建议谨慎使用，但未给出替代方案或交叉验证方法"
+        ]
+      },
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+# ============================================================
+# 核心依赖
+# ============================================================
+
+# LangGraph / LangChain（多智能体编排）
+langgraph>=0.2.0
+langchain>=0.3.0
+langchain-core>=0.3.0
+
+# LLM（DeepSeek-V3，兼容 OpenAI API）
+openai>=1.50.0
+
+# 数据库
+sqlalchemy>=2.0
+pymysql>=1.1
+chromadb>=0.5.0
+
+# Embedding（BAAI/bge-small-zh，本地运行）
+sentence-transformers>=3.0
+
+# 数据处理
+pandas>=2.2
+numpy>=1.26
+
+# 机器学习与预测
+scikit-learn>=1.5
+xgboost>=2.1
+prophet>=1.1
+
+# Web 框架
+fastapi>=0.115
+uvicorn>=0.30
+
+# 环境变量
+python-dotenv>=1.0
+
+# SQL 解析（安全校验）
+sqlparse>=0.5
+
+# 日期处理
+python-dateutil>=2.9

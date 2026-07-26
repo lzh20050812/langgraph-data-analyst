@@ -1,0 +1,103 @@
+{
+  "generated_at": "2026-07-26T23:17:09.336691",
+  "project": "AI Data Analyst — 多智能体企业智能运营分析平台",
+  "sections": {
+    "schema_agent": {
+      "top5_hit_rate": 0.95,
+      "pure_chromadb_top5": "N/A",
+      "llm_rerank_hard_recall": "N/A",
+      "test_count": "N/A"
+    },
+    "sql_agent": {
+      "total_queries": 25,
+      "unsolvable_count": 1,
+      "first_try_success_rate_all": 0.92,
+      "after_retry_success_rate_all": 0.92,
+      "retry_improvement": 0.0,
+      "solvable_first_try_success_rate": 0.958,
+      "solvable_after_retry_success_rate": 0.958,
+      "retries_fixed": 0,
+      "safety_rejections": 0,
+      "by_difficulty": {
+        "easy": {
+          "count": 8,
+          "generated": 8,
+          "first_try_success": 8,
+          "after_retry_success": 8,
+          "first_try_rate": 1.0,
+          "after_retry_rate": 1.0
+        },
+        "medium": {
+          "count": 8,
+          "generated": 8,
+          "first_try_success": 8,
+          "after_retry_success": 8,
+          "first_try_rate": 1.0,
+          "after_retry_rate": 1.0
+        },
+        "hard": {
+          "count": 8,
+          "generated": 8,
+          "first_try_success": 7,
+          "after_retry_success": 7,
+          "first_try_rate": 0.875,
+          "after_retry_rate": 0.875
+        }
+      }
+    },
+    "prediction_agent": {
+      "churn": {
+        "model": "XGBoost",
+        "auc": 0.6926,
+        "positive_rate": 0.0897,
+        "recall_optimal": 0.4471,
+        "precision_optimal": 0.2754,
+        "f1_optimal": 0.3408,
+        "optimal_threshold": 0.4825,
+        "train_samples": 5700,
+        "test_samples": 1900
+      },
+      "sales": {
+        "model": "Prophet",
+        "rmse": 6584.95,
+        "mape_pct": 15.65,
+        "mae": 5837.82,
+        "train_periods": 69,
+        "test_periods": 6
+      }
+    },
+    "report_agent": {
+      "total_tests": 5,
+      "generated": 5,
+      "avg_char_count": 4706,
+      "avg_structure_completeness_pct": 100.0,
+      "llm_judge": {
+        "completeness": {
+          "mean": 7.8,
+          "min": 7,
+          "max": 9
+        },
+        "insightfulness": {
+          "mean": 8.4,
+          "min": 8,
+          "max": 9
+        },
+        "actionability": {
+          "mean": 8.4,
+          "min": 8,
+          "max": 9
+        },
+        "readability": {
+          "mean": 9.0,
+          "min": 9,
+          "max": 9
+        },
+        "data_accuracy": {
+          "mean": 7.2,
+          "min": 6,
+          "max": 8
+        }
+      }
+    }
+  }
+}

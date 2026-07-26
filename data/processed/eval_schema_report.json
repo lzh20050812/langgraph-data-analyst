@@ -1,0 +1,471 @@
+{
+  "summary": {
+    "total_queries": 20,
+    "top_k": 10,
+    "top1_hit_rate": 0.75,
+    "top3_hit_rate": 0.9,
+    "top5_hit_rate": 0.95,
+    "avg_table_recall": 1.0,
+    "by_difficulty": {
+      "easy": {
+        "count": 6,
+        "avg_field_recall": 0.861,
+        "avg_table_recall": 1.0
+      },
+      "medium": {
+        "count": 8,
+        "avg_field_recall": 0.792,
+        "avg_table_recall": 1.0
+      },
+      "hard": {
+        "count": 6,
+        "avg_field_recall": 0.514,
+        "avg_table_recall": 1.0
+      }
+    }
+  },
+  "details": [
+    {
+      "id": 1,
+      "query": "中国区GMV最高的前10个客户是谁",
+      "difficulty": "easy",
+      "expected_tables": [
+        "customers"
+      ],
+      "retrieved_tables": [
+        "orders",
+        "customers",
+        "monthly_revenue"
+      ],
+      "field_recall": 1.0,
+      "table_recall": 1.0,
+      "hits": [
+        "customers.total_spend_usd",
+        "customers.customer_id",
+        "customers.country"
+      ],
+      "misses": []
+    },
+    {
+      "id": 2,
+      "query": "各个国家的客户数量分布",
+      "difficulty": "easy",
+      "expected_tables": [
+        "customers"
+      ],
+      "retrieved_tables": [
+        "product_summary",
+        "orders",
+        "customers",
+        "monthly_revenue"
+      ],
+      "field_recall": 1.0,
+      "table_recall": 1.0,
+      "hits": [
+        "customers.customer_id",
+        "customers.country"
+      ],
+      "misses": []
+    },
+    {
+      "id": 3,
+      "query": "已流失的客户有哪些",
+      "difficulty": "easy",
+      "expected_tables": [
+        "customers"
+      ],
+      "retrieved_tables": [
+        "orders",
+        "customers",
+        "monthly_revenue"
+      ],
+      "field_recall": 1.0,
+      "table_recall": 1.0,
+      "hits": [
+        "customers.customer_id",
+        "customers.churned"
+      ],
+      "misses": []
+    },
+    {
+      "id": 4,
+      "query": "Gold会员的平均消费金额是多少",
+      "difficulty": "easy",
+      "expected_tables": [
+        "customers"
+      ],
+      "retrieved_tables": [
+        "orders",
+        "customers",
+        "monthly_revenue"
+      ],
+      "field_recall": 1.0,
+      "table_recall": 1.0,
+      "hits": [
+        "customers.total_spend_usd",
+        "customers.membership_tier"
+      ],
+      "misses": []
+    },
+    {
+      "id": 5,
+      "query": "每个品类的商品数量统计",
+      "difficulty": "easy",
+      "expected_tables": [
+        "product_summary",
+        "orders"
+      ],
+      "retrieved_tables": [
+        "product_summary",
+        "orders",
+        "customers"
+      ],
+      "field_recall": 0.5,
+      "table_recall": 1.0,
+      "hits": [
+        "orders.category"
+      ],
+      "misses": [
+        "product_summary.category"
+      ]
+    },
+    {
+      "id": 6,
+      "query": "上个月订单量最多的5个商品是什么",
+      "difficulty": "medium",
+      "expected_tables": [
+        "orders"
+      ],
+      "retrieved_tables": [
+        "customers",
+        "product_summary",
+        "orders",
+        "monthly_revenue"
+      ],
+      "field_recall": 0.667,
+      "table_recall": 1.0,
+      "hits": [
+        "orders.order_id",
+        "orders.product_name"
+      ],
+      "misses": [
+        "orders.order_date"
+      ]
+    },
+    {
+      "id": 7,
+      "query": "各会员等级的平均客单价对比",
+      "difficulty": "medium",
+      "expected_tables": [
+        "customers"
+      ],
+      "retrieved_tables": [
+        "orders",
+        "monthly_revenue",
+        "customers"
+      ],
+      "field_recall": 1.0,
+      "table_recall": 1.0,
+      "hits": [
+        "customers.avg_order_value_usd",
+        "customers.membership_tier"
+      ],
+      "misses": []
+    },
+    {
+      "id": 8,
+      "query": "通过社交媒体渠道获客的客户平均退货率",
+      "difficulty": "medium",
+      "expected_tables": [
+        "customers"
+      ],
+      "retrieved_tables": [
+        "product_summary",
+        "orders",
+        "customers",
+        "monthly_revenue"
+      ],
+      "field_recall": 1.0,
+      "table_recall": 1.0,
+      "hits": [
+        "customers.acquisition_channel",
+        "customers.returns_made"
+      ],
+      "misses": []
+    },
+    {
+      "id": 9,
+      "query": "2025年Q4的总营收是多少",
+      "difficulty": "medium",
+      "expected_tables": [
+        "monthly_revenue"
+      ],
+      "retrieved_tables": [
+        "product_summary",
+        "orders",
+        "monthly_revenue",
+        "customers"
+      ],
+      "field_recall": 0.333,
+      "table_recall": 1.0,
+      "hits": [
+        "monthly_revenue.revenue_usd"
+      ],
+      "misses": [
+        "monthly_revenue.year",
+        "monthly_revenue.quarter"
+      ]
+    },
+    {
+      "id": 10,
+      "query": "各个国家每月的新增客户趋势",
+      "difficulty": "medium",
+      "expected_tables": [
+        "customers",
+        "monthly_revenue"
+      ],
+      "retrieved_tables": [
+        "orders",
+        "monthly_revenue",
+        "customers"
+      ],
+      "field_recall": 0.667,
+      "table_recall": 1.0,
+      "hits": [
+        "monthly_revenue.new_customers",
+        "customers.country"
+      ],
+      "misses": [
+        "customers.registration_date"
+      ]
+    },
+    {
+      "id": 11,
+      "query": "复购率最高的品类中，客单价超过100美元的产品有哪些",
+      "difficulty": "hard",
+      "expected_tables": [
+        "product_summary",
+        "orders"
+      ],
+      "retrieved_tables": [
+        "product_summary",
+        "orders",
+        "customers"
+      ],
+      "field_recall": 0.25,
+      "table_recall": 1.0,
+      "hits": [
+        "orders.is_repeat_customer"
+      ],
+      "misses": [
+        "orders.category",
+        "product_summary.avg_price",
+        "product_summary.product_name"
+      ]
+    },
+    {
+      "id": 12,
+      "query": "最近30天内有购买但之前已流失的客户名单",
+      "difficulty": "hard",
+      "expected_tables": [
+        "orders",
+        "customers"
+      ],
+      "retrieved_tables": [
+        "orders",
+        "customers"
+      ],
+      "field_recall": 0.667,
+      "table_recall": 1.0,
+      "hits": [
+        "customers.customer_id",
+        "customers.churned"
+      ],
+      "misses": [
+        "orders.order_date"
+      ]
+    },
+    {
+      "id": 13,
+      "query": "使用移动端下单且配送天数超过5天的订单退货率",
+      "difficulty": "hard",
+      "expected_tables": [
+        "orders"
+      ],
+      "retrieved_tables": [
+        "monthly_revenue",
+        "product_summary",
+        "orders",
+        "customers"
+      ],
+      "field_recall": 0.667,
+      "table_recall": 1.0,
+      "hits": [
+        "orders.device_used",
+        "orders.delivery_days"
+      ],
+      "misses": [
+        "orders.returned"
+      ]
+    },
+    {
+      "id": 14,
+      "query": "客单价Top20%的客户的共同特征是什么",
+      "difficulty": "hard",
+      "expected_tables": [
+        "customers"
+      ],
+      "retrieved_tables": [
+        "orders",
+        "customers",
+        "monthly_revenue"
+      ],
+      "field_recall": 0.25,
+      "table_recall": 1.0,
+      "hits": [
+        "customers.avg_order_value_usd"
+      ],
+      "misses": [
+        "customers.preferred_category",
+        "customers.preferred_device",
+        "customers.membership_tier"
+      ]
+    },
+    {
+      "id": 15,
+      "query": "折扣力度最大的月份对应的营收和退货率变化",
+      "difficulty": "hard",
+      "expected_tables": [
+        "monthly_revenue"
+      ],
+      "retrieved_tables": [
+        "product_summary",
+        "orders",
+        "monthly_revenue"
+      ],
+      "field_recall": 0.75,
+      "table_recall": 1.0,
+      "hits": [
+        "monthly_revenue.return_rate",
+        "monthly_revenue.revenue_usd",
+        "monthly_revenue.avg_discount_pct"
+      ],
+      "misses": [
+        "monthly_revenue.month"
+      ]
+    },
+    {
+      "id": 16,
+      "query": "哪个品类的GMV最大",
+      "difficulty": "easy",
+      "expected_tables": [
+        "product_summary",
+        "orders"
+      ],
+      "retrieved_tables": [
+        "product_summary",
+        "orders",
+        "customers",
+        "monthly_revenue"
+      ],
+      "field_recall": 0.667,
+      "table_recall": 1.0,
+      "hits": [
+        "orders.category",
+        "product_summary.total_revenue_usd"
+      ],
+      "misses": [
+        "orders.subtotal_usd"
+      ]
+    },
+    {
+      "id": 17,
+      "query": "各渠道的获客成本对比（用客单价衡量）",
+      "difficulty": "medium",
+      "expected_tables": [
+        "customers"
+      ],
+      "retrieved_tables": [
+        "product_summary",
+        "orders",
+        "customers",
+        "monthly_revenue"
+      ],
+      "field_recall": 1.0,
+      "table_recall": 1.0,
+      "hits": [
+        "customers.avg_order_value_usd",
+        "customers.acquisition_channel"
+      ],
+      "misses": []
+    },
+    {
+      "id": 18,
+      "query": "哪种支付方式的复购率最高",
+      "difficulty": "medium",
+      "expected_tables": [
+        "orders",
+        "customers"
+      ],
+      "retrieved_tables": [
+        "monthly_revenue",
+        "orders",
+        "customers"
+      ],
+      "field_recall": 1.0,
+      "table_recall": 1.0,
+      "hits": [
+        "customers.preferred_payment_method",
+        "orders.payment_method",
+        "orders.is_repeat_customer"
+      ],
+      "misses": []
+    },
+    {
+      "id": 19,
+      "query": "物流时间最长的10个商品及其退货率",
+      "difficulty": "medium",
+      "expected_tables": [
+        "product_summary"
+      ],
+      "retrieved_tables": [
+        "monthly_revenue",
+        "product_summary",
+        "orders",
+        "customers"
+      ],
+      "field_recall": 0.667,
+      "table_recall": 1.0,
+      "hits": [
+        "product_summary.avg_delivery_days",
+        "product_summary.return_rate"
+      ],
+      "misses": [
+        "product_summary.product_name"
+      ]
+    },
+    {
+      "id": 20,
+      "query": "评分低于3分的订单对应的客户有什么共同特征",
+      "difficulty": "hard",
+      "expected_tables": [
+        "orders",
+        "customers"
+      ],
+      "retrieved_tables": [
+        "orders",
+        "customers"
+      ],
+      "field_recall": 0.5,
+      "table_recall": 1.0,
+      "hits": [
+        "orders.customer_rating",
+        "customers.preferred_device"
+      ],
+      "misses": [
+        "customers.age",
+        "customers.membership_tier"
+      ]
+    }
+  ]
+}

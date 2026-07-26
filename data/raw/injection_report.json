@@ -1,0 +1,78 @@
+{
+  "random_seed": 42,
+  "original_file": "customers.csv",
+  "original_rows": 8000,
+  "original_columns": 20,
+  "overlap_customer_count": 400,
+  "overlap_ratio": 0.05,
+  "sources": [
+    {
+      "source": "customers_app_raw.csv",
+      "total_rows_before": 4800,
+      "injections": {
+        "missing": {
+          "age": {
+            "missing_count": 288,
+            "missing_rate": 0.06
+          },
+          "avg_review_score": {
+            "missing_count": 288,
+            "missing_rate": 0.06
+          }
+        },
+        "duplicates": {
+          "duplicate_rows_added": 96,
+          "duplicate_rate": 0.0196,
+          "type": "近似重复（同一customerId，total_spend_usd微调）"
+        }
+      },
+      "total_rows_after": 4896
+    },
+    {
+      "source": "customers_web_raw.csv",
+      "total_rows_before": 3200,
+      "injections": {
+        "missing": {
+          "country": {
+            "missing_count": 256,
+            "missing_rate": 0.08
+          },
+          "preferred_device": {
+            "missing_count": 256,
+            "missing_rate": 0.08
+          }
+        },
+        "duplicates": {
+          "duplicate_rows_added": 96,
+          "duplicate_rate": 0.0291,
+          "type": "完全重复（所有字段值相同）"
+        }
+      },
+      "total_rows_after": 3296
+    }
+  ],
+  "summary": {
+    "app": {
+      "file": "customers_app_raw.csv",
+      "rows": 4896,
+      "columns": 20,
+      "missing_cols": [
+        "age",
+        "avg_review_score"
+      ],
+      "missing_rate": 0.06,
+      "dup_rate": 0.02
+    },
+    "web": {
+      "file": "customers_web_raw.csv",
+      "rows": 3296,
+      "columns": 20,
+      "missing_cols": [
+        "country",
+        "preferred_device"
+      ],
+      "missing_rate": 0.08,
+      "dup_rate": 0.03
+    }
+  }
+}
