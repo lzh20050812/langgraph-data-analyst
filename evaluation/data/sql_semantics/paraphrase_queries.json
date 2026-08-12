@@ -1,0 +1,17 @@
+[
+  {"query": "按会员层级汇总用户数并计算百分比", "expected_recipe": "customer.membership_distribution"},
+  {"query": "分国家查看用户规模及人均累计消费", "expected_recipe": "customer.country_value"},
+  {"query": "比较各年龄区间的人数和平均消费", "expected_recipe": "customer.age_band_behavior"},
+  {"query": "按终端类型比较用户平均客单价与订单频次", "expected_recipe": "customer.device_behavior"},
+  {"query": "分付款类型汇总交易笔数及成交金额", "expected_recipe": "order.payment_summary"},
+  {"query": "按状态统计订单数、成交额及退单比例", "expected_recipe": "order.status_summary"},
+  {"query": "查看季度订单数、销售额和平均优惠幅度", "expected_recipe": "order.quarter_trend"},
+  {"query": "老客复购订单与首购订单的评分、折扣和配送对比", "expected_recipe": "order.repeat_customer_performance"},
+  {"query": "按商品分类统计SKU数、累计销售收入和均分", "expected_recipe": "product.category_performance"},
+  {"query": "比较各商品分类的平均退货和优惠水平", "expected_recipe": "product.category_returns"},
+  {"query": "列出均分最高的十款产品，附分类、均价和订单数", "expected_recipe": "product.top_rated"},
+  {"query": "查看2025各月销售收入走势", "expected_recipe": "revenue.monthly_year"},
+  {"query": "按年汇总销售收入、订单数和新增用户", "expected_recipe": "revenue.annual_summary"},
+  {"query": "统计流失与留存用户的人数比例", "expected_recipe": "customer.churn_distribution"},
+  {"query": "比较各引流来源的用户规模、累计消费和流失比例", "expected_recipe": "customer.channel_value"}
+]

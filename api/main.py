@@ -12,8 +12,8 @@ FastAPI 应用层 —— 对外暴露对话式查询接口 + 图表数据接口�
     或: python -m api.main
 """
 
+import logging
 import sys
-import traceback
 from pathlib import Path
 from typing import Optional
 
@@ -30,6 +30,8 @@ app = FastAPI(
     description="基于 LangGraph 的多智能体企业运营分析 API",
     version="1.0.0",
 )
+
+logger = logging.getLogger(__name__)
 
 # ---- 请求模型 ----
 
@@ -106,11 +108,11 @@ def handle_query(req: QueryRequest):
     try:
         from agents.planner import run_query
 
-        state = run_query(req.query)
+        state = run_query(req.query, requested_intent=req.intent)
 
         # 缓存最新结果
         _latest_state = dict(state)
-        _latest_charts = state.get("charts", [])
+        _latest_charts = state.get("charts") or []
 
         # 序列化 query_result（限制前100行避免响应过大）
         query_result = state.get("query_result")
@@ -132,24 +134,26 @@ def handle_query(req: QueryRequest):
         )
 
     except Exception as e:
+        logger.exception("Query execution failed")
         return QueryResponse(
             success=False,
             intent="error",
-            error=f"{e}\n{traceback.format_exc()}",
-            messages=[f"[ERROR] {e}"],
+            error="查询执行失败，请检查服务端日志",
+            messages=[f"[ERROR] {type(e).__name__}"],
         )
 
 
 @app.get("/charts")
 def get_charts():
     """获取最近一次查询生成的所有图表配置（ECharts option JSON）。"""
-    return {"charts": _latest_charts, "count": len(_latest_charts)}
+    charts = _latest_charts or []
+    return {"charts": charts, "count": len(charts)}
 
 
 @app.get("/report")
 def get_report():
     """获取最近一次查询生成的经营洞察报告。"""
-    report = _latest_state.get("report", "")
+    report = _latest_state.get("report") or ""
     intent = _latest_state.get("intent", "")
     return {"report": report, "intent": intent}
 

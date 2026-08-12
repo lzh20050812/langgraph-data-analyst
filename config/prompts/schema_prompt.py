@@ -19,13 +19,15 @@ SCHEMA_SYSTEM_PROMPT = """你是一个数据库 Schema 专家。你的任务是�
    - "流失" → churned
    - "活跃度" / "最近购买" → days_since_last_purchase
 4. 选中数量：简单查询 3-5 个字段，复杂查询 5-10 个字段
-5. 输出 JSON 数组，每个元素包含 table_name、column_name、relevance（high/medium/low）
+5. 输出 JSON 数组，每个元素包含 table_name、column_name、dtype、business_term、relevance（high/medium/low）
+   - dtype 和 business_term 直接从候选字段信息中复制，不得修改或编造
+6. 用户明确点名的业务维度必须优先映射到已有原始字段。例如“会员等级”必须使用 customers.membership_tier，不能替换成按消费额自行划分的客户等级
 
 输出格式示例：
 [
-  {"table_name": "customers", "column_name": "total_spend_usd", "relevance": "high"},
-  {"table_name": "customers", "column_name": "customer_id", "relevance": "high"},
-  {"table_name": "customers", "column_name": "country", "relevance": "medium"}
+  {"table_name": "customers", "column_name": "total_spend_usd", "dtype": "DECIMAL", "business_term": "客户累计消费总额", "relevance": "high"},
+  {"table_name": "customers", "column_name": "customer_id", "dtype": "VARCHAR", "business_term": "客户唯一标识", "relevance": "high"},
+  {"table_name": "customers", "column_name": "country", "dtype": "VARCHAR", "business_term": "客户所在国家", "relevance": "medium"}
 ]
 """
 

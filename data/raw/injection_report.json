@@ -30,25 +30,25 @@
     },
     {
       "source": "customers_web_raw.csv",
-      "total_rows_before": 3200,
+      "total_rows_before": 3600,
       "injections": {
         "missing": {
           "country": {
-            "missing_count": 256,
+            "missing_count": 288,
             "missing_rate": 0.08
           },
           "preferred_device": {
-            "missing_count": 256,
+            "missing_count": 288,
             "missing_rate": 0.08
           }
         },
         "duplicates": {
-          "duplicate_rows_added": 96,
+          "duplicate_rows_added": 108,
           "duplicate_rate": 0.0291,
           "type": "完全重复（所有字段值相同）"
         }
       },
-      "total_rows_after": 3296
+      "total_rows_after": 3708
     }
   ],
   "summary": {
@@ -65,7 +65,7 @@
     },
     "web": {
       "file": "customers_web_raw.csv",
-      "rows": 3296,
+      "rows": 3708,
       "columns": 20,
       "missing_cols": [
         "country",

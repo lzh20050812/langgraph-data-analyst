@@ -1,0 +1,453 @@
+[
+  {
+    "id": 1,
+    "difficulty": "easy",
+    "category": "simple_filter",
+    "query": "查询所有Gold会员的客户ID和消费总额",
+    "expected_sql": "SELECT customer_id, total_spend_usd FROM customers WHERE membership_tier = 'Gold'",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 2,
+    "difficulty": "easy",
+    "category": "simple_filter",
+    "query": "查询中国区的所有客户姓名和年龄",
+    "expected_sql": "SELECT customer_id, age FROM customers WHERE country = 'China'",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 3,
+    "difficulty": "easy",
+    "category": "simple_aggregation",
+    "query": "已流失的客户有多少个",
+    "expected_sql": "SELECT COUNT(*) AS cnt FROM customers WHERE churned = 1",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 4,
+    "difficulty": "easy",
+    "category": "simple_aggregation",
+    "query": "客户表中总共有多少条记录",
+    "expected_sql": "SELECT COUNT(*) AS cnt FROM customers",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 5,
+    "difficulty": "easy",
+    "category": "simple_sort_limit",
+    "query": "消费总额最高的前5个客户是谁",
+    "expected_sql": "SELECT customer_id, total_spend_usd FROM customers ORDER BY total_spend_usd DESC LIMIT 5",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 6,
+    "difficulty": "easy",
+    "category": "simple_sort_limit",
+    "query": "查询年龄最大的10个客户ID和年龄",
+    "expected_sql": "SELECT customer_id, age FROM customers ORDER BY age DESC LIMIT 10",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 7,
+    "difficulty": "easy",
+    "category": "simple_groupby",
+    "query": "各个国家的客户数量",
+    "expected_sql": "SELECT country, COUNT(*) AS cnt FROM customers GROUP BY country",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 8,
+    "difficulty": "easy",
+    "category": "simple_groupby",
+    "query": "每个会员等级各有多少客户",
+    "expected_sql": "SELECT membership_tier, COUNT(*) AS cnt FROM customers GROUP BY membership_tier",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 9,
+    "difficulty": "easy",
+    "category": "simple_filter",
+    "query": "查询年龄在25到35岁之间的客户ID和年龄",
+    "expected_sql": "SELECT customer_id, age FROM customers WHERE age >= 25 AND age <= 35",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 10,
+    "difficulty": "easy",
+    "category": "simple_filter",
+    "query": "查询美国的女性客户ID",
+    "expected_sql": "SELECT customer_id FROM customers WHERE country = 'USA' AND gender = 'Female'",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 11,
+    "difficulty": "easy",
+    "category": "simple_aggregation",
+    "query": "所有客户的平均年龄是多少",
+    "expected_sql": "SELECT AVG(age) AS avg_age FROM customers",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 12,
+    "difficulty": "easy",
+    "category": "simple_sort_limit",
+    "query": "查询退货次数最多的5个客户",
+    "expected_sql": "SELECT customer_id, returns_made FROM customers ORDER BY returns_made DESC LIMIT 5",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 13,
+    "difficulty": "easy",
+    "category": "simple_filter",
+    "query": "查询订阅了新闻邮件的客户数量",
+    "expected_sql": "SELECT COUNT(*) AS cnt FROM customers WHERE newsletter_subscribed = 1",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 14,
+    "difficulty": "easy",
+    "category": "simple_order",
+    "query": "查询订单表中2025年的所有订单ID和日期",
+    "expected_sql": "SELECT order_id, order_date FROM orders WHERE year = 2025",
+    "expected_tables": ["orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 15,
+    "difficulty": "easy",
+    "category": "simple_order",
+    "query": "订单表中一共有多少条记录",
+    "expected_sql": "SELECT COUNT(*) AS cnt FROM orders",
+    "expected_tables": ["orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 16,
+    "difficulty": "easy",
+    "category": "simple_groupby",
+    "query": "各品类的商品数量统计",
+    "expected_sql": "SELECT category, COUNT(*) AS cnt FROM product_summary GROUP BY category",
+    "expected_tables": ["product_summary"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 17,
+    "difficulty": "easy",
+    "category": "simple_sort_limit",
+    "query": "评分最高的10个商品名称和评分",
+    "expected_sql": "SELECT product_name, avg_rating FROM product_summary ORDER BY avg_rating DESC LIMIT 10",
+    "expected_tables": ["product_summary"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 18,
+    "difficulty": "easy",
+    "category": "simple_filter",
+    "query": "查询2024年1月的总营收",
+    "expected_sql": "SELECT revenue_usd FROM monthly_revenue WHERE year = 2024 AND month = 1",
+    "expected_tables": ["monthly_revenue"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 19,
+    "difficulty": "medium",
+    "category": "aggregation_groupby",
+    "query": "各会员等级的平均消费金额是多少",
+    "expected_sql": "SELECT membership_tier, AVG(total_spend_usd) AS avg_spend FROM customers GROUP BY membership_tier",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 20,
+    "difficulty": "medium",
+    "category": "aggregation_groupby",
+    "query": "每个国家的平均客单价对比",
+    "expected_sql": "SELECT country, AVG(avg_order_value_usd) AS avg_aov FROM customers GROUP BY country ORDER BY avg_aov DESC",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 21,
+    "difficulty": "medium",
+    "category": "aggregation_groupby",
+    "query": "各获客渠道的客户数量分布",
+    "expected_sql": "SELECT acquisition_channel, COUNT(*) AS cnt FROM customers GROUP BY acquisition_channel ORDER BY cnt DESC",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 22,
+    "difficulty": "medium",
+    "category": "multi_condition",
+    "query": "查询已流失且退货次数超过3次的客户列表",
+    "expected_sql": "SELECT customer_id, returns_made FROM customers WHERE churned = 1 AND returns_made > 3",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 23,
+    "difficulty": "medium",
+    "category": "multi_condition",
+    "query": "通过社交媒体渠道获客且年龄小于30岁的客户有多少",
+    "expected_sql": "SELECT COUNT(*) AS cnt FROM customers WHERE acquisition_channel = 'Social Media' AND age < 30",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 24,
+    "difficulty": "medium",
+    "category": "date_filter",
+    "query": "统计2025年第一季度的订单总数",
+    "expected_sql": "SELECT COUNT(*) AS cnt FROM orders WHERE year = 2025 AND quarter = 1",
+    "expected_tables": ["orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 25,
+    "difficulty": "medium",
+    "category": "date_filter",
+    "query": "查询2025年每月的营收趋势",
+    "expected_sql": "SELECT month, SUM(total_amount_usd) AS revenue FROM orders WHERE year = 2025 GROUP BY month ORDER BY month",
+    "expected_tables": ["orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 26,
+    "difficulty": "medium",
+    "category": "aggregation_groupby",
+    "query": "订单评分不为空的订单中平均评分是多少",
+    "expected_sql": "SELECT AVG(customer_rating) AS avg_rating FROM orders WHERE customer_rating IS NOT NULL",
+    "expected_tables": ["orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 27,
+    "difficulty": "medium",
+    "category": "aggregation_groupby",
+    "query": "各支付方式的订单数量统计",
+    "expected_sql": "SELECT payment_method, COUNT(*) AS cnt FROM orders GROUP BY payment_method ORDER BY cnt DESC",
+    "expected_tables": ["orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 28,
+    "difficulty": "medium",
+    "category": "aggregation_groupby",
+    "query": "每个订单状态下的订单数量和占比",
+    "expected_sql": "SELECT order_status, COUNT(*) AS cnt FROM orders GROUP BY order_status",
+    "expected_tables": ["orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 29,
+    "difficulty": "medium",
+    "category": "multi_condition",
+    "query": "折扣率超过20%的订单数占总订单数的比例",
+    "expected_sql": "SELECT SUM(CASE WHEN discount_pct > 0.20 THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS ratio FROM orders",
+    "expected_tables": ["orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 30,
+    "difficulty": "medium",
+    "category": "date_filter",
+    "query": "查询每月的新增客户数量趋势",
+    "expected_sql": "SELECT year, month, new_customers FROM monthly_revenue ORDER BY year, month",
+    "expected_tables": ["monthly_revenue"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 31,
+    "difficulty": "medium",
+    "category": "aggregation_groupby",
+    "query": "2025年每个季度的总营收和订单量",
+    "expected_sql": "SELECT quarter, SUM(revenue_usd) AS total_revenue, SUM(orders) AS total_orders FROM monthly_revenue WHERE year = 2025 GROUP BY quarter ORDER BY quarter",
+    "expected_tables": ["monthly_revenue"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 32,
+    "difficulty": "medium",
+    "category": "aggregation_groupby",
+    "query": "每个品类中商品的平均评分和平均价格",
+    "expected_sql": "SELECT category, AVG(avg_rating) AS avg_rating, AVG(avg_price) AS avg_price FROM product_summary GROUP BY category",
+    "expected_tables": ["product_summary"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 33,
+    "difficulty": "medium",
+    "category": "sort_limit",
+    "query": "退货率最高的5个品类及其退货率",
+    "expected_sql": "SELECT category, AVG(return_rate) AS avg_return_rate FROM product_summary GROUP BY category ORDER BY avg_return_rate DESC LIMIT 5",
+    "expected_tables": ["product_summary"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 34,
+    "difficulty": "medium",
+    "category": "multi_condition",
+    "query": "使用Mobile设备下单且配送天数超过5天的订单有多少",
+    "expected_sql": "SELECT COUNT(*) AS cnt FROM orders WHERE device_used = 'Mobile' AND delivery_days > 5",
+    "expected_tables": ["orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 35,
+    "difficulty": "hard",
+    "category": "multi_table_join",
+    "query": "查询每个客户的订单总数和累计消费金额",
+    "expected_sql": "SELECT c.customer_id, COUNT(o.order_id) AS order_count, SUM(o.total_amount_usd) AS total_spend FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id",
+    "expected_tables": ["customers", "orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 36,
+    "difficulty": "hard",
+    "category": "multi_table_join",
+    "query": "查询已流失客户的订单记录数量",
+    "expected_sql": "SELECT COUNT(o.order_id) AS cnt FROM orders o JOIN customers c ON o.customer_id = c.customer_id WHERE c.churned = 1",
+    "expected_tables": ["customers", "orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 37,
+    "difficulty": "hard",
+    "category": "subquery",
+    "query": "消费总额超过所有客户平均消费额2倍的客户有哪些",
+    "expected_sql": "SELECT customer_id, total_spend_usd FROM customers WHERE total_spend_usd > (SELECT 2 * AVG(total_spend_usd) FROM customers)",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 38,
+    "difficulty": "hard",
+    "category": "subquery",
+    "query": "配送天数超过平均配送天数1.5倍的订单有多少",
+    "expected_sql": "SELECT COUNT(*) AS cnt FROM orders WHERE delivery_days > (SELECT 1.5 * AVG(delivery_days) FROM orders)",
+    "expected_tables": ["orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 39,
+    "difficulty": "hard",
+    "category": "multi_table_join",
+    "query": "每个会员等级在2025年的月均消费额",
+    "expected_sql": "SELECT c.membership_tier, AVG(o.total_amount_usd) AS avg_monthly_spend FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.year = 2025 GROUP BY c.membership_tier",
+    "expected_tables": ["customers", "orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 40,
+    "difficulty": "hard",
+    "category": "multi_table_join",
+    "query": "各品类的客户平均评分对比",
+    "expected_sql": "SELECT o.category, AVG(o.customer_rating) AS avg_rating, COUNT(DISTINCT o.customer_id) AS customer_count FROM orders o WHERE o.customer_rating IS NOT NULL GROUP BY o.category ORDER BY avg_rating DESC",
+    "expected_tables": ["orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 41,
+    "difficulty": "hard",
+    "category": "complex_aggregation",
+    "query": "每个国家中消费总额排名前3的客户",
+    "expected_sql": "SELECT customer_id, country, total_spend_usd FROM (SELECT customer_id, country, total_spend_usd, ROW_NUMBER() OVER (PARTITION BY country ORDER BY total_spend_usd DESC) AS rn FROM customers) t WHERE rn <= 3",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 42,
+    "difficulty": "hard",
+    "category": "subquery",
+    "query": "退货率高于品类平均退货率的商品名称",
+    "expected_sql": "SELECT p.product_name, p.return_rate FROM product_summary p WHERE p.return_rate > (SELECT AVG(return_rate) FROM product_summary WHERE category = p.category)",
+    "expected_tables": ["product_summary"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 43,
+    "difficulty": "hard",
+    "category": "multi_table_join",
+    "query": "查询每个客户最近一次下单的日期",
+    "expected_sql": "SELECT c.customer_id, MAX(o.order_date) AS last_order_date FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id",
+    "expected_tables": ["customers", "orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 44,
+    "difficulty": "hard",
+    "category": "complex_aggregation",
+    "query": "复购客户与非复购客户的平均评分对比",
+    "expected_sql": "SELECT is_repeat_customer, AVG(customer_rating) AS avg_rating FROM orders WHERE customer_rating IS NOT NULL GROUP BY is_repeat_customer",
+    "expected_tables": ["orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 45,
+    "difficulty": "hard",
+    "category": "complex_aggregation",
+    "query": "2025年营收最高的月份以及该月的订单量和客单价",
+    "expected_sql": "SELECT year, month, revenue_usd, orders, avg_order_value FROM monthly_revenue WHERE year = 2025 ORDER BY revenue_usd DESC LIMIT 1",
+    "expected_tables": ["monthly_revenue"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 46,
+    "difficulty": "hard",
+    "category": "multi_table_join",
+    "query": "每个国家的会员等级分布",
+    "expected_sql": "SELECT country, membership_tier, COUNT(*) AS cnt FROM customers GROUP BY country, membership_tier ORDER BY country, membership_tier",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 47,
+    "difficulty": "edge",
+    "category": "data_model_limited",
+    "query": "2025年每月的新增客户数和流失客户数对比",
+    "expected_sql": "SELECT m.year, m.month, m.new_customers, COUNT(c.customer_id) AS churned_count FROM monthly_revenue m LEFT JOIN customers c ON c.churned = 1 GROUP BY m.year, m.month",
+    "expected_tables": ["customers", "monthly_revenue"],
+    "validation": "result_comparison",
+    "unsolvable_reason": "customers.churned is a static 0/1 label without churn_date; cannot attribute churn to a specific month"
+  },
+  {
+    "id": 48,
+    "difficulty": "edge",
+    "category": "schema_ambiguous",
+    "query": "过去90天内有退货记录的客户的会员等级分布",
+    "expected_sql": "SELECT c.membership_tier, COUNT(DISTINCT c.customer_id) AS cnt FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.returned = 1 AND o.order_date >= DATE_SUB(CURDATE(), INTERVAL 90 DAY) GROUP BY c.membership_tier",
+    "expected_tables": ["customers", "orders"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 49,
+    "difficulty": "edge",
+    "category": "complex_business",
+    "query": "计算每个客户的客户生命周期价值（LTV），定义为累计消费额除以注册天数",
+    "expected_sql": "SELECT customer_id, total_spend_usd / NULLIF(DATEDIFF(CURDATE(), registration_date), 0) AS ltv_per_day FROM customers",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  },
+  {
+    "id": 50,
+    "difficulty": "edge",
+    "category": "complex_business",
+    "query": "找出同时满足以下条件的客户：Gold会员、消费总额超过5000美元、且近30天内有购买记录",
+    "expected_sql": "SELECT c.customer_id FROM customers c WHERE c.membership_tier = 'Gold' AND c.total_spend_usd > 5000 AND c.days_since_last_purchase <= 30",
+    "expected_tables": ["customers"],
+    "validation": "result_comparison"
+  }
+]

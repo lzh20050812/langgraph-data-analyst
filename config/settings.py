@@ -55,6 +55,12 @@ class Settings:
 
     # ---- SQL Agent ----
     SQL_MAX_RETRIES: int = 3  # 自修正最多重试次数
+    BUSINESS_SEMANTICS_ENABLED: bool = os.getenv(
+        "BUSINESS_SEMANTICS_ENABLED", "1"
+    ).strip().lower() not in {"0", "false", "no", "off"}
+    ANALYSIS_MEMORY_ENABLED: bool = os.getenv(
+        "ANALYSIS_MEMORY_ENABLED", "1"
+    ).strip().lower() not in {"0", "false", "no", "off"}
 
 
 _settings: Settings | None = None

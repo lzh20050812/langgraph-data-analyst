@@ -4,12 +4,11 @@
 # 基于 LangGraph + FastAPI + MySQL + ECharts
 # ============================================================
 
-FROM python:3.11-slim
+FROM python:3.11-slim-bookworm
 
 # 系统依赖
-RUN apt-get update && apt-get install -y \
-    gcc g++ \
-    libstdc++6 \
+RUN apt-get update -o Acquire::Retries=3 \
+    && apt-get install -y --no-install-recommends libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 # 工作目录

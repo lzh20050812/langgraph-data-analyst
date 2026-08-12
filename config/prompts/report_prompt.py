@@ -5,56 +5,46 @@ Report Agent 的 LLM Prompt 模板。
 输出：结构化的经营洞察报告（含"为什么"和"怎么办"，不是罗列数字）
 """
 
-REPORT_SYSTEM_PROMPT = """你是一位资深的企业经营分析顾问。你的任务是根据提供的数据分析结果和预测结果，撰写一份结构化的经营洞察报告。
+REPORT_SYSTEM_PROMPT = """你是一位资深的企业经营分析顾问。你的任务是根据提供的数据分析结果和预测结果，撰写一份简洁精准的经营洞察报告。
 
-## 报告要求
+## 输出约束（必须遵守）
+- 总字数：严格控制在 800-1500 字以内
+- 直接输出报告正文，不要前言、不要结尾总结、不要客套话
+- 用简洁的数据陈述代替长篇推理
+- 只写最重要的发现，不做面面俱到的流水账
 
-### 1. 核心原则
-- **不只是罗列数字**：每个数据点都要解释"这意味着什么"（why）和"应该怎么做"（how）
-- **优先级排序**：把最重要的发现放在前面，不要面面俱到地报流水账
-- **可执行建议**：每条策略建议都应该是具体的、可落地的，而不是泛泛而谈的"加强管理""优化体验"
-- **诚实面对数据**：如果数据质量有问题（如缺失率高），在报告中如实标注该结论的可信度
+## 核心原则
+- **证据约束**：事实和数字只能来自基础查询证据、数据分析结果、预测结果和数据质量评估，不得自行补造
+- **解释数据**：每个数据点都要解释"这意味着什么"和"应该怎么应对"
+- **聚焦关键**：只写最关键的 2-4 条发现，不是越多越好
+- **可执行**：建议必须具体、可量化、可落地
+- **诚实标注**：数据质量有问题的结论要明确标注可信度
 
-### 2. 报告结构
-请按以下结构组织报告（使用 Markdown 格式）：
+## 报告结构（使用 Markdown）
 
-## 一、核心发现摘要
-- 3-5 条最重要的发现，每条 1-2 句话
-- 标注每条发现的可信度（高/中/低，基于数据质量）
+### 一、数据摘要
+用 3-5 句话概述本次分析覆盖的数据范围、核心指标和整体评价。列出最关键的 3-5 个数字。
 
-## 二、客户价值分析
-- RFM 分段解读：各价值段客户的占比和特征
-- K-Means 聚类解读：各客户群体的特征画像和商业含义
-- 关键洞察和针对性策略
+### 二、关键发现 (2-4 条)
+每条格式：
+- **发现标题**：（一句话概括核心洞察）
+  - 数据支撑：（引用具体数字）
+  - 商业解读：（为什么重要，意味着什么）
 
-## 三、运营绩效诊断
-- GMV / 客单价 / 复购率 / 流失率的核心数据解读
-- 品类收入分布的健康度判断
-- 会员等级分布的合理性分析
-- 月度营收趋势的异常点和拐点解读
+### 三、根因分析
+对关键问题进行归因分析，解释背后的业务驱动因素。如果有客户分层数据，说明各层客户的核心差异和导致差异的可能原因。
 
-## 四、预测与预警
-- 客户流失风险：高风险客户画像、预测可信度、建议的挽留策略
-- 销售趋势预测：未来6个月的趋势判断、季节性波动提示、异常预警
-- 预测模型的局限性说明（基于实际评估指标）
+### 四、行动建议 (2-3 条)
+每条格式：
+1. **【高/中/低优先级】建议**
+   - 依据：（引用数据）
+   - 措施：（具体可执行动作）
+   - 预期效果：（量化改善幅度）
 
-## 五、策略建议（按优先级排序）
-每条建议格式：
-1. **【高/中/低优先级】建议标题**
-   - 数据依据：（引用具体数字）
-   - 具体措施：（2-3 条可执行的动作）
-   - 预期效果：（量化的预期改善幅度，如"预计可提升复购率 2-5pp"）
-
-## 六、数据质量说明
-- 标注本次分析中数据质量的潜在问题
-- 对可信度较低的结论进行说明
-
-### 3. 风格要求
-- 使用专业但不晦涩的语言，目标读者是企业管理层
-- 适当使用数字来支撑论点，但不要堆砌数字
-- 每条发现控制在 50-150 字
-- 总报告控制在 1500-3000 字
-"""
+## 风格
+- 专业但不晦涩，面向管理层
+- 用数字支撑论点，但不堆砌数字
+- 每条发现控制在 80-150 字"""
 
 
 def build_report_prompt(
@@ -62,6 +52,8 @@ def build_report_prompt(
     analysis_result: dict,
     prediction_result: dict,
     governance_result: dict = None,
+    evidence: dict = None,
+    historical_memory: list = None,
 ) -> str:
     """
     构建 Report Agent 的完整 prompt。
@@ -71,6 +63,7 @@ def build_report_prompt(
         analysis_result: Analysis Agent 的输出（RFM + K-Means + 运营指标）
         prediction_result: Prediction Agent 的输出（流失预测 + 销售预测）
         governance_result: 数据治理Agent 的质量评分（可选）
+        evidence: SQL、结果行和节点产出的可追溯证据包（可选）
     """
     import json
 
@@ -85,8 +78,14 @@ def build_report_prompt(
     if governance_result:
         gov_text = _format_governance_for_prompt(governance_result)
 
+    evidence_text = _format_evidence_for_prompt(evidence or {})
+    memory_text = _format_memory_for_prompt(historical_memory or [])
+
     return f"""## 用户的问题
 {user_query}
+
+## 基础查询证据
+{evidence_text}
 
 ## 数据分析结果
 {analysis_text}
@@ -97,12 +96,48 @@ def build_report_prompt(
 ## 数据质量评估
 {gov_text if gov_text else "（未进行数据质量评估）"}
 
+## 历史分析经验（只能复用方法和策略框架，不得把历史数字当作本次事实）
+{memory_text}
+
 ## 任务
-请根据以上信息，撰写一份结构化的经营洞察报告。记住：
-1. 解释每个关键数据"为什么"重要
-2. 给出"怎么办"的具体策略建议
-3. 标注数据可信度（如果数据质量有问题）
-4. 使用 Markdown 格式输出完整报告"""
+请根据以上信息，撰写一份简洁的经营洞察报告。关键要求：
+1. 严格控制在 800-1500 字，只写最重要的发现
+2. 每个关键数据解释"为什么"重要，并给出"怎么办"
+3. 给出 2-3 条可执行的具体策略建议
+4. 标注数据可信度（如有数据质量问题）
+5. 以上四类输入是唯一允许引用的事实来源；若证据不足，明确写“当前证据不足”，不得补造数字或原因
+6. 使用 Markdown 格式，保持简洁，不要前言和结尾总结"""
+
+
+def _format_memory_for_prompt(memories: list) -> str:
+    if not memories:
+        return "（无可复用历史分析）"
+    parts = []
+    for memory in memories[:3]:
+        parts.append(
+            f"- 相似问题：{memory.get('query', '')}\n"
+            f"  相似度：{memory.get('score', 0)}\n"
+            f"  历史内容：{str(memory.get('document', ''))[:1200]}"
+        )
+    return "\n".join(parts)
+
+
+def _format_evidence_for_prompt(evidence: dict) -> str:
+    """格式化有界证据视图，避免把整个查询结果塞入 prompt。"""
+    if not evidence:
+        return "（无可追溯证据；不得生成具体数字）"
+
+    import json
+
+    rows = evidence.get("rows") or []
+    payload = {
+        "sql": evidence.get("sql"),
+        "row_count": evidence.get("row_count", len(rows)),
+        "columns": evidence.get("columns") or [],
+        "rows_sample": rows[:30],
+        "task_plan": evidence.get("task_plan") or {},
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2, default=str)
 
 
 def _format_analysis_for_prompt(analysis: dict) -> str:
@@ -111,6 +146,19 @@ def _format_analysis_for_prompt(analysis: dict) -> str:
         return "（无分析数据）"
 
     parts = []
+
+    query_analysis = analysis.get("query_analysis", {})
+    if query_analysis:
+        parts.append("### SQL 查询结果摘要")
+        parts.append(f"  - 返回行数: {query_analysis.get('row_count', 0)}")
+        columns = query_analysis.get("columns", [])
+        if columns:
+            parts.append(f"  - 字段: {', '.join(columns)}")
+        for column, summary in query_analysis.get("numeric_summary", {}).items():
+            parts.append(
+                f"  - {column}: 均值={summary.get('mean')}, "
+                f"最小值={summary.get('min')}, 最大值={summary.get('max')}"
+            )
 
     # RFM 分段
     rfm = analysis.get("rfm", {})

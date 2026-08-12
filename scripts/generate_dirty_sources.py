@@ -1,9 +1,9 @@
 """
 脏数据生成脚本 —— 从干净的 customers.csv 生成两个模拟异构来源。
 
-设计目标（对应论文"数据质量问题描述"章节）：
+设计目标（构造可重复的数据质量基准）：
 1. customers_app_raw.csv  —— 模拟App端导出（驼峰/缩写命名，约60%客户）
-2. customers_web_raw.csv  —— 模拟Web端导出（snake_case不统一，约40%客户）
+2. customers_web_raw.csv  —— 模拟Web端导出（snake_case不统一，约45%客户，含5%交集）
 3. injection_report.json  —— 每列缺失/重复注入统计，供ETL治理效果对比
 
 可重复运行：random_seed=42，所有随机操作可复现。
@@ -28,9 +28,10 @@ OUTPUT_APP = RAW_DIR / "customers_app_raw.csv"
 OUTPUT_WEB = RAW_DIR / "customers_web_raw.csv"
 OUTPUT_REPORT = RAW_DIR / "injection_report.json"
 
-# App端约60%客户，Web端约40%客户，交集约5%
+# App端约60%客户，Web独占约40%客户，另有约5%客户同时出现在两端。
+# 因此 Web 导出总量约45%，两端并集覆盖全部原始客户。
 APP_FRAC = 0.60
-WEB_FRAC = 0.40
+WEB_ONLY_FRAC = 0.40
 OVERLAP_FRAC = 0.05  # 占全体客户的5%同时在两端出现
 
 # App端注入参数
@@ -68,13 +69,17 @@ def split_customers(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, set]:
     # 重叠ID（约5%）
     overlap_ids = set(all_ids[:n_overlap])
 
-    # 剩余ID分配给App和Web（App占60%，Web占40%）
+    # 剩余 ID 分配给 App-only 和 Web-only。两端并集必须覆盖全部客户。
     remaining = all_ids[n_overlap:]
-    n_app = int(n_total * APP_FRAC) - n_overlap
-    n_web = int(n_total * WEB_FRAC) - n_overlap
+    n_app_only = int(n_total * APP_FRAC) - n_overlap
+    n_web_only = int(n_total * WEB_ONLY_FRAC)
 
-    app_ids = set(remaining[:n_app]) | overlap_ids
-    web_ids = set(remaining[n_app:n_app + n_web]) | overlap_ids
+    app_ids = set(remaining[:n_app_only]) | overlap_ids
+    web_ids = set(remaining[n_app_only:n_app_only + n_web_only]) | overlap_ids
+
+    # 处理非整比例数据集的舍入尾数，避免任何原始客户被静默丢弃。
+    assigned = app_ids | web_ids
+    web_ids.update(set(all_ids) - assigned)
 
     app_df = df[df["customer_id"].isin(app_ids)].copy()
     web_df = df[df["customer_id"].isin(web_ids)].copy()

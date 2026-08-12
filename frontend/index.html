@@ -588,7 +588,9 @@ function destroyAllCharts() {
 // ============================================================
 function markdownToHtml(md) {
   if (!md) return '';
-  let html = md;
+  // LLM 输出属于不可信输入。先转义 HTML，再做有限 Markdown 替换，
+  // 防止模型输出的 script/event handler 被 innerHTML 执行。
+  let html = escapeHtml(md);
 
   // 标题
   html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
