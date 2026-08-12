@@ -171,6 +171,13 @@ SCHEMA_FIELDS: List[Dict] = [
     },
     {
         "table_name": "orders",
+        "column_name": "customer_id",
+        "dtype": "VARCHAR",
+        "business_term": "订单所属客户ID，关联 customers.customer_id",
+        "aliases": ["订单客户ID", "客户关联", "用户关联", "customer id", "join customer"],
+    },
+    {
+        "table_name": "orders",
         "column_name": "order_date",
         "dtype": "DATE",
         "business_term": "订单日期",
@@ -302,8 +309,48 @@ SCHEMA_FIELDS: List[Dict] = [
         "business_term": "是否为复购客户（1=复购, 0=新客）",
         "aliases": ["复购", "回头客", "repeat customer", "老客"],
     },
+    {
+        "table_name": "orders", "column_name": "discount_amount_usd", "dtype": "DECIMAL",
+        "business_term": "订单折扣金额（美元）", "aliases": ["优惠金额", "折扣金额", "discount amount"],
+    },
+    {
+        "table_name": "orders", "column_name": "shipping_fee_usd", "dtype": "DECIMAL",
+        "business_term": "订单运费（美元）", "aliases": ["运费", "配送费", "shipping fee"],
+    },
+    {
+        "table_name": "orders", "column_name": "tax_pct", "dtype": "DECIMAL",
+        "business_term": "订单税率", "aliases": ["税率", "tax rate"],
+    },
+    {
+        "table_name": "orders", "column_name": "tax_amount_usd", "dtype": "DECIMAL",
+        "business_term": "订单税额（美元）", "aliases": ["税额", "税费", "tax amount"],
+    },
+    {
+        "table_name": "orders", "column_name": "delivery_date", "dtype": "DATE",
+        "business_term": "订单送达日期", "aliases": ["送达日期", "收货日期", "delivery date"],
+    },
+    {
+        "table_name": "orders", "column_name": "session_duration_minutes", "dtype": "DECIMAL",
+        "business_term": "下单会话时长（分钟）", "aliases": ["会话时长", "浏览时长", "session duration"],
+    },
+    {
+        "table_name": "orders", "column_name": "pages_viewed_before_purchase", "dtype": "INT",
+        "business_term": "购买前浏览页面数", "aliases": ["浏览页数", "购买前页面数", "pages viewed"],
+    },
 
     # ---- monthly_revenue 表 ----
+    {
+        "table_name": "monthly_revenue", "column_name": "year", "dtype": "INT",
+        "business_term": "月度营收记录所属年份", "aliases": ["营收年份", "年度", "year"],
+    },
+    {
+        "table_name": "monthly_revenue", "column_name": "month", "dtype": "INT",
+        "business_term": "月度营收记录所属月份（1-12）", "aliases": ["营收月份", "月份", "month"],
+    },
+    {
+        "table_name": "monthly_revenue", "column_name": "quarter", "dtype": "INT",
+        "business_term": "月度营收记录所属季度（1-4）", "aliases": ["营收季度", "季度", "quarter"],
+    },
     {
         "table_name": "monthly_revenue",
         "column_name": "revenue_usd",
@@ -355,6 +402,14 @@ SCHEMA_FIELDS: List[Dict] = [
     },
 
     # ---- product_summary 表 ----
+    {
+        "table_name": "product_summary", "column_name": "category", "dtype": "VARCHAR",
+        "business_term": "商品所属品类", "aliases": ["商品品类", "品类", "类别", "category"],
+    },
+    {
+        "table_name": "product_summary", "column_name": "product_name", "dtype": "VARCHAR",
+        "business_term": "商品名称，商品汇总表主键", "aliases": ["商品名称", "产品名称", "商品", "product name"],
+    },
     {
         "table_name": "product_summary",
         "column_name": "total_orders",

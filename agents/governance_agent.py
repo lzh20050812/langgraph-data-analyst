@@ -6,7 +6,7 @@
 2. 追溯源表，查询源表字段的真实缺失率（源表层面）—— 解决"GROUP BY 压缩了缺失率"的问题
 3. 合并两层评估，输出质量分数（0-100）+ 告警列表 + 字段级详情
 
-设计定位（论文中的区分）：
+设计定位（工程职责边界）：
 - ETL 层的数据清洗是"批处理"，处理的是已知的脏数据（格式不一致、重复等）
 - 数据治理Agent 是"运行时"，回答"这批查询结果靠谱吗？"—— 因为 SQL 查出来的数据
   可能依然有问题（如 customer_rating 天然缺失 63%，这不是 ETL 能修的），
@@ -18,6 +18,7 @@
 import re
 from typing import List, Dict, Any, Optional
 from agents.state import AgentState
+from agents.evidence import update_evidence
 
 
 # ============================================================
@@ -350,6 +351,10 @@ def governance_agent_node(state: AgentState) -> AgentState:
                 "row_count": 0,
                 "message": "无可评估的查询结果",
             }
+            state["evidence"] = update_evidence(
+                state.get("evidence"),
+                data_quality=state["governance_result"],
+            )
             state["messages"].append("[Governance Agent] 无可评估数据，跳过")
             return state
 
@@ -381,6 +386,10 @@ def governance_agent_node(state: AgentState) -> AgentState:
             "column_count": len(col_quality),
             "warnings": all_warnings,
         }
+        state["evidence"] = update_evidence(
+            state.get("evidence"),
+            data_quality=state["governance_result"],
+        )
 
         state["messages"].append(
             f"[Governance Agent] 质量评分: {overall['score']}/100 ({overall['level']}), "

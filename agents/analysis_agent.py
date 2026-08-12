@@ -19,6 +19,7 @@ from sklearn.metrics import silhouette_score
 from sklearn.decomposition import PCA
 
 from agents.state import AgentState
+from agents.evidence import update_evidence
 from storage.db_adapter import get_available_adapter
 
 
@@ -215,6 +216,48 @@ def compute_metrics(adapter) -> dict:
     return metrics
 
 
+def summarize_query_result(rows: list[dict]) -> dict:
+    """Create a compact, query-specific profile from SQL Agent evidence."""
+    if not rows:
+        return {
+            "row_count": 0,
+            "columns": [],
+            "numeric_summary": {},
+            "categorical_summary": {},
+            "sample": [],
+        }
+
+    df = pd.DataFrame(rows)
+    numeric_summary = {}
+    categorical_summary = {}
+
+    for column in df.columns:
+        numeric = pd.to_numeric(df[column], errors="coerce")
+        non_null_original = int(df[column].notna().sum())
+        numeric_count = int(numeric.notna().sum())
+        if non_null_original > 0 and numeric_count / non_null_original >= 0.8:
+            valid = numeric.dropna()
+            numeric_summary[column] = {
+                "count": int(valid.count()),
+                "missing": int(df[column].isna().sum()),
+                "min": round(float(valid.min()), 4) if not valid.empty else None,
+                "max": round(float(valid.max()), 4) if not valid.empty else None,
+                "mean": round(float(valid.mean()), 4) if not valid.empty else None,
+                "sum": round(float(valid.sum()), 4) if not valid.empty else None,
+            }
+        else:
+            counts = df[column].fillna("<NULL>").astype(str).value_counts().head(10)
+            categorical_summary[column] = counts.to_dict()
+
+    return {
+        "row_count": len(df),
+        "columns": list(df.columns),
+        "numeric_summary": numeric_summary,
+        "categorical_summary": categorical_summary,
+        "sample": df.head(20).to_dict(orient="records"),
+    }
+
+
 # ============================================================
 # LangGraph 节点
 # ============================================================
@@ -223,63 +266,85 @@ def analysis_agent_node(state: AgentState) -> AgentState:
     """
     Analysis Agent 的 LangGraph 节点函数。
 
-    从数据库读取客户数据，执行 RFM 分析 + K-Means 聚类 + 运营指标计算，
-    结果写入 state["analysis_result"]。
+    按 Planner 的 task_plan 执行分析工具。通用分析直接消费 SQL Agent
+    产生的 EvidenceBundle；RFM/K-Means 等专用工具仅在明确请求时运行。
     """
     state["current_step"] = "analysis_agent"
     state["messages"].append("[Analysis Agent] 开始分析...")
 
     try:
-        adapter = get_available_adapter()
+        task_plan = state.get("task_plan") or {}
+        tools = list(task_plan.get("analysis_tools") or ["query_summary"])
+        adapter = None
+        if {"rfm", "kmeans", "operational_metrics"}.intersection(tools):
+            adapter = get_available_adapter()
+        evidence = state.get("evidence") or {}
+        evidence_rows = evidence.get("rows")
+        if evidence_rows is None:
+            evidence_rows = state.get("query_result") or []
 
-        # 1. 获取客户数据
-        customers_rows = adapter.execute_sql(
-            "SELECT customer_id, age, total_orders, total_spend_usd, "
-            "avg_order_value_usd, days_since_last_purchase, avg_review_score, "
-            "returns_made, wishlist_items, churned, membership_tier, country "
-            "FROM customers"
-        )
-        if not customers_rows:
-            state["error"] = "Analysis Agent: customers 表无数据"
-            state["messages"].append(f"[Analysis Agent] ERROR: {state['error']}")
-            return state
+        result = {
+            "source": "sql_evidence",
+            "tools_executed": [],
+            "task_plan": task_plan,
+        }
 
-        customers_df = pd.DataFrame(customers_rows)
-        state["messages"].append(
-            f"[Analysis Agent] 获取 {len(customers_df)} 条客户数据"
-        )
+        if "query_summary" in tools:
+            result["query_analysis"] = summarize_query_result(evidence_rows)
+            result["tools_executed"].append("query_summary")
+            state["messages"].append(
+                f"[Analysis Agent] 已分析 SQL 证据 {len(evidence_rows)} 行"
+            )
 
-        # 2. RFM 分析
-        rfm_df = compute_rfm(customers_df)
-        rfm_summary = rfm_df["rfm_segment"].value_counts().to_dict()
-        state["messages"].append(
-            f"[Analysis Agent] RFM 分段: {rfm_summary}"
-        )
+        customers_df = None
+        if "rfm" in tools or "kmeans" in tools:
+            assert adapter is not None
+            customers_rows = adapter.execute_sql(
+                "SELECT customer_id, age, total_orders, total_spend_usd, "
+                "avg_order_value_usd, days_since_last_purchase, avg_review_score, "
+                "returns_made, wishlist_items, churned, membership_tier, country "
+                "FROM customers"
+            )
+            if not customers_rows:
+                state["error"] = "Analysis Agent: customers 表无数据"
+                state["messages"].append(f"[Analysis Agent] ERROR: {state['error']}")
+                return state
+            customers_df = pd.DataFrame(customers_rows)
 
-        # 3. K-Means 聚类
-        kmeans_result = compute_kmeans(customers_df)
-        state["messages"].append(
-            f"[Analysis Agent] K-Means 轮廓系数: {kmeans_result.get('silhouette_score', 'N/A')}"
-        )
-
-        # 4. 运营指标
-        metrics = compute_metrics(adapter)
-        state["messages"].append(
-            f"[Analysis Agent] 运营指标: GMV=${metrics.get('gmv_usd', 0):,.0f}, "
-            f"客单价=${metrics.get('avg_order_value_usd', 0):,.2f}"
-        )
-
-        # 组装输出
-        state["analysis_result"] = {
-            "rfm": {
+        if "rfm" in tools and customers_df is not None:
+            rfm_df = compute_rfm(customers_df)
+            rfm_summary = rfm_df["rfm_segment"].value_counts().to_dict()
+            result["rfm"] = {
                 "segments": rfm_summary,
                 "sample": rfm_df[
                     ["customer_id", "r_score", "f_score", "m_score", "rfm_total", "rfm_segment"]
                 ].head(20).to_dict(orient="records"),
-            },
-            "kmeans": kmeans_result,
-            "metrics": metrics,
-        }
+            }
+            result["tools_executed"].append("rfm")
+            state["messages"].append(f"[Analysis Agent] RFM 分段: {rfm_summary}")
+
+        if "kmeans" in tools and customers_df is not None:
+            kmeans_result = compute_kmeans(customers_df)
+            result["kmeans"] = kmeans_result
+            result["tools_executed"].append("kmeans")
+            state["messages"].append(
+                f"[Analysis Agent] K-Means 轮廓系数: {kmeans_result.get('silhouette_score', 'N/A')}"
+            )
+
+        if "operational_metrics" in tools:
+            assert adapter is not None
+            metrics = compute_metrics(adapter)
+            result["metrics"] = metrics
+            result["tools_executed"].append("operational_metrics")
+            state["messages"].append(
+                f"[Analysis Agent] 运营指标: GMV=${metrics.get('gmv_usd', 0):,.0f}, "
+                f"客单价=${metrics.get('avg_order_value_usd', 0):,.2f}"
+            )
+
+        state["analysis_result"] = result
+        state["evidence"] = update_evidence(
+            state.get("evidence"), analysis_results=result
+        )
 
         state["messages"].append("[Analysis Agent] 分析完成。")
 

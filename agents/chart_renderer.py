@@ -49,8 +49,8 @@ def render_charts(state: AgentState) -> AgentState:
 
     # K-Means 散点图
     kmeans = analysis.get("kmeans", {})
-    if kmeans.get("coords_2d") and kmeans.get("labels"):
-        coords = kmeans["coords_2d"]
+    coords = kmeans.get("pca_coords_2d") or kmeans.get("coords_2d")
+    if coords and kmeans.get("labels"):
         labels = kmeans["labels"]
         clusters = sorted(set(labels))
         scatter_data = [

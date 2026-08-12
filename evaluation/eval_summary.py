@@ -9,7 +9,7 @@
 
 输出：
   1. data/processed/evaluation_summary.json —— 机器可读的完整报告
-  2. 控制台打印 —— 论文速查表
+  2. 控制台打印 —— 基准指标速查表
 
 用法：
   python -m evaluation.eval_summary
@@ -144,11 +144,11 @@ def build_summary() -> dict:
 
 
 def print_summary(summary: dict) -> None:
-    """打印论文速查表。"""
+    """打印基准指标速查表。"""
     s = summary["sections"]
 
     print("\n" + "=" * 65)
-    print("   [Evaluation Summary] 评估层总汇总 -- 论文数据速查表")
+    print("   [Evaluation Summary] 评估层总汇总 -- 基准指标速查表")
     print("=" * 65)
     print(f"   生成时间: {summary['generated_at'][:19]}")
     print()
@@ -232,7 +232,7 @@ def print_summary(summary: dict) -> None:
     print()
 
     print("=" * 65)
-    print("   以上数字已通过评估脚本验证，可直接用于论文。")
+    print("   以上指标均由固定评估脚本生成，可用于版本对比与回归审计。")
     print("=" * 65)
 
 

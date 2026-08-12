@@ -8,6 +8,7 @@ MySQL 连接封装 —— 提供上下文管理器，自动处理事务提交/�
 """
 
 from contextlib import contextmanager
+import re
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine, Connection
 from config.settings import get_settings
@@ -39,6 +40,9 @@ def get_connection():
     engine = get_engine()
     conn = engine.connect()
     try:
+        # 防止 LLM 生成的笛卡尔积或低效聚合无限占用数据库。
+        # MySQL 的 MAX_EXECUTION_TIME 只约束只读 SELECT（毫秒）。
+        conn.execute(text("SET SESSION MAX_EXECUTION_TIME=60000"))
         yield conn
         conn.commit()
     except Exception:
@@ -50,8 +54,8 @@ def get_connection():
 
 def execute_sql(sql: str) -> list[dict]:
     """
-    执行一条 SELECT 语句，返回 dict 列表。
-    非 SELECT 语句会抛出 ValueError。
+    执行一条只读 SELECT（含以 WITH 开头的 CTE）并返回 dict 列表。
+    写操作或多语句会抛出 ValueError。
 
     Args:
         sql: SQL 语句
@@ -60,11 +64,21 @@ def execute_sql(sql: str) -> list[dict]:
         [{col: val, ...}, ...]
 
     Raises:
-        ValueError: 如果不是 SELECT 语句
+        ValueError: 如果不是单条只读查询
     """
     sql_stripped = sql.strip()
-    if not sql_stripped.upper().startswith("SELECT"):
-        raise ValueError(f"仅允许 SELECT 语句，收到: {sql_stripped[:50]}...")
+    normalized = sql_stripped.rstrip(";").strip()
+    # CTE 同样是只读查询的常见写法；同时拒绝写操作和多语句，避免把
+    # “允许 WITH”扩大成允许 WITH ... UPDATE/DELETE。
+    starts_read_only = bool(re.match(r"^(SELECT|WITH)\b", normalized, re.IGNORECASE))
+    has_write_keyword = bool(re.search(
+        r"\b(INSERT|UPDATE|DELETE|DROP|ALTER|TRUNCATE|CREATE|REPLACE|GRANT|REVOKE|CALL|LOAD)\b",
+        normalized,
+        re.IGNORECASE,
+    ))
+    has_multiple_statements = ";" in normalized
+    if not starts_read_only or has_write_keyword or has_multiple_statements:
+        raise ValueError(f"仅允许单条只读 SELECT/CTE，收到: {sql_stripped[:50]}...")
 
     with get_connection() as conn:
         result = conn.execute(text(sql_stripped))

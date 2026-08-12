@@ -20,6 +20,8 @@ SQL_SYSTEM_PROMPT = """你是一个 SQL 专家。你的任务是根据用户的�
 6. 限制返回行数时使用 LIMIT
 7. 如果用户问题涉及日期范围，使用 DATE 类型字段进行比较（如 WHERE order_date >= '2025-01-01'）
 8. 只返回纯 SQL 语句，不要包含解释文字，不要用 ```sql 包裹
+9. 相关度标为 required 的字段必须出现在 SQL 中；不得用 CASE 分箱、代理指标或自行定义的业务口径替代用户明确点名的原始字段
+10. 用户要求“占比”或“百分比”时，统一乘以 100，输出 0-100 的百分数口径，不要返回 0-1 小数
 """
 
 SQL_RETRY_PROMPT = """之前的 SQL 执行失败了。请根据错误信息修正 SQL。
@@ -32,6 +34,9 @@ SQL_RETRY_PROMPT = """之前的 SQL 执行失败了。请根据错误信息修�
 
 ## 执行错误信息
 {error}
+
+## 可用的表和字段
+{schema_info}
 
 ## 要求
 请分析错误原因并生成修正后的 SQL。只返回纯 SQL 语句，不要包含其他文字。"""
@@ -46,9 +51,18 @@ def build_sql_prompt(user_query: str, schema_info: str) -> str:
 {user_query}
 
 ## 任务
-请根据以上信息，生成一条 MySQL SELECT 语句来回答用户的问题。"""
+请根据以上信息，生成一条 MySQL SELECT 语句来回答用户的问题。
+
+注意：字段详情中包含数据类型(dtype)和业务含义(business_term)，请根据这些信息正确选择和使用字段（如 DECIMAL 类型字段可用 SUM/AVG，VARCHAR 字段用于字符串比较，DATE 字段用于日期范围筛选）。"""
 
 
-def build_sql_retry_prompt(user_query: str, sql: str, error: str) -> str:
+def build_sql_retry_prompt(
+    user_query: str, sql: str, error: str, schema_info: str = ""
+) -> str:
     """构建 SQL 修正的 prompt。"""
-    return SQL_RETRY_PROMPT.format(user_query=user_query, sql=sql, error=error)
+    return SQL_RETRY_PROMPT.format(
+        user_query=user_query,
+        sql=sql,
+        error=error,
+        schema_info=schema_info,
+    )

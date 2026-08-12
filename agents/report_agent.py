@@ -12,6 +12,7 @@ Report Agent —— 综合 Analysis / Prediction / Governance 的输出，用 LL
 from agents.state import AgentState
 from agents.llm import chat
 from config.prompts.report_prompt import REPORT_SYSTEM_PROMPT, build_report_prompt
+from config.settings import get_settings
 
 
 def report_agent_node(state: AgentState) -> AgentState:
@@ -29,7 +30,17 @@ def report_agent_node(state: AgentState) -> AgentState:
         analysis = state.get("analysis_result") or {}
         prediction = state.get("prediction_result") or {}
         governance = state.get("governance_result") or {}
+        evidence = state.get("evidence") or {}
         user_query = state.get("user_query", "")
+        memories = []
+        if get_settings().ANALYSIS_MEMORY_ENABLED:
+            from storage.chromadb.analysis_memory import get_analysis_memory
+            memories = get_analysis_memory().recall(user_query, top_k=3)
+        state["memory_context"] = memories
+        if memories:
+            state["messages"].append(
+                f"[Report Agent] 复用 {len(memories)} 条历史分析经验"
+            )
 
         # 构建 prompt
         user_prompt = build_report_prompt(
@@ -37,6 +48,8 @@ def report_agent_node(state: AgentState) -> AgentState:
             analysis_result=analysis,
             prediction_result=prediction,
             governance_result=governance,
+            evidence=evidence,
+            historical_memory=memories,
         )
 
         messages = [
@@ -44,8 +57,8 @@ def report_agent_node(state: AgentState) -> AgentState:
             {"role": "user", "content": user_prompt},
         ]
 
-        # 调用 LLM 生成报告（报告较长，给更大的 max_tokens）
-        report_text = chat(messages, temperature=0.3, max_tokens=4096)
+        # 调用 LLM 生成报告（V4: 压缩至 2000 tokens，约 1000-1500 字）
+        report_text = chat(messages, temperature=0.3, max_tokens=2000)
 
         if not report_text or len(report_text.strip()) < 50:
             state["error"] = "Report Agent: LLM 返回的报告过短或为空"
@@ -53,6 +66,12 @@ def report_agent_node(state: AgentState) -> AgentState:
             return state
 
         state["report"] = report_text.strip()
+        if get_settings().ANALYSIS_MEMORY_ENABLED:
+            from storage.chromadb.analysis_memory import get_analysis_memory
+            get_analysis_memory().remember(
+                query=user_query, report=state["report"],
+                category=state.get("intent", ""),
+            )
         state["messages"].append(
             f"[Report Agent] 报告生成完成 ({len(report_text)} 字符)"
         )

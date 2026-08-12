@@ -1,0 +1,322 @@
+[
+  {
+    "id": 1,
+    "category": "用户分析",
+    "query": "查询不同会员等级客户数量",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.membership_tier"],
+    "description": "简单的单表分组查询，需识别会员等级字段"
+  },
+  {
+    "id": 2,
+    "category": "用户分析",
+    "query": "各个国家的客户分布情况",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.country"],
+    "description": "按国家维度统计客户，需识别国家和客户ID字段"
+  },
+  {
+    "id": 3,
+    "category": "用户分析",
+    "query": "男性客户和女性客户的消费总额对比",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.gender", "customers.total_spend_usd"],
+    "description": "按性别分组统计消费，需识别性别和消费总额"
+  },
+  {
+    "id": 4,
+    "category": "用户分析",
+    "query": "各年龄段客户的平均客单价",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.age", "customers.avg_order_value_usd"],
+    "description": "按年龄分析客单价，需识别年龄和客单价字段"
+  },
+  {
+    "id": 5,
+    "category": "用户分析",
+    "query": "各获客渠道带来的客户数量和新客户占比",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.acquisition_channel"],
+    "description": "按获客渠道分析客户来源分布"
+  },
+  {
+    "id": 6,
+    "category": "用户分析",
+    "query": "订阅了营销邮件的客户与未订阅客户的消费行为差异",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.newsletter_subscribed", "customers.total_spend_usd", "customers.total_orders"],
+    "description": "比较订阅/未订阅客户的消费数据"
+  },
+  {
+    "id": 7,
+    "category": "用户分析",
+    "query": "客户使用不同设备购物的偏好分布",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.preferred_device"],
+    "description": "按设备偏好统计客户分布"
+  },
+  {
+    "id": 8,
+    "category": "订单分析",
+    "query": "统计不同支付方式订单数量",
+    "expected_tables": ["orders"],
+    "expected_fields": ["orders.payment_method"],
+    "description": "按支付方式统计订单量"
+  },
+  {
+    "id": 9,
+    "category": "订单分析",
+    "query": "各订单状态下订单数量和金额汇总",
+    "expected_tables": ["orders"],
+    "expected_fields": ["orders.order_status", "orders.total_amount_usd"],
+    "description": "按订单状态分组统计数量和金额"
+  },
+  {
+    "id": 10,
+    "category": "订单分析",
+    "query": "退货订单占总订单比例以及退货金额",
+    "expected_tables": ["orders"],
+    "expected_fields": ["orders.returned", "orders.total_amount_usd"],
+    "description": "分析退货比例和退货金额"
+  },
+  {
+    "id": 11,
+    "category": "订单分析",
+    "query": "不同配送天数的订单分布情况",
+    "expected_tables": ["orders"],
+    "expected_fields": ["orders.delivery_days"],
+    "description": "按配送天数统计订单分布"
+  },
+  {
+    "id": 12,
+    "category": "订单分析",
+    "query": "复购客户和新客户的订单平均评分对比",
+    "expected_tables": ["orders"],
+    "expected_fields": ["orders.is_repeat_customer", "orders.customer_rating"],
+    "description": "对比复购和新客户的评分"
+  },
+  {
+    "id": 13,
+    "category": "订单分析",
+    "query": "各季度订单数量和营收趋势",
+    "expected_tables": ["orders"],
+    "expected_fields": ["orders.quarter", "orders.total_amount_usd"],
+    "description": "按季度统计订单量和营收"
+  },
+  {
+    "id": 14,
+    "category": "订单分析",
+    "query": "使用不同设备下单的客户平均折扣率",
+    "expected_tables": ["orders"],
+    "expected_fields": ["orders.device_used", "orders.discount_pct"],
+    "description": "按设备分析折扣差异"
+  },
+  {
+    "id": 15,
+    "category": "商品分析",
+    "query": "各品类商品数量统计",
+    "expected_tables": ["product_summary"],
+    "expected_fields": ["product_summary.category"],
+    "description": "按品类统计商品数量"
+  },
+  {
+    "id": 16,
+    "category": "商品分析",
+    "query": "评分最高的商品及其平均评分",
+    "expected_tables": ["product_summary"],
+    "expected_fields": ["product_summary.product_name", "product_summary.avg_rating"],
+    "description": "查询高评分商品"
+  },
+  {
+    "id": 17,
+    "category": "商品分析",
+    "query": "各品类商品的平均价格和平均评分",
+    "expected_tables": ["product_summary"],
+    "expected_fields": ["product_summary.category", "product_summary.avg_price", "product_summary.avg_rating"],
+    "description": "按品类分析定价和评分"
+  },
+  {
+    "id": 18,
+    "category": "商品分析",
+    "query": "退货率最高的商品类别及其退货率",
+    "expected_tables": ["product_summary"],
+    "expected_fields": ["product_summary.category", "product_summary.return_rate"],
+    "description": "分析各品类退货率"
+  },
+  {
+    "id": 19,
+    "category": "商品分析",
+    "query": "各商品品类的总营收和销量排名",
+    "expected_tables": ["product_summary"],
+    "expected_fields": ["product_summary.category", "product_summary.total_revenue_usd", "product_summary.total_orders"],
+    "description": "按品类排名营收和销量"
+  },
+  {
+    "id": 20,
+    "category": "商品分析",
+    "query": "折扣率最高的商品和品类折扣率趋势",
+    "expected_tables": ["product_summary"],
+    "expected_fields": ["product_summary.product_name", "product_summary.avg_discount_pct", "product_summary.category"],
+    "description": "分析折扣策略"
+  },
+  {
+    "id": 21,
+    "category": "商品分析",
+    "query": "商品平均配送天数统计",
+    "expected_tables": ["product_summary"],
+    "expected_fields": ["product_summary.avg_delivery_days"],
+    "description": "分析商品物流时效"
+  },
+  {
+    "id": 22,
+    "category": "销售趋势分析",
+    "query": "2025年每月的营收变化趋势",
+    "expected_tables": ["monthly_revenue"],
+    "expected_fields": ["monthly_revenue.revenue_usd"],
+    "description": "月度营收趋势分析"
+  },
+  {
+    "id": 23,
+    "category": "销售趋势分析",
+    "query": "月度新增客户数量变化",
+    "expected_tables": ["monthly_revenue"],
+    "expected_fields": ["monthly_revenue.new_customers"],
+    "description": "新客户增长趋势"
+  },
+  {
+    "id": 24,
+    "category": "销售趋势分析",
+    "query": "月度活跃客户数和月均客单价趋势",
+    "expected_tables": ["monthly_revenue"],
+    "expected_fields": ["monthly_revenue.unique_customers", "monthly_revenue.avg_order_value"],
+    "description": "活跃用户和客单价双指标趋势"
+  },
+  {
+    "id": 25,
+    "category": "销售趋势分析",
+    "query": "各月份退货率变化趋势",
+    "expected_tables": ["monthly_revenue"],
+    "expected_fields": ["monthly_revenue.return_rate"],
+    "description": "退货率月度趋势"
+  },
+  {
+    "id": 26,
+    "category": "销售趋势分析",
+    "query": "月度平均折扣率和订单量对比",
+    "expected_tables": ["monthly_revenue"],
+    "expected_fields": ["monthly_revenue.avg_discount_pct", "monthly_revenue.orders"],
+    "description": "折扣策略与订单量关系"
+  },
+  {
+    "id": 27,
+    "category": "销售趋势分析",
+    "query": "各年度总营收和总订单量汇总",
+    "expected_tables": ["monthly_revenue"],
+    "expected_fields": ["monthly_revenue.revenue_usd", "monthly_revenue.orders"],
+    "description": "年度汇总统计"
+  },
+  {
+    "id": 28,
+    "category": "销售趋势分析",
+    "query": "按季度汇总订单数量和交易金额",
+    "expected_tables": ["orders"],
+    "expected_fields": ["orders.quarter", "orders.total_amount_usd"],
+    "description": "季度订单和金额汇总"
+  },
+  {
+    "id": 29,
+    "category": "客户流失分析",
+    "query": "已流失客户数量统计",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.churned"],
+    "description": "流失客户统计"
+  },
+  {
+    "id": 30,
+    "category": "客户流失分析",
+    "query": "流失客户与未流失客户的消费总额对比",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.churned", "customers.total_spend_usd"],
+    "description": "流失vs留存客户消费对比"
+  },
+  {
+    "id": 31,
+    "category": "客户流失分析",
+    "query": "不同会员等级的客户流失率",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.membership_tier", "customers.churned"],
+    "description": "按会员等级分析流失情况"
+  },
+  {
+    "id": 32,
+    "category": "客户流失分析",
+    "query": "退货次数多的客户流失率是否更高",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.returns_made", "customers.churned"],
+    "description": "退货行为与流失相关性"
+  },
+  {
+    "id": 33,
+    "category": "客户流失分析",
+    "query": "长时间未购买的客户流失率分析",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.days_since_last_purchase", "customers.churned"],
+    "description": "最近购买时间与流失关系"
+  },
+  {
+    "id": 34,
+    "category": "客户流失分析",
+    "query": "各获客渠道的客户流失率对比",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.acquisition_channel", "customers.churned"],
+    "description": "不同渠道客户的留存质量"
+  },
+  {
+    "id": 35,
+    "category": "营销渠道分析",
+    "query": "各获客渠道带来的客户数量和消费总额",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.acquisition_channel", "customers.total_spend_usd"],
+    "description": "渠道获客效果评估"
+  },
+  {
+    "id": 36,
+    "category": "营销渠道分析",
+    "query": "不同渠道获客的客户中高价值客户占比",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.acquisition_channel", "customers.membership_tier", "customers.total_spend_usd"],
+    "description": "渠道质量分析"
+  },
+  {
+    "id": 37,
+    "category": "营销渠道分析",
+    "query": "各渠道获客客户的客单价对比",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.acquisition_channel", "customers.avg_order_value_usd"],
+    "description": "渠道客单价效果对比"
+  },
+  {
+    "id": 38,
+    "category": "营销渠道分析",
+    "query": "邮件营销渠道获客的客户复购率",
+    "expected_tables": ["customers", "orders"],
+    "expected_fields": ["customers.acquisition_channel", "orders.is_repeat_customer"],
+    "description": "邮件渠道复购效果"
+  },
+  {
+    "id": 39,
+    "category": "营销渠道分析",
+    "query": "社交媒体渠道获客的客户中订阅邮件的比例",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.acquisition_channel", "customers.newsletter_subscribed"],
+    "description": "社交媒体用户的二次触达意愿"
+  },
+  {
+    "id": 40,
+    "category": "营销渠道分析",
+    "query": "不同设备偏好的客户在各渠道的分布",
+    "expected_tables": ["customers"],
+    "expected_fields": ["customers.acquisition_channel", "customers.preferred_device"],
+    "description": "渠道与设备偏好交叉分析"
+  }
+]

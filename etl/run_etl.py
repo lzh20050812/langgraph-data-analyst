@@ -98,7 +98,7 @@ def main():
     print(f"[OK] 清洗后 customers 已保存: {merged_path}")
 
     print("\n" + "=" * 60)
-    print("ETL 全流程验证通过 ✓")
+    print("[OK] ETL 全流程验证通过")
     print("=" * 60)
 
 

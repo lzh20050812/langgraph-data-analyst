@@ -1,7 +1,7 @@
 """
 LLM 调用抽象层 —— 所有 Agent 通过此模块调用 LLM，不直接硬编码模型名。
 
-设计目的（对应论文"多模型对比实验"需求）：
+设计目的（支持多模型基准对比）：
 - 换模型只需改配置或传参，不改 Agent 代码
 - 支持 DeepSeek-V3（默认）、GPT-4o-mini 等 OpenAI 兼容 API
 - 统一处理 temperature、max_tokens、重试等参数

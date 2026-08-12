@@ -1,0 +1,17 @@
+.git
+.venv
+.pytest_cache
+__pycache__
+*.pyc
+*.pyo
+.cache
+.claude
+.env
+api key.txt
+backups
+evaluation/results
+*_figures
+data
+*.docx
+*.pdf
+*.log

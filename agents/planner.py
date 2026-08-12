@@ -18,51 +18,158 @@ from typing import Literal
 
 from langgraph.graph import StateGraph, END
 from agents.state import AgentState, create_initial_state
+from agents.task_planning import build_task_plan, planned_nodes
 
 
 # ============================================================
 # 意图解析
 # ============================================================
 
+# 分析关键词（须明确请求分析/计算，而非简单查询）
+ANALYSIS_KEYWORDS = [
+    "rfm", "k-means", "kmeans", "聚类", "分群", "客户价值",
+    "rfm分析", "客户分层", "运营指标",
+    "客单价分析", "复购率分析", "品类分布",
+    # V3 补充：覆盖行为分析、渠道分析、退货分析等场景
+    "客户行为", "消费行为", "画像", "退货",
+    # V4 补充：对比分析场景
+    "对比", "比较",
+]
+
+# 预测关键词
+PREDICTION_KEYWORDS = [
+    "预测", "流失", "prophet", "xgboost", "趋势", "forecast",
+    "未来", "销售预测", "营收预测",
+]
+
+# 报告关键词
+REPORT_KEYWORDS = [
+    "报告", "综合", "全面", "report", "洞察", "建议", "经营分析",
+    # V3 补充：覆盖策略方案类请求
+    "方案", "策略",
+]
+
+# 模糊分析信号词（query 中出现这些词但未匹配到上述关键词时，触发 LLM 再分类）
+AMBIGUOUS_ANALYSIS_SIGNALS = [
+    "分析", "找出", "发现", "哪些", "为什么", "怎么",
+    "如何提升", "如何降低", "优化", "评估", "诊断",
+]
+
+
+def _get_keyword_confidence(query_lower: str) -> tuple[str, str]:
+    """
+    V4: 计算关键词匹配置信度。
+
+    Returns:
+        (intent, confidence_level)
+        confidence_level: "high" — 明确匹配到关键词
+                         "low"  — 无关键词匹配，退化为 sql_query
+    """
+    has_analysis = any(kw in query_lower for kw in ANALYSIS_KEYWORDS)
+    has_prediction = any(kw in query_lower for kw in PREDICTION_KEYWORDS)
+    has_report = any(kw in query_lower for kw in REPORT_KEYWORDS)
+
+    # 有明确关键词 → 高置信度
+    if has_report or (has_analysis and has_prediction):
+        return ("mixed", "high")
+    if has_analysis and not has_prediction:
+        return ("analysis", "high")
+    if has_prediction and not has_analysis:
+        return ("prediction", "high")
+
+    # 无关键词匹配 → 低置信度（默认 sql_query）
+    return ("sql_query", "low")
+
+
+def _llm_classify_intent(query: str) -> str:
+    """
+    V4: 使用 LLM 对模糊意图做辅助分类。
+
+    仅在关键词无法匹配时调用（关键词退化为 sql_query 且 query 包含分析信号词）。
+    要求返回 {intent: sql_query|analysis|prediction|mixed, reasoning: ...}
+
+    Returns:
+        分类后的 intent 字符串
+    """
+    try:
+        from agents.llm import chat_with_json_output
+
+        prompt = f"""分析以下用户查询，判断需要执行什么类型的任务。
+
+任务类型说明:
+- sql_query: 简单数据查询、统计、分组、排序，只需要SQL即可完整回答
+- analysis: 需要深度数据分析（RFM客户分群、K-Means聚类、运营指标计算、对比分析等）
+- prediction: 需要预测建模（客户流失预测、销售趋势预测等）
+- mixed: 需要综合分析+报告输出（包含分析和建议的综合任务）
+
+用户查询: {query}
+
+请返回JSON: {{"intent": "<类型>", "reasoning": "<简要理由(20字内)>"}}"""
+
+        messages = [{"role": "user", "content": prompt}]
+        response = chat_with_json_output(messages, temperature=0.0, max_tokens=256)
+        result = json.loads(response)
+        intent = result.get("intent", "sql_query")
+        if intent not in ("sql_query", "analysis", "prediction", "mixed"):
+            intent = "sql_query"
+        return intent
+    except Exception:
+        return "sql_query"
+
+
 def parse_intent(state: AgentState) -> AgentState:
     """
-    Planner 节点：解析用户意图，决定路由方向。
+    V4 Planner 节点：两阶段意图分类 + 日志。
 
-    使用关键词规则快速判断，覆盖主流中文业务表达。
+    阶段1: 关键词快速匹配（覆盖 60-70% 常见case）
+    阶段2: LLM 辅助分类（关键词失配时，对模糊查询做再分类）
     """
     query = state["user_query"]
     query_lower = query.lower()
 
-    # 分析关键词（须明确请求分析/计算，而非简单查询）
-    analysis_keywords = [
-        "rfm", "k-means", "kmeans", "聚类", "分群", "客户价值",
-        "rfm分析", "客户分层", "运营指标",
-        "客单价分析", "复购率分析", "品类分布",
-    ]
-    # 预测关键词
-    prediction_keywords = [
-        "预测", "流失", "prophet", "xgboost", "趋势", "forecast",
-        "未来", "销售预测", "营收预测",
-    ]
-    # 报告关键词
-    report_keywords = ["报告", "综合", "全面", "report", "洞察", "建议", "经营分析"]
-
-    has_analysis = any(kw in query_lower for kw in analysis_keywords)
-    has_prediction = any(kw in query_lower for kw in prediction_keywords)
-    has_report = any(kw in query_lower for kw in report_keywords)
-
-    if has_report or (has_analysis and has_prediction):
-        intent = "mixed"
-    elif has_analysis:
-        intent = "analysis"
-    elif has_prediction:
-        intent = "prediction"
+    requested_intent = state.get("requested_intent")
+    if requested_intent in ("sql_query", "analysis", "prediction", "mixed"):
+        intent, confidence = requested_intent, "high"
+        classification_method = "request_override"
     else:
-        intent = "sql_query"
+        # 阶段1: 关键词置信度评估
+        intent, confidence = _get_keyword_confidence(query_lower)
+        classification_method = "keyword"
 
+    # 阶段2: 低置信度 + 含分析信号词时，调用 LLM 辅助分类
+    if confidence == "low" and len(query) > 10:
+        # 检查是否存在模糊分析信号
+        has_signal = any(sig in query_lower for sig in AMBIGUOUS_ANALYSIS_SIGNALS)
+        if has_signal:
+            llm_intent = _llm_classify_intent(query)
+            if llm_intent != "sql_query":
+                intent = llm_intent
+                classification_method = "llm"
+
+    # 生成可审计的结构化任务计划，而不是只记录粗粒度 intent。
+    task_plan = build_task_plan(query, intent)
+    planned_agents = planned_nodes(task_plan)
+
+    # 写入状态
     state["intent"] = intent
+    state["planner_intent"] = intent
+    state["planned_agents"] = planned_agents
+    state["task_plan"] = task_plan
     state["current_step"] = "intent_parsed"
-    state["messages"].append(f"[Planner] 意图: {intent}")
+
+    # V4 日志
+    state["messages"].append(
+        f"[Planner] 用户问题: {query[:100]}"
+    )
+    state["messages"].append(
+        f"[Planner] 识别意图: {intent} (方法: {classification_method})"
+    )
+    state["messages"].append(
+        f"[Planner] 计划调用: {' → '.join(planned_agents)}"
+    )
+    state["messages"].append(
+        "[Planner] 任务计划: " + json.dumps(task_plan, ensure_ascii=False)
+    )
 
     return state
 
@@ -104,15 +211,14 @@ def route_after_governance(state: AgentState) -> str:
     if state.get("error"):
         return END
 
-    intent = state.get("intent", "sql_query")
-
-    if intent in ("analysis", "mixed"):
+    task_plan = state.get("task_plan") or {}
+    if task_plan.get("analysis_tools"):
         return "analysis_agent"
-    elif intent == "prediction":
+    if task_plan.get("prediction_tools"):
         return "prediction_agent"
-    else:
-        # sql_query: 直接结束
-        return END
+    if task_plan.get("need_report"):
+        return "report_agent"
+    return END
 
 
 def route_after_analysis(state: AgentState) -> str:
@@ -120,14 +226,12 @@ def route_after_analysis(state: AgentState) -> str:
     if state.get("error"):
         return END
 
-    intent = state.get("intent", "sql_query")
-
-    if intent == "mixed":
-        # 还需跑预测
+    task_plan = state.get("task_plan") or {}
+    if task_plan.get("prediction_tools"):
         return "prediction_agent"
-    else:
-        # 纯 analysis → chart → END
-        return "chart_renderer"
+    if task_plan.get("need_report"):
+        return "report_agent"
+    return "chart_renderer"
 
 
 def route_after_prediction(state: AgentState) -> str:
@@ -140,13 +244,10 @@ def route_after_prediction(state: AgentState) -> str:
     if state.get("error"):
         return END
 
-    intent = state.get("intent", "sql_query")
-
-    if intent == "mixed":
-        # 综合场景：先出报告再出图表
+    task_plan = state.get("task_plan") or {}
+    if task_plan.get("need_report"):
         return "report_agent"
-    else:
-        return "chart_renderer"
+    return "chart_renderer"
 
 
 def route_after_report(state: AgentState) -> str:
@@ -214,12 +315,14 @@ def build_graph() -> StateGraph:
     workflow.add_conditional_edges("governance_agent", route_after_governance, {
         "analysis_agent": "analysis_agent",
         "prediction_agent": "prediction_agent",
+        "report_agent": "report_agent",
         END: END,
     })
 
     # Analysis → Prediction / Chart
     workflow.add_conditional_edges("analysis_agent", route_after_analysis, {
         "prediction_agent": "prediction_agent",
+        "report_agent": "report_agent",
         "chart_renderer": "chart_renderer",
         END: END,
     })
@@ -255,7 +358,9 @@ def get_graph():
     return _graph
 
 
-def run_query(user_query: str) -> AgentState:
+def run_query(
+    user_query: str, requested_intent: str | None = None
+) -> AgentState:
     """
     执行一次查询 —— Phase 3 的主入口。
 
@@ -266,7 +371,20 @@ def run_query(user_query: str) -> AgentState:
         完整的 AgentState（包含 query_result, analysis_result, prediction_result,
         governance_result, report, charts）
     """
+    initial_state = create_initial_state(
+        user_query, requested_intent=requested_intent
+    )
+    from agents.scope_guard import detect_unsupported_request
+    unsupported = detect_unsupported_request(user_query)
+    if unsupported:
+        initial_state["current_step"] = "scope_guard"
+        initial_state["error"] = (
+            f"当前数据能力不支持该请求（{unsupported.capability}）：{unsupported.reason}"
+        )
+        initial_state["messages"].append(
+            f"[Scope Guard] 拒绝越界推断: {unsupported.reason}"
+        )
+        return initial_state
     graph = get_graph()
-    initial_state = create_initial_state(user_query)
     result = graph.invoke(initial_state)
     return result

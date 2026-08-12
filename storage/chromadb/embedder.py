@@ -37,7 +37,11 @@ class SchemaEmbedder:
         if self._model is None:
             print(f"[Embedder] 加载模型: {self.model_name} ...")
             self._model = SentenceTransformer(self.model_name)
-            print(f"[Embedder] 模型加载完成 (dim={self._model.get_sentence_embedding_dimension()})")
+            if hasattr(self._model, "get_embedding_dimension"):
+                get_dimension = self._model.get_embedding_dimension
+            else:
+                get_dimension = self._model.get_sentence_embedding_dimension
+            print(f"[Embedder] 模型加载完成 (dim={get_dimension()})")
         return self._model
 
     @property

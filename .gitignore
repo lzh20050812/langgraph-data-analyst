@@ -23,7 +23,7 @@ env/
 # 数据文件
 data/raw/*.csv
 data/processed/*
-# 保留评估报告（论文证据）和 injection_report
+# 保留机器可读评估摘要和 injection_report
 !data/processed/eval_*.json
 !data/processed/evaluation_summary.json
 !data/processed/injection_report.json
@@ -32,6 +32,8 @@ data/processed/*
 
 # ChromaDB 持久化
 data/chromadb/
+data/hf_cache/
+data/st_cache/
 
 # Jupyter
 .ipynb_checkpoints/
@@ -51,3 +53,22 @@ api key.txt
 
 # 日志
 *.log
+
+# 本地重建备份与运行时缓存
+backups/
+.cache/
+
+# 运行时日志与历史原始实验输出
+evaluation/logs/
+evaluation/results/
+
+# 本地研究文档（不进入专业项目仓库）
+PROGRESS.md
+PROJECT_BRIEF.md
+*_experiment_draft.md
+generate_analysis_report.py
+*_figures/
+docs/release/
+evaluation/EXPERIMENT_MATRIX.md
+evaluation/experiments/generate_*_materials.py
+项目分析报告.docx
