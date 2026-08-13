@@ -32,8 +32,8 @@ EXPOSE 8000
 ENV MYSQL_HOST=mysql
 ENV MYSQL_PORT=3306
 ENV MYSQL_USER=root
-ENV MYSQL_PASSWORD=bi_she_2024
-ENV MYSQL_DATABASE=bi_she
+ENV MYSQL_PASSWORD=analytics_dev_password
+ENV MYSQL_DATABASE=ai_analytics
 ENV CHROMA_PERSIST_DIR=/app/data/chromadb
 # 模型缓存持久化（避免每次容器重启重新下载 BAAI/bge-small-zh）
 ENV HF_HOME=/app/data/hf_cache

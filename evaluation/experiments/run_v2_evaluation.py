@@ -293,7 +293,7 @@ def run_full_v2_evaluation(
     print(f"  metrics_summary: {summary_path.name}")
 
     # ============================================================
-    # Phase 4: Generate paper tables + report
+    # Phase 4: Generate evaluation tables + report
     # ============================================================
     print("\n" + "=" * 70)
     print("PHASE 4: 生成技术评测表格和实验报告")

@@ -9,7 +9,7 @@ def main() -> None:
     rows = adapter.execute_sql(
         "SELECT TABLE_NAME AS table_name, COLUMN_NAME AS column_name "
         "FROM information_schema.COLUMNS "
-        "WHERE TABLE_SCHEMA = 'bi_she' "
+        "WHERE TABLE_SCHEMA = 'ai_analytics' "
         "AND TABLE_NAME IN ('customers', 'orders', 'monthly_revenue', 'product_summary') "
         "ORDER BY TABLE_NAME, ORDINAL_POSITION"
     )

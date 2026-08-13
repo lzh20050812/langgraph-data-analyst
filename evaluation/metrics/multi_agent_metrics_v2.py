@@ -801,7 +801,7 @@ def _compute_by_type_v2(details: List[Dict[str, Any]]) -> Dict[str, Dict[str, An
 
 
 # ============================================================
-# Part 4: Paper Table Generators (V2)
+# Part 4: Benchmark Table Generators (V2)
 # ============================================================
 
 def _fmt_pct(val) -> str:

@@ -1,5 +1,5 @@
 """
-Complete end-to-end: Run LLM-as-Judge → Generate paper tables → Generate Markdown report.
+Complete end-to-end: Run LLM-as-Judge → Generate benchmark tables → Generate Markdown report.
 
 Usage: python generate_all_results.py
 """
@@ -132,10 +132,10 @@ def main():
         print(f"  TSR={metrics['task_success_rate']:.1%}, RPT={metrics['report_score']}, SQL_ACC={metrics['sql_accuracy']:.1%}")
 
     # ============================================================
-    # Step 3: Generate Paper Tables
+    # Step 3: Generate Benchmark Tables
     # ============================================================
     print("\n" + "=" * 60)
-    print("Step 3: Generate Paper Tables")
+    print("Step 3: Generate Benchmark Tables")
     print("=" * 60)
 
     s = comparison_metrics["single_llm"]
@@ -162,7 +162,7 @@ def main():
     (TABLES / "table4_ablation.md").write_text(t4, encoding="utf-8")
     print("  table4_ablation.md")
 
-    # Save metrics as CSV for paper use
+    # Save metrics as CSV for downstream analysis
     import csv
 
     # Table 1 CSV

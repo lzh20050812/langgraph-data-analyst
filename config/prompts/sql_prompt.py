@@ -8,7 +8,7 @@ SQL Agent 的 LLM Prompt 模板。
 SQL_SYSTEM_PROMPT = """你是一个 SQL 专家。你的任务是根据用户的自然语言问题和可用的数据库表结构，生成可执行的 MySQL SELECT 语句。
 
 ## 数据库信息
-数据库名: bi_she
+数据库名: ai_analytics
 数据库类型: MySQL 8.0
 
 ## 规则

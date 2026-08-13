@@ -62,12 +62,13 @@ backups/
 evaluation/logs/
 evaluation/results/
 
-# 本地研究文档（不进入专业项目仓库）
+# 本地工作文件（不进入项目仓库）
 PROGRESS.md
 PROJECT_BRIEF.md
 *_experiment_draft.md
 generate_analysis_report.py
 *_figures/
+doc_work/
 docs/release/
 evaluation/EXPERIMENT_MATRIX.md
 evaluation/experiments/generate_*_materials.py

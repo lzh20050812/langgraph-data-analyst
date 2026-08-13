@@ -313,9 +313,9 @@ class RAGSchemaExperiment(ExperimentBase):
             generate_table_by_category(m),
             generate_table_failure_analysis(self.result.details),
         ])
-        mdpath = raw_dir / f"{self.name}_paper_tables_{_timestamp()}.md"
+        mdpath = raw_dir / f"{self.name}_benchmark_tables_{_timestamp()}.md"
         mdpath.write_text(md_tables, encoding="utf-8")
-        saved["paper_tables_md"] = mdpath
+        saved["benchmark_tables_md"] = mdpath
 
         self.logger.info(f"结果已保存: {len(saved)} 个文件")
         for k, v in saved.items():
