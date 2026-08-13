@@ -191,7 +191,7 @@ def run_ablation_experiments() -> Dict[str, Any]:
 
 
 # ============================================================
-# Step 5: Compute paper metrics from results
+# Step 5: Compute benchmark metrics from results
 # ============================================================
 
 def _compute_tcs(details: List[Dict]) -> float:
@@ -262,13 +262,13 @@ def _compute_avg_llm_calls(details: List[Dict]) -> float:
 
 
 # ============================================================
-# Step 6: Generate Paper Tables
+# Step 6: Generate Benchmark Tables
 # ============================================================
 
-def generate_paper_tables(
+def generate_benchmark_tables(
     single_llm: Dict, rag_llm: Dict, multi_agent: Dict, ablation: Dict
 ) -> Dict[str, Path]:
-    """Generate all 4 paper tables."""
+    """Generate all four benchmark tables."""
 
     def _extract(details):
         return details if isinstance(details, list) else details.get("details", [])
@@ -613,11 +613,11 @@ def main():
         save_json(multi_agent["traces"], OUTPUT_DIR / "raw" / "agent_trace.json")
         print("Agent trace saved")
 
-    # Step 6: Generate paper tables
+    # Step 6: Generate benchmark tables
     print("\n" + "=" * 60)
-    print("Generating paper tables...")
+    print("Generating benchmark tables...")
     print("=" * 60)
-    table_paths = generate_paper_tables(single_llm, rag_llm, multi_agent, ablation)
+    table_paths = generate_benchmark_tables(single_llm, rag_llm, multi_agent, ablation)
 
     # Step 7: Generate final report
     print("\n" + "=" * 60)

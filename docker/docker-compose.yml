@@ -4,11 +4,11 @@ services:
   # ============================================================
   mysql:
     image: mysql:8.0
-    container_name: bi_she_mysql
+    container_name: ai_analytics_mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: bi_she_2024
-      MYSQL_DATABASE: bi_she
+      MYSQL_ROOT_PASSWORD: analytics_dev_password
+      MYSQL_DATABASE: ai_analytics
     ports:
       - "3306:3306"
     volumes:
@@ -28,7 +28,7 @@ services:
     build:
       context: ..
       dockerfile: Dockerfile
-    container_name: bi_she_app
+    container_name: ai_analytics_app
     restart: unless-stopped
     env_file:
       - ../.env
@@ -38,8 +38,8 @@ services:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
       MYSQL_USER: root
-      MYSQL_PASSWORD: bi_she_2024
-      MYSQL_DATABASE: bi_she
+      MYSQL_PASSWORD: analytics_dev_password
+      MYSQL_DATABASE: ai_analytics
       CHROMA_PERSIST_DIR: /app/data/chromadb
       HF_HOME: /app/data/hf_cache
       SENTENCE_TRANSFORMERS_HOME: /app/data/st_cache

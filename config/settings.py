@@ -29,8 +29,8 @@ class Settings:
     MYSQL_HOST: str = os.getenv("MYSQL_HOST", "127.0.0.1")
     MYSQL_PORT: int = int(os.getenv("MYSQL_PORT", "3306"))
     MYSQL_USER: str = os.getenv("MYSQL_USER", "root")
-    MYSQL_PASSWORD: str = os.getenv("MYSQL_PASSWORD", "bi_she_2024")
-    MYSQL_DATABASE: str = os.getenv("MYSQL_DATABASE", "bi_she")
+    MYSQL_PASSWORD: str = os.getenv("MYSQL_PASSWORD", "analytics_dev_password")
+    MYSQL_DATABASE: str = os.getenv("MYSQL_DATABASE", "ai_analytics")
 
     @property
     def mysql_url(self) -> str:

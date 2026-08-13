@@ -1,13 +1,13 @@
 -- ============================================================
 -- 数据库 DDL —— 四张业务表 + 两张聚合视图
--- 数据库名: bi_she
+-- 数据库名: ai_analytics
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS bi_she
+CREATE DATABASE IF NOT EXISTS ai_analytics
     DEFAULT CHARACTER SET utf8mb4
     DEFAULT COLLATE utf8mb4_unicode_ci;
 
-USE bi_she;
+USE ai_analytics;
 
 -- -----------------------------------------------------------
 -- 1. customers（清洗后的统一客户表，ETL导入）
