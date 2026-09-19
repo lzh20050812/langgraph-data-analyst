@@ -1,0 +1,13 @@
+ticket_id,agent_id,opened_at,channel,priority,status,resolution_hours,satisfaction_score
+T001,A001,2026-01-05 09:10:00,Email,High,Resolved,3.5,5.0
+T002,A003,2026-01-08 10:20:00,Chat,Medium,Resolved,1.2,4.0
+T003,A002,2026-02-02 14:00:00,Phone,Critical,Resolved,5.8,3.0
+T004,A004,2026-02-14 16:30:00,Chat,Low,Closed,0.8,5.0
+T005,A001,2026-03-01 08:45:00,Email,Medium,Resolved,2.7,4.0
+T006,A003,2026-03-11 12:15:00,Phone,High,Open,,
+T007,A002,2026-04-04 11:40:00,Chat,High,Resolved,4.1,4.0
+T008,A004,2026-04-18 15:05:00,Email,Low,Closed,1.0,5.0
+T009,A001,2026-05-06 09:35:00,Phone,Critical,Resolved,6.4,2.0
+T010,A003,2026-05-21 13:25:00,Chat,Medium,Resolved,1.6,4.0
+T011,A002,2026-06-09 10:50:00,Email,High,Pending,,
+T012,A004,2026-06-22 17:10:00,Phone,Medium,Resolved,2.2,5.0

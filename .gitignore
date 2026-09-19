@@ -27,6 +27,8 @@ node_modules/
 data/raw/*.csv
 data/processed/*
 # 保留机器可读评估摘要和 injection_report
+!data/raw/support_agents.csv
+!data/raw/support_tickets.csv
 !data/processed/eval_*.json
 !data/processed/evaluation_summary.json
 !data/processed/injection_report.json

@@ -184,6 +184,7 @@
 | `scripts/verify_docker_release.ps1` | 完整构建模式与 `-SkipBuild` 快速模式均通过；自动检查 Compose 配置、App/Worker/MySQL healthy、db-init=0、Worker 重启=0、live/ready=ok 和前端 200 |
 | `.env` 容器边界与最终回归 | 移除 db-init/App/Worker 的 `.env` 文件挂载，仅保留 `env_file` 进程注入；容器内 `/app/.env` 均不存在；新增 2 条部署配置回归后 `220 passed`（16.53s），App/Worker 重启均为 0 |
 | 依赖与密钥收口 | 本地及应用镜像 `pip check` 均无冲突；`npm audit --omit=dev --audit-level=high --registry=https://registry.npmjs.org` 返回 0 vulnerabilities；已跟踪源码高置信密钥模式扫描无命中；两项一键验收脚本已固化可离线检查 |
+| 首次远端 CI 复核 | 推送后 GitHub Actions run `35454693628` 暴露本机存在但被 `.gitignore` 排除的第二 Schema 固定 CSV，导致 3 项回归失败；已仅对白名单合成夹具 `support_agents.csv`、`support_tickets.csv` 解除忽略并纳入版本控制，其他原始 CSV 继续忽略 |
 | `python -m evaluation.experiments.stage5_deterministic_regression --check` | 179 条目录审计通过；31 条确定性逐样本回归通过；0 次 LLM 调用 |
 | `python -m evaluation.experiments.architecture_comparison_v2 --max-samples 5` | dry-run 通过；未执行外部模型调用 |
 | V2 `deepseek-v4-flash` 付费小样本对照 | 每组 5 条；15 calls；27,686 tokens；峰值估算 $0.02056；受控组严格答案 5/5 |
@@ -221,4 +222,4 @@
 
 ## 收尾状态
 
-阶段一至阶段七已全部完成并收尾，没有待交付的视频文件。升级成果从 `24386dd`（`feat: complete trustworthy analytics platform upgrade`）形成，并在最终 Docker 验收后将本地发布标签 `v2026.09` 更新到完整收尾提交。未跟踪目录 `research-proposal/` 未纳入发布、未修改。完整 50 条付费对照、多主机与真实模型压力测试属于当前范围之外的可选扩展，仍需单独费用和环境授权，不以当前结果替代。
+阶段一至阶段七已全部完成并收尾，没有待交付的视频文件。升级成果从 `24386dd`（`feat: complete trustworthy analytics platform upgrade`）形成；初始远端标签 `v2026.09` 保留不改写，首次 CI 发现的合成夹具打包缺失由修订标签 `v2026.09.1` 收口。未跟踪目录 `research-proposal/` 未纳入发布、未修改。完整 50 条付费对照、多主机与真实模型压力测试属于当前范围之外的可选扩展，仍需单独费用和环境授权，不以当前结果替代。
