@@ -41,7 +41,6 @@ services:
         condition: service_healthy
     volumes:
       - ../data:/app/data
-      - ../.env:/app/.env:ro
     command: >
       sh -c "python -m storage.init_storage --skip-etl && python -m storage.mysql.provision_reader"
 
@@ -93,7 +92,6 @@ services:
       # SQLite WAL stays on Docker's Linux filesystem and is shared only by
       # the API and worker; the Windows bind mount remains for datasets/cache.
       - task_runtime_data:/app/data/runtime
-      - ../.env:/app/.env:ro
     command: uvicorn api.main:app --host 0.0.0.0 --port 8000
 
   # ============================================================
@@ -132,7 +130,6 @@ services:
     volumes:
       - ../data:/app/data
       - task_runtime_data:/app/data/runtime
-      - ../.env:/app/.env:ro
     command: python -m api.task_worker
 
 volumes:
