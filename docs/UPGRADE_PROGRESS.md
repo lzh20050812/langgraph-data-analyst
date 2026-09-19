@@ -177,6 +177,7 @@
 | `.venv\\Scripts\\python.exe -m pytest -q`（阶段五付费对照后最终验收） | 201 passed，1 条相同弃用警告，13.26s |
 | `.venv\\Scripts\\python.exe -m pytest -q`（阶段六最终验收） | 214 passed，1 条相同弃用警告，12.49s |
 | `powershell -ExecutionPolicy Bypass -File .\\scripts\\verify_release.ps1`（阶段七最终工程验收） | 一键完成 217 passed（12.02s）、179 条目录/31 条确定性记录审计、Python 编译、前端类型检查与生产构建；全部通过 |
+| `scripts/verify_release.ps1`（提交后发布复核） | 217 passed（23.37s，1 条第三方弃用警告）、179 条目录/31 条确定性记录审计、Python 编译、前端类型检查与 Vite 生产构建；全部通过 |
 | `python -m evaluation.experiments.stage5_deterministic_regression --check` | 179 条目录审计通过；31 条确定性逐样本回归通过；0 次 LLM 调用 |
 | `python -m evaluation.experiments.architecture_comparison_v2 --max-samples 5` | dry-run 通过；未执行外部模型调用 |
 | V2 `deepseek-v4-flash` 付费小样本对照 | 每组 5 条；15 calls；27,686 tokens；峰值估算 $0.02056；受控组严格答案 5/5 |
@@ -198,7 +199,7 @@
 
 - 已连接真实 MySQL 并验证数据范围；未调用真实 LLM，避免在未确认费用边界时消耗外部服务。
 - 已使用真实 Ephemeral Chroma 验证 owner `where` 过滤；未对现有持久化记忆集合写入测试数据。
-- Docker Desktop 进程已启动，但 Linux Engine 未返回有效状态，因此本轮未执行 Compose 验收。租约竞争使用临时 SQLite 行为测试验证。
+- Docker Desktop 4.83.0 在本机启动时因陈旧的 `AppData/Local/Docker/run/dockerInference` 重解析点触发 Windows 错误 1920，Linux Engine 未创建；两个限定到该单一路径的清理方式均被系统拒绝，未扩大删除范围或执行 factory reset，因此本轮未执行 Compose 验收。租约竞争使用临时 SQLite 行为测试验证。
 - 未进行真实浏览器人工验收；已完成 Vue 类型检查和生产构建。
 - 自然语言解析仍是受控确定性子集，不声称覆盖任意表达；未知指标、字段或关键口径需继续澄清或拒绝。
 - 未调用真实收费 LLM，因此阶段三没有新增开放式 Text2SQL 下游正确率；客服侧只验证了 1 条确定性业务配方。旧冻结准确率不冒充本次结果。
