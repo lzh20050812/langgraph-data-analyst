@@ -1,5 +1,5 @@
 -- ============================================================
--- 数据库 DDL —— 四张业务表 + 两张聚合视图
+-- 数据库 DDL —— 两套业务 Schema（六张表）+ 两张聚合视图
 -- 数据库名: ai_analytics
 -- ============================================================
 
@@ -122,7 +122,37 @@ CREATE TABLE product_summary (
 
 
 -- -----------------------------------------------------------
--- 5. 日粒度聚合视图（供 Prediction Agent 查询）
+-- 5. support_agents（第二业务 Schema：客服坐席）
+-- -----------------------------------------------------------
+DROP TABLE IF EXISTS support_agents;
+CREATE TABLE support_agents (
+    agent_id             VARCHAR(20)     PRIMARY KEY,
+    team                 VARCHAR(100)    NOT NULL,
+    region               VARCHAR(100)    NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- -----------------------------------------------------------
+-- 6. support_tickets（第二业务 Schema：客服工单）
+-- -----------------------------------------------------------
+DROP TABLE IF EXISTS support_tickets;
+CREATE TABLE support_tickets (
+    ticket_id            VARCHAR(20)     PRIMARY KEY,
+    agent_id             VARCHAR(20)     NOT NULL,
+    opened_at            DATETIME        NOT NULL,
+    channel              VARCHAR(50)     NOT NULL,
+    priority             VARCHAR(20)     NOT NULL,
+    status               VARCHAR(30)     NOT NULL,
+    resolution_hours     DECIMAL(8, 2),
+    satisfaction_score   DECIMAL(3, 1),
+    INDEX idx_support_tickets_agent (agent_id),
+    CONSTRAINT fk_support_tickets_agent FOREIGN KEY (agent_id)
+        REFERENCES support_agents(agent_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- -----------------------------------------------------------
+-- 7. 日粒度聚合视图（供 Prediction Agent 查询）
 -- -----------------------------------------------------------
 CREATE OR REPLACE VIEW daily_orders_agg AS
 SELECT
@@ -146,7 +176,7 @@ ORDER BY order_date;
 
 
 -- -----------------------------------------------------------
--- 6. 月粒度聚合视图（供 Prophet 预测训练使用）
+-- 8. 月粒度聚合视图（供 Prophet 预测训练使用）
 -- -----------------------------------------------------------
 CREATE OR REPLACE VIEW monthly_orders_agg AS
 SELECT

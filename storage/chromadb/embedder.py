@@ -7,6 +7,7 @@ Schema Agent 通过此模块检索最相关的表/字段。
 """
 
 import chromadb
+from hashlib import sha256
 from chromadb.config import Settings as ChromaSettings
 from sentence_transformers import SentenceTransformer
 from typing import List, Dict
@@ -14,8 +15,9 @@ from typing import List, Dict
 from config.settings import get_settings
 from storage.chromadb.schema_metadata import (
     SCHEMA_FIELDS,
+    SCHEMA_CATALOG_VERSION,
     get_documents_for_embedding,
-    get_field_by_id,
+    schema_catalog_fingerprint,
 )
 
 
@@ -86,21 +88,40 @@ class SchemaEmbedder:
 
         embeddings = self.model.encode(docs, show_progress_bar=True).tolist()
 
-        ids = [f"field_{i}" for i in range(len(docs))]
+        ids = [
+            "field_" + sha256(
+                f"{field['data_source']}:{field['table_name']}:{field['column_name']}".encode()
+            ).hexdigest()[:20]
+            for field in SCHEMA_FIELDS
+        ]
         metadatas = [
             {
                 "table_name": f["table_name"],
                 "column_name": f["column_name"],
                 "dtype": f["dtype"],
                 "business_term": f["business_term"],
+                "data_source": f["data_source"],
+                "catalog_version": f["catalog_version"],
+                "source_id": f["source_id"],
+                "access_scope": f["access_scope"],
+                "owner_id": f.get("owner_id", ""),
             }
             for f in SCHEMA_FIELDS
         ]
 
         collection = self.client.get_or_create_collection(
             name=self.collection_name,
-            metadata={"description": "Schema metadata for Text2SQL"},
+            metadata={
+                "description": "Versioned Schema metadata for Text2SQL",
+                "catalog_version": SCHEMA_CATALOG_VERSION,
+                "catalog_fingerprint": schema_catalog_fingerprint(),
+            },
         )
+        collection.modify(metadata={
+            "description": "Versioned Schema metadata for Text2SQL",
+            "catalog_version": SCHEMA_CATALOG_VERSION,
+            "catalog_fingerprint": schema_catalog_fingerprint(),
+        })
 
         # 如果已有数据，先清空
         existing = collection.get()
@@ -118,7 +139,21 @@ class SchemaEmbedder:
         print(f"[Embedder] 索引完成: {collection.count()} 条记录")
         return collection.count()
 
-    def search(self, query: str, top_k: int = 10) -> List[Dict]:
+    def index_is_current(self) -> bool:
+        collection = self.collection
+        if collection is None:
+            return False
+        metadata = collection.metadata or {}
+        return metadata.get("catalog_fingerprint") == schema_catalog_fingerprint()
+
+    def search(
+        self,
+        query: str,
+        top_k: int = 10,
+        *,
+        data_source: str = "ai_analytics",
+        principal_id: str | None = None,
+    ) -> List[Dict]:
         """
         语义检索最相关的表/字段。
 
@@ -133,10 +168,20 @@ class SchemaEmbedder:
             raise RuntimeError("Collection 未初始化，请先调用 build()")
 
         query_embedding = self.model.encode([query]).tolist()
+        access_filter = {"access_scope": {"$eq": "public"}}
+        if principal_id:
+            access_filter = {"$or": [
+                {"access_scope": {"$eq": "public"}},
+                {"owner_id": {"$eq": principal_id}},
+            ]}
         results = self.collection.query(
             query_embeddings=query_embedding,
             n_results=top_k,
             include=["metadatas", "documents", "distances"],
+            where={"$and": [
+                {"data_source": {"$eq": data_source}},
+                access_filter,
+            ]},
         )
 
         formatted = []
@@ -151,6 +196,10 @@ class SchemaEmbedder:
                 "column_name": meta["column_name"],
                 "business_term": meta["business_term"],
                 "dtype": meta["dtype"],
+                "data_source": meta["data_source"],
+                "catalog_version": meta["catalog_version"],
+                "source_id": meta["source_id"],
+                "access_scope": meta["access_scope"],
                 "document": doc,
                 "score": round(1 - dist, 4),  # distance → similarity
             })

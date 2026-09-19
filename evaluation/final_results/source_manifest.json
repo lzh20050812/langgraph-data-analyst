@@ -1,0 +1,56 @@
+{
+  "protocol": "final-results-v1",
+  "material_pack": "evaluation/results/chapter6_materials_20260812",
+  "source_commit": "e9b8cc86dbe0cf23710f02891be4be686c0bc680",
+  "sources": {
+    "governance": {
+      "path": "evaluation/results/governance_20260812/governance_metrics.json",
+      "sha256": "da4f4c940461a1592702e55b217d8c0564c8c62540d09dd080be428c109b2ec0"
+    },
+    "rag": {
+      "path": "evaluation/results/rag_retrieval_20260812/rag_retrieval_results.json",
+      "sha256": "fb0d203884d0dd794e69be41bb9813811ebd73446f69c4a8a3fe61edf146f0b1"
+    },
+    "text2sql": {
+      "path": "evaluation/results/text2sql_ablation_20260812/text2sql_ablation_results.json",
+      "sha256": "387c000171dc1f2be72abeba7f3d4921e8b6463638b407d10e98fe0062a370dc"
+    },
+    "models": {
+      "path": "evaluation/results/models_20260812/model_metrics.json",
+      "sha256": "ff68d2efacefe1f1ff429626f767af80feaa3db8f32a4463ce5a04a31b9ae1a3"
+    },
+    "multiagent_after": {
+      "path": "evaluation/results/formal_comparison/20260812_005036/summary.json",
+      "sha256": "82d258ae8a0ff23a582206a8fb0d9671b96746496fc5a69895a083d29309ad89"
+    },
+    "multiagent_before": {
+      "path": "evaluation/results/formal_comparison/20260811_133723/summary.json",
+      "sha256": "74c211b0c383653218108a6e9957b4a818dff90c637788e88a5289823211cfce"
+    },
+    "semantics_off": {
+      "path": "evaluation/results/formal_comparison/20260812_011740/summary.json",
+      "sha256": "fb0019e8b1ae983383c50c25cb363858b7e113305cc806747ad8e549539df996"
+    },
+    "semantics_on": {
+      "path": "evaluation/results/formal_comparison/20260812_011923/summary.json",
+      "sha256": "9419850e3bce902d89cf72f0cf3a8814dcd5db74413aeefbf6623c2cd9cd30e6"
+    },
+    "system": {
+      "path": "evaluation/results/system_20260812/system_metrics.json",
+      "sha256": "64616dc294ada3b970fba35763d4af7e68506d14cf4046d28674ccd1ac66fd8b"
+    },
+    "docker": {
+      "path": "evaluation/results/system_20260812/docker_validation.json",
+      "sha256": "0212dda4dcc30d63141898871c777c74ccae48f80f64962f30b99b657a741a3c"
+    },
+    "robustness": {
+      "path": "evaluation/results/robustness_20260812/robustness_metrics.json",
+      "sha256": "9b7a2553bed08936e2c2830e9f465cee4931c1b5230a1e95b198962fc0681903"
+    },
+    "memory": {
+      "path": "evaluation/results/memory_20260812/memory_metrics.json",
+      "sha256": "57494abab00a9d10d90df925f5e8f1917664851d6285097fabca28fbafc7d238"
+    }
+  },
+  "note": "The bulky per-sample artifacts remain locally reproducible and Git-ignored. final_metrics.json is the compact, version-controlled source of truth for published claims."
+}

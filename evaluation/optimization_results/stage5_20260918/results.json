@@ -1,0 +1,1615 @@
+{
+  "protocol": "stage5-deterministic-v1",
+  "created_utc": "2026-09-18T15:56:34.733343+00:00",
+  "scope": "No LLM calls; deterministic CI and dataset audit only.",
+  "dataset_audit": {
+    "catalog_version": "2026.09.1",
+    "total_samples": 179,
+    "dataset_count": 7,
+    "status": "passed",
+    "datasets": [
+      {
+        "dataset_id": "text2sql-v1",
+        "samples": 50,
+        "usage": "frozen_test",
+        "sha256": "e97ddaba709afa307da2467731b1cc166a41c691f8303e9c47ea213c30896c5a",
+        "status": "passed"
+      },
+      {
+        "dataset_id": "schema-ecommerce-v1",
+        "samples": 40,
+        "usage": "validation_and_frozen_test",
+        "sha256": "dac29515e83c217c956c8417396b8a3312ad2acfcd2be75a50a5a51e24232a7f",
+        "status": "passed"
+      },
+      {
+        "dataset_id": "schema-support-transfer-v1",
+        "samples": 8,
+        "usage": "transfer_test",
+        "sha256": "01202b871ce4f7777bcaab42b2c3025ff88d94f83fc0132defc49b9dec670d62",
+        "status": "passed"
+      },
+      {
+        "dataset_id": "multi-agent-v1",
+        "samples": 50,
+        "usage": "frozen_test",
+        "sha256": "47536d224b70df844f75afba3b65e220d37f18ecbd35e721b1557d4edc54faf5",
+        "status": "passed"
+      },
+      {
+        "dataset_id": "semantic-paraphrase-v1",
+        "samples": 15,
+        "usage": "development_regression",
+        "sha256": "5e510eb4f3ed68b850111390065961f84194bf20b98e422b199e68b11c0c983b",
+        "status": "passed"
+      },
+      {
+        "dataset_id": "multiturn-v1",
+        "samples": 8,
+        "usage": "development_regression",
+        "sha256": "6d4c1509f666e6a03a4adafc3bb8cdcb4050d75a748e9761074b192b5e59950d",
+        "status": "passed"
+      },
+      {
+        "dataset_id": "evidence-failures-v1",
+        "samples": 8,
+        "usage": "development_regression",
+        "sha256": "13312c390c56ec690647e67c69fc44d22b0fc5e9171c382f29b86fa53221a289",
+        "status": "passed"
+      }
+    ],
+    "issues": []
+  },
+  "failure_case_library": {
+    "samples": 8,
+    "categories": [
+      "condition_loss",
+      "empty_result",
+      "join_fanout",
+      "missing_refund",
+      "null_result",
+      "unsupported_number",
+      "valid_evidence",
+      "wrong_period"
+    ],
+    "status": "passed"
+  },
+  "metrics": {
+    "samples": 31,
+    "query": {
+      "business_answer_accuracy": {
+        "value": 1.0,
+        "n": 15
+      },
+      "condition_retention_rate": {
+        "value": 1.0,
+        "n": 15
+      },
+      "execution_success_rate": {
+        "value": null,
+        "n": 0
+      },
+      "repair_success_rate": {
+        "value": null,
+        "n": 0
+      }
+    },
+    "retrieval": {
+      "table_recall": {
+        "value": 1.0,
+        "n": 8
+      },
+      "field_recall": {
+        "value": 1.0,
+        "n": 8
+      },
+      "relationship_coverage": {
+        "value": 1.0,
+        "n": 3
+      }
+    },
+    "multiturn": {
+      "task_completion_rate": {
+        "value": 1.0,
+        "n": 8
+      },
+      "inheritance_correct_rate": {
+        "value": 1.0,
+        "n": 8
+      },
+      "clarification_correct_rate": {
+        "value": 1.0,
+        "n": 3
+      }
+    },
+    "report": {
+      "numeric_consistency_rate": {
+        "value": null,
+        "n": 0
+      },
+      "citation_correct_rate": {
+        "value": null,
+        "n": 0
+      },
+      "unsupported_claim_free_rate": {
+        "value": null,
+        "n": 0
+      }
+    },
+    "engineering": {
+      "latency_p50_ms": 0.161,
+      "latency_p95_ms": 0.397,
+      "llm_calls": 0,
+      "tool_calls": 31,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0,
+      "recovery_success_rate": {
+        "value": null,
+        "n": 0
+      }
+    }
+  },
+  "records": [
+    {
+      "sample_id": "P1",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.026,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "customer.membership_distribution",
+        "actual_recipe": "customer.membership_distribution"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P2",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.031,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "customer.country_value",
+        "actual_recipe": "customer.country_value"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P3",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.03,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "customer.age_band_behavior",
+        "actual_recipe": "customer.age_band_behavior"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P4",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.038,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "customer.device_behavior",
+        "actual_recipe": "customer.device_behavior"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P5",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.03,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "order.payment_summary",
+        "actual_recipe": "order.payment_summary"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P6",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.03,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "order.status_summary",
+        "actual_recipe": "order.status_summary"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P7",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.032,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "order.quarter_trend",
+        "actual_recipe": "order.quarter_trend"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P8",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.032,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "order.repeat_customer_performance",
+        "actual_recipe": "order.repeat_customer_performance"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P9",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.035,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "product.category_performance",
+        "actual_recipe": "product.category_performance"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P10",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.036,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "product.category_returns",
+        "actual_recipe": "product.category_returns"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P11",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.035,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "product.top_rated",
+        "actual_recipe": "product.top_rated"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P12",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.049,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "revenue.monthly_year",
+        "actual_recipe": "revenue.monthly_year"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P13",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.039,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "revenue.annual_summary",
+        "actual_recipe": "revenue.annual_summary"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P14",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.038,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "customer.churn_distribution",
+        "actual_recipe": "customer.churn_distribution"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "P15",
+      "dataset_id": "semantic-paraphrase-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.041,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "expected_recipe": "customer.channel_value",
+        "actual_recipe": "customer.channel_value"
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "answer_correct": true,
+      "conditions_retained": true,
+      "execution_success": null,
+      "repair_success": null
+    },
+    {
+      "sample_id": "S1",
+      "dataset_id": "schema-support-transfer-v1",
+      "split": "transfer_test",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 1.133,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "retrieved_fields": [
+          "support_agents.agent_id",
+          "support_agents.region",
+          "support_agents.team",
+          "support_tickets.agent_id",
+          "support_tickets.channel",
+          "support_tickets.opened_at",
+          "support_tickets.priority",
+          "support_tickets.resolution_hours",
+          "support_tickets.status",
+          "support_tickets.ticket_id"
+        ],
+        "retrieved_tables": [
+          "support_agents",
+          "support_tickets"
+        ]
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "table_recall_pass": true,
+      "field_recall_pass": true,
+      "relationship_covered": true
+    },
+    {
+      "sample_id": "S2",
+      "dataset_id": "schema-support-transfer-v1",
+      "split": "transfer_test",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.308,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "retrieved_fields": [
+          "support_tickets.agent_id",
+          "support_tickets.channel",
+          "support_tickets.opened_at",
+          "support_tickets.priority",
+          "support_tickets.resolution_hours",
+          "support_tickets.satisfaction_score",
+          "support_tickets.status",
+          "support_tickets.ticket_id"
+        ],
+        "retrieved_tables": [
+          "support_tickets"
+        ]
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "table_recall_pass": true,
+      "field_recall_pass": true,
+      "relationship_covered": null
+    },
+    {
+      "sample_id": "S3",
+      "dataset_id": "schema-support-transfer-v1",
+      "split": "transfer_test",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.291,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "retrieved_fields": [
+          "support_agents.agent_id",
+          "support_agents.region",
+          "support_agents.team",
+          "support_tickets.agent_id",
+          "support_tickets.channel",
+          "support_tickets.opened_at",
+          "support_tickets.priority",
+          "support_tickets.satisfaction_score",
+          "support_tickets.status",
+          "support_tickets.ticket_id"
+        ],
+        "retrieved_tables": [
+          "support_agents",
+          "support_tickets"
+        ]
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "table_recall_pass": true,
+      "field_recall_pass": true,
+      "relationship_covered": null
+    },
+    {
+      "sample_id": "S4",
+      "dataset_id": "schema-support-transfer-v1",
+      "split": "transfer_test",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.289,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "retrieved_fields": [
+          "support_tickets.agent_id",
+          "support_tickets.channel",
+          "support_tickets.opened_at",
+          "support_tickets.priority",
+          "support_tickets.resolution_hours",
+          "support_tickets.satisfaction_score",
+          "support_tickets.status",
+          "support_tickets.ticket_id"
+        ],
+        "retrieved_tables": [
+          "support_tickets"
+        ]
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "table_recall_pass": true,
+      "field_recall_pass": true,
+      "relationship_covered": null
+    },
+    {
+      "sample_id": "S5",
+      "dataset_id": "schema-support-transfer-v1",
+      "split": "transfer_test",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.302,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "retrieved_fields": [
+          "support_agents.agent_id",
+          "support_agents.region",
+          "support_tickets.agent_id",
+          "support_tickets.channel",
+          "support_tickets.opened_at",
+          "support_tickets.priority",
+          "support_tickets.resolution_hours",
+          "support_tickets.satisfaction_score",
+          "support_tickets.status",
+          "support_tickets.ticket_id"
+        ],
+        "retrieved_tables": [
+          "support_agents",
+          "support_tickets"
+        ]
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "table_recall_pass": true,
+      "field_recall_pass": true,
+      "relationship_covered": true
+    },
+    {
+      "sample_id": "S6",
+      "dataset_id": "schema-support-transfer-v1",
+      "split": "transfer_test",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.302,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "retrieved_fields": [
+          "support_agents.agent_id",
+          "support_agents.region",
+          "support_agents.team",
+          "support_tickets.agent_id",
+          "support_tickets.channel",
+          "support_tickets.opened_at",
+          "support_tickets.priority",
+          "support_tickets.satisfaction_score",
+          "support_tickets.status",
+          "support_tickets.ticket_id"
+        ],
+        "retrieved_tables": [
+          "support_agents",
+          "support_tickets"
+        ]
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "table_recall_pass": true,
+      "field_recall_pass": true,
+      "relationship_covered": true
+    },
+    {
+      "sample_id": "S7",
+      "dataset_id": "schema-support-transfer-v1",
+      "split": "transfer_test",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.282,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "retrieved_fields": [
+          "support_tickets.agent_id",
+          "support_tickets.channel",
+          "support_tickets.opened_at",
+          "support_tickets.priority",
+          "support_tickets.resolution_hours",
+          "support_tickets.satisfaction_score",
+          "support_tickets.status",
+          "support_tickets.ticket_id"
+        ],
+        "retrieved_tables": [
+          "support_tickets"
+        ]
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "table_recall_pass": true,
+      "field_recall_pass": true,
+      "relationship_covered": null
+    },
+    {
+      "sample_id": "S8",
+      "dataset_id": "schema-support-transfer-v1",
+      "split": "transfer_test",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.292,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "retrieved_fields": [
+          "support_tickets.agent_id",
+          "support_tickets.channel",
+          "support_tickets.opened_at",
+          "support_tickets.priority",
+          "support_tickets.resolution_hours",
+          "support_tickets.satisfaction_score",
+          "support_tickets.status",
+          "support_tickets.ticket_id"
+        ],
+        "retrieved_tables": [
+          "support_tickets"
+        ]
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "table_recall_pass": true,
+      "field_recall_pass": true,
+      "relationship_covered": null
+    },
+    {
+      "sample_id": "M1",
+      "dataset_id": "multiturn-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.397,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "effective_request": {
+          "schema_version": "1.0",
+          "metric_catalog_version": "2026.09.1",
+          "metrics": [
+            "paid_amount"
+          ],
+          "dimensions": [
+            "country"
+          ],
+          "time_scope": {
+            "field": "orders.order_date",
+            "years": [
+              2025
+            ],
+            "start": null,
+            "end": null
+          },
+          "filters": {
+            "country": [
+              "United States"
+            ]
+          },
+          "sort": [],
+          "limit": null,
+          "data_source": "ai_analytics",
+          "unresolved_ambiguities": [],
+          "unsupported_conditions": []
+        },
+        "changes": [
+          {
+            "field": "request",
+            "action": "initialize"
+          },
+          {
+            "field": "filters.country",
+            "action": "replace",
+            "from": null,
+            "to": [
+              "United States"
+            ]
+          }
+        ],
+        "mismatches": {},
+        "expected_issue_found": true
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "task_completed": true,
+      "inheritance_correct": true,
+      "clarification_correct": null
+    },
+    {
+      "sample_id": "M2",
+      "dataset_id": "multiturn-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.18,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "effective_request": {
+          "schema_version": "1.0",
+          "metric_catalog_version": "2026.09.1",
+          "metrics": [
+            "paid_amount"
+          ],
+          "dimensions": [
+            "time"
+          ],
+          "time_scope": {
+            "field": "orders.order_date",
+            "years": [
+              2025
+            ],
+            "start": null,
+            "end": null
+          },
+          "filters": {
+            "country": [
+              "United States"
+            ]
+          },
+          "sort": [],
+          "limit": null,
+          "data_source": "ai_analytics",
+          "unresolved_ambiguities": [],
+          "unsupported_conditions": []
+        },
+        "changes": [
+          {
+            "field": "request",
+            "action": "initialize"
+          },
+          {
+            "field": "dimensions",
+            "action": "replace",
+            "from": [],
+            "to": [
+              "time"
+            ]
+          }
+        ],
+        "mismatches": {},
+        "expected_issue_found": true
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "task_completed": true,
+      "inheritance_correct": true,
+      "clarification_correct": null
+    },
+    {
+      "sample_id": "M3",
+      "dataset_id": "multiturn-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.18,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "effective_request": {
+          "schema_version": "1.0",
+          "metric_catalog_version": "2026.09.1",
+          "metrics": [
+            "paid_amount"
+          ],
+          "dimensions": [
+            "country"
+          ],
+          "time_scope": {
+            "field": "orders.order_date",
+            "years": [
+              2025
+            ],
+            "start": null,
+            "end": null
+          },
+          "filters": {},
+          "sort": [],
+          "limit": null,
+          "data_source": "ai_analytics",
+          "unresolved_ambiguities": [],
+          "unsupported_conditions": []
+        },
+        "changes": [
+          {
+            "field": "request",
+            "action": "initialize"
+          },
+          {
+            "field": "dimensions",
+            "action": "replace",
+            "from": [],
+            "to": [
+              "country"
+            ]
+          },
+          {
+            "field": "filters.country",
+            "action": "clear",
+            "from": [
+              "United States"
+            ],
+            "to": null
+          }
+        ],
+        "mismatches": {},
+        "expected_issue_found": true
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "task_completed": true,
+      "inheritance_correct": true,
+      "clarification_correct": null
+    },
+    {
+      "sample_id": "M4",
+      "dataset_id": "multiturn-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.161,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "effective_request": {
+          "schema_version": "1.0",
+          "metric_catalog_version": "2026.09.1",
+          "metrics": [
+            "customer_count"
+          ],
+          "dimensions": [],
+          "time_scope": {
+            "field": null,
+            "years": [],
+            "start": null,
+            "end": null
+          },
+          "filters": {},
+          "sort": [],
+          "limit": null,
+          "data_source": "ai_analytics",
+          "unresolved_ambiguities": [],
+          "unsupported_conditions": []
+        },
+        "changes": [
+          {
+            "field": "request",
+            "action": "initialize"
+          },
+          {
+            "field": "request",
+            "action": "initialize"
+          }
+        ],
+        "mismatches": {},
+        "expected_issue_found": true
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "task_completed": true,
+      "inheritance_correct": true,
+      "clarification_correct": null
+    },
+    {
+      "sample_id": "M5",
+      "dataset_id": "multiturn-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.192,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "effective_request": {
+          "schema_version": "1.0",
+          "metric_catalog_version": "2026.09.1",
+          "metrics": [
+            "avg_resolution_hours"
+          ],
+          "dimensions": [
+            "team"
+          ],
+          "time_scope": {
+            "field": "support_tickets.opened_at",
+            "years": [],
+            "start": null,
+            "end": null
+          },
+          "filters": {
+            "country": [
+              "United States"
+            ]
+          },
+          "sort": [],
+          "limit": null,
+          "data_source": "support_ops",
+          "unresolved_ambiguities": [],
+          "unsupported_conditions": [
+            "平均解决时长 不支持国家筛选"
+          ]
+        },
+        "changes": [
+          {
+            "field": "request",
+            "action": "initialize"
+          },
+          {
+            "field": "metrics",
+            "action": "replace",
+            "from": [
+              "customer_count"
+            ],
+            "to": [
+              "avg_resolution_hours"
+            ]
+          },
+          {
+            "field": "dimensions",
+            "action": "replace",
+            "from": [],
+            "to": [
+              "team"
+            ]
+          },
+          {
+            "field": "data_source",
+            "action": "replace",
+            "from": "ai_analytics",
+            "to": "support_ops"
+          }
+        ],
+        "mismatches": {},
+        "expected_issue_found": true
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "task_completed": true,
+      "inheritance_correct": true,
+      "clarification_correct": true
+    },
+    {
+      "sample_id": "M6",
+      "dataset_id": "multiturn-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.181,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "effective_request": {
+          "schema_version": "1.0",
+          "metric_catalog_version": "2026.09.1",
+          "metrics": [
+            "customer_count"
+          ],
+          "dimensions": [],
+          "time_scope": {
+            "field": null,
+            "years": [],
+            "start": null,
+            "end": null
+          },
+          "filters": {},
+          "sort": [],
+          "limit": null,
+          "data_source": "ai_analytics",
+          "unresolved_ambiguities": [],
+          "unsupported_conditions": [
+            "当前 Schema 只有 country，没有华东等国内区域字段"
+          ]
+        },
+        "changes": [
+          {
+            "field": "request",
+            "action": "initialize"
+          }
+        ],
+        "mismatches": {},
+        "expected_issue_found": true
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "task_completed": true,
+      "inheritance_correct": true,
+      "clarification_correct": true
+    },
+    {
+      "sample_id": "M7",
+      "dataset_id": "multiturn-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.178,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "effective_request": {
+          "schema_version": "1.0",
+          "metric_catalog_version": "2026.09.1",
+          "metrics": [
+            "churn_rate"
+          ],
+          "dimensions": [],
+          "time_scope": {
+            "field": null,
+            "years": [
+              2025
+            ],
+            "start": null,
+            "end": null
+          },
+          "filters": {},
+          "sort": [],
+          "limit": null,
+          "data_source": "ai_analytics",
+          "unresolved_ambiguities": [],
+          "unsupported_conditions": [
+            "当前流失率 没有可回溯的时间字段"
+          ]
+        },
+        "changes": [
+          {
+            "field": "request",
+            "action": "initialize"
+          },
+          {
+            "field": "metrics",
+            "action": "replace",
+            "from": [
+              "paid_amount"
+            ],
+            "to": [
+              "churn_rate"
+            ]
+          }
+        ],
+        "mismatches": {},
+        "expected_issue_found": true
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "task_completed": true,
+      "inheritance_correct": true,
+      "clarification_correct": true
+    },
+    {
+      "sample_id": "M8",
+      "dataset_id": "multiturn-v1",
+      "split": "development_regression",
+      "architecture": "deterministic_control",
+      "success": true,
+      "duration_ms": 0.174,
+      "llm_calls": 0,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "error": null,
+      "failure_category": null,
+      "output": {
+        "effective_request": {
+          "schema_version": "1.0",
+          "metric_catalog_version": "2026.09.1",
+          "metrics": [
+            "paid_amount"
+          ],
+          "dimensions": [
+            "country"
+          ],
+          "time_scope": {
+            "field": "orders.order_date",
+            "years": [],
+            "start": null,
+            "end": null
+          },
+          "filters": {},
+          "sort": [],
+          "limit": null,
+          "data_source": "ai_analytics",
+          "unresolved_ambiguities": [],
+          "unsupported_conditions": []
+        },
+        "changes": [
+          {
+            "field": "request",
+            "action": "initialize"
+          },
+          {
+            "field": "metrics",
+            "action": "replace",
+            "from": [],
+            "to": [
+              "paid_amount"
+            ]
+          }
+        ],
+        "mismatches": {},
+        "expected_issue_found": true
+      },
+      "config": {
+        "network": false,
+        "paid_model": false,
+        "random_seed": 42
+      },
+      "versions": {
+        "protocol": "stage5-deterministic-v1",
+        "schema_catalog": "2026.09.1",
+        "git_commit": "d04fe98b15068b7a389037cfd6fcd6f742cef755"
+      },
+      "task_completed": true,
+      "inheritance_correct": true,
+      "clarification_correct": null
+    }
+  ],
+  "success": true
+}

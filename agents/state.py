@@ -7,8 +7,7 @@ AgentState —— 多智能体协同的运行时共享状态。
 设计参考 LangGraph 的 TypedDict State 模式。
 """
 
-from typing import TypedDict, List, Dict, Optional, Any, Annotated
-import operator
+from typing import TypedDict, List, Dict, Optional, Any
 
 
 class AgentState(TypedDict):
@@ -36,6 +35,7 @@ class AgentState(TypedDict):
     # 输入
     user_query: str
     requested_intent: Optional[str]
+    run_id: Optional[str]
 
     # Planner
     intent: str  # sql_query | analysis | prediction | report | mixed
@@ -48,6 +48,7 @@ class AgentState(TypedDict):
     selected_tables: List[Dict[str, str]]  # [{table_name, column_name, business_term, relevance}, ...]
     # V4: table-level context (descriptions, row counts — populated by Schema Agent)
     table_context: Optional[str]
+    business_context: Optional[str]
 
     # SQL Agent
     sql: Optional[str]
@@ -76,19 +77,26 @@ class AgentState(TypedDict):
     # 错误 & 追踪
     error: Optional[str]
     current_step: str
-    messages: Annotated[List[str], operator.add]  # 追加式日志
+    execution_trace: List[Dict[str, Any]]
+    # Nodes currently mutate and return the complete state. Replacement
+    # semantics therefore prevent LangGraph from re-appending full history.
+    messages: List[str]
 
 
 def create_initial_state(
-    user_query: str, requested_intent: Optional[str] = None
+    user_query: str,
+    requested_intent: Optional[str] = None,
+    run_id: Optional[str] = None,
 ) -> AgentState:
     """创建初始 AgentState（Planner 入口前调用）。"""
     return AgentState(
         user_query=user_query,
         requested_intent=requested_intent,
+        run_id=run_id,
         intent="",
         selected_tables=[],
         table_context=None,
+        business_context=None,
         sql=None,
         query_result=None,
         sql_retries=0,
@@ -102,6 +110,7 @@ def create_initial_state(
         memory_context=[],
         error=None,
         current_step="start",
+        execution_trace=[],
         planner_intent="",
         planned_agents=[],
         task_plan={},

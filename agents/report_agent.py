@@ -13,6 +13,9 @@ from agents.state import AgentState
 from agents.llm import chat
 from config.prompts.report_prompt import REPORT_SYSTEM_PROMPT, build_report_prompt
 from config.settings import get_settings
+from agents.run_context import current_owner_id
+from agents.evidence import update_evidence
+from agents.evidence_validation import validate_report_claims
 
 
 def report_agent_node(state: AgentState) -> AgentState:
@@ -33,9 +36,16 @@ def report_agent_node(state: AgentState) -> AgentState:
         evidence = state.get("evidence") or {}
         user_query = state.get("user_query", "")
         memories = []
-        if get_settings().ANALYSIS_MEMORY_ENABLED:
+        owner_id = current_owner_id()
+        if get_settings().ANALYSIS_MEMORY_ENABLED and owner_id:
             from storage.chromadb.analysis_memory import get_analysis_memory
-            memories = get_analysis_memory().recall(user_query, top_k=3)
+            memories = get_analysis_memory().recall(
+                user_query, owner_id=owner_id, top_k=3
+            )
+        elif get_settings().ANALYSIS_MEMORY_ENABLED:
+            state["messages"].append(
+                "[Report Agent] 未提供用户作用域，已禁用历史记忆复用"
+            )
         state["memory_context"] = memories
         if memories:
             state["messages"].append(
@@ -65,10 +75,39 @@ def report_agent_node(state: AgentState) -> AgentState:
             state["messages"].append(f"[Report Agent] ERROR: {state['error']}")
             return state
 
-        state["report"] = report_text.strip()
-        if get_settings().ANALYSIS_MEMORY_ENABLED:
+        report_text = report_text.strip()
+        report_validation = validate_report_claims(report_text, evidence)
+        if report_validation["status"] == "failed":
+            failed_messages = [
+                item["message"] for item in report_validation["checks"]
+                if item["status"] == "failed"
+            ]
+            repair_messages = messages + [
+                {"role": "assistant", "content": report_text},
+                {
+                    "role": "user",
+                    "content": (
+                        "上述报告未通过事实校验：" + "；".join(failed_messages[:8])
+                        + "。请仅使用基础查询证据中的 facts 重写；每个数值必须在同一行引用对应 [F#]，"
+                        "不要新增证据中不存在的数字、年份、名称或排名。"
+                    ),
+                },
+            ]
+            report_text = chat(repair_messages, temperature=0.1, max_tokens=2000).strip()
+            report_validation = validate_report_claims(report_text, evidence)
+        state["evidence"] = update_evidence(
+            evidence, report_validation=report_validation
+        )
+        if report_validation["status"] == "failed":
+            state["error"] = "Report Agent: 报告事实引用校验失败"
+            state["messages"].append(f"[Report Agent] ERROR: {state['error']}")
+            return state
+
+        state["report"] = report_text
+        if get_settings().ANALYSIS_MEMORY_ENABLED and owner_id:
             from storage.chromadb.analysis_memory import get_analysis_memory
             get_analysis_memory().remember(
+                owner_id=owner_id,
                 query=user_query, report=state["report"],
                 category=state.get("intent", ""),
             )

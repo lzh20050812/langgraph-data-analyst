@@ -7,7 +7,7 @@ Planner Agent —— LangGraph 状态图入口。
 3. 管理和传递共享状态 AgentState
 
 Phase 3 支持的链路：
-  sql_query:   START → planner → schema → sql → governance → END
+  sql_query:   START → planner → schema → sql → governance → chart → END
   analysis:    START → planner → schema → sql → governance → analysis → chart → END
   prediction:  START → planner → schema → sql → governance → prediction → chart → END
   mixed:       START → planner → schema → sql → governance → analysis → prediction → report → chart → END
@@ -19,6 +19,7 @@ from typing import Literal
 from langgraph.graph import StateGraph, END
 from agents.state import AgentState, create_initial_state
 from agents.task_planning import build_task_plan, planned_nodes
+from agents.observability import traced_node
 
 
 # ============================================================
@@ -206,7 +207,7 @@ def route_after_governance(state: AgentState) -> str:
     - analysis → analysis_agent
     - prediction → prediction_agent
     - mixed → analysis_agent（先分析再预测）
-    - sql_query → END
+    - sql_query → chart_renderer（结果集适合时生成通用图表）
     """
     if state.get("error"):
         return END
@@ -218,7 +219,7 @@ def route_after_governance(state: AgentState) -> str:
         return "prediction_agent"
     if task_plan.get("need_report"):
         return "report_agent"
-    return END
+    return "chart_renderer"
 
 
 def route_after_analysis(state: AgentState) -> str:
@@ -271,7 +272,7 @@ def build_graph() -> StateGraph:
                                                  │                ↑
                                                  ├─→ prediction ──┘
                                                  │
-                                                 └─→ END (sql_query)
+                                                 └─→ chart → END (sql_query)
     """
     from agents.schema_agent import schema_agent_node
     from agents.sql_agent import sql_agent_node
@@ -284,14 +285,18 @@ def build_graph() -> StateGraph:
     workflow = StateGraph(AgentState)
 
     # 注册所有节点
-    workflow.add_node("planner", parse_intent)
-    workflow.add_node("schema_agent", schema_agent_node)
-    workflow.add_node("sql_agent", sql_agent_node)
-    workflow.add_node("governance_agent", governance_agent_node)
-    workflow.add_node("analysis_agent", analysis_agent_node)
-    workflow.add_node("prediction_agent", prediction_agent_node)
-    workflow.add_node("report_agent", report_agent_node)
-    workflow.add_node("chart_renderer", render_charts)
+    workflow.add_node("planner", traced_node("planner", parse_intent))
+    workflow.add_node("schema_agent", traced_node("schema_agent", schema_agent_node))
+    workflow.add_node("sql_agent", traced_node("sql_agent", sql_agent_node))
+    workflow.add_node(
+        "governance_agent", traced_node("governance_agent", governance_agent_node)
+    )
+    workflow.add_node("analysis_agent", traced_node("analysis_agent", analysis_agent_node))
+    workflow.add_node(
+        "prediction_agent", traced_node("prediction_agent", prediction_agent_node)
+    )
+    workflow.add_node("report_agent", traced_node("report_agent", report_agent_node))
+    workflow.add_node("chart_renderer", traced_node("chart_renderer", render_charts))
 
     # 入口
     workflow.set_entry_point("planner")
@@ -311,11 +316,12 @@ def build_graph() -> StateGraph:
         END: END,
     })
 
-    # Governance → Analysis / Prediction / END
+    # Governance → Analysis / Prediction / Report / Chart
     workflow.add_conditional_edges("governance_agent", route_after_governance, {
         "analysis_agent": "analysis_agent",
         "prediction_agent": "prediction_agent",
         "report_agent": "report_agent",
+        "chart_renderer": "chart_renderer",
         END: END,
     })
 
@@ -359,7 +365,9 @@ def get_graph():
 
 
 def run_query(
-    user_query: str, requested_intent: str | None = None
+    user_query: str,
+    requested_intent: str | None = None,
+    run_id: str | None = None,
 ) -> AgentState:
     """
     执行一次查询 —— Phase 3 的主入口。
@@ -372,7 +380,7 @@ def run_query(
         governance_result, report, charts）
     """
     initial_state = create_initial_state(
-        user_query, requested_intent=requested_intent
+        user_query, requested_intent=requested_intent, run_id=run_id
     )
     from agents.scope_guard import detect_unsupported_request
     unsupported = detect_unsupported_request(user_query)

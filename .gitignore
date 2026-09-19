@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 dist/
+!frontend/dist/
+!frontend/dist/**
 build/
 .eggs/
 
@@ -10,6 +12,7 @@ build/
 venv/
 .venv/
 env/
+node_modules/
 
 # 环境变量（含 API Key）
 .env
@@ -27,6 +30,7 @@ data/processed/*
 !data/processed/eval_*.json
 !data/processed/evaluation_summary.json
 !data/processed/injection_report.json
+!data/processed/README.md
 !data/raw/injection_report.json
 !data/processed/.gitkeep
 
@@ -34,6 +38,7 @@ data/processed/*
 data/chromadb/
 data/hf_cache/
 data/st_cache/
+data/runtime/
 
 # Jupyter
 .ipynb_checkpoints/

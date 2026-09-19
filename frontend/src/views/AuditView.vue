@@ -1,0 +1,11 @@
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { Refresh, Search } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { api, errorMessage } from '../api/client'
+const events=ref<any[]>([]), owner=ref(''), loading=ref(false)
+async function load(){loading.value=true;try{const q=owner.value?`?limit=200&owner_id=${encodeURIComponent(owner.value)}`:'?limit=200';events.value=(await api<any>(`/operations/audit${q}`)).events.reverse()}catch(error:unknown){ElMessage.error(errorMessage(error,'审计日志加载失败'))}finally{loading.value=false}}
+onMounted(load)
+</script>
+<template><div class="page"><div class="page-heading"><div><h2>日志中心</h2><p>持久化操作审计，不展示 API Key、Prompt 或业务明细</p></div><el-button :icon="Refresh" @click="load">刷新</el-button></div><div class="surface"><div class="filters"><el-input v-model="owner" placeholder="按用户 ID 筛选" clearable :prefix-icon="Search" style="width:280px" @keyup.enter="load"/><el-button type="primary" plain @click="load">查询</el-button><span class="muted">共 {{ events.length }} 条</span></div><el-table v-loading="loading" :data="events" stripe><el-table-column label="时间" width="180"><template #default="s">{{ new Date(s.row.created_at*1000).toLocaleString() }}</template></el-table-column><el-table-column prop="owner_id" label="用户/租户" min-width="180" show-overflow-tooltip/><el-table-column prop="role" label="角色" width="100"/><el-table-column prop="action" label="操作" width="160"><template #default="s"><code>{{s.row.action}}</code></template></el-table-column><el-table-column prop="resource_type" label="资源" width="110"/><el-table-column prop="resource_id" label="资源 ID" min-width="210" show-overflow-tooltip/><el-table-column label="结果" width="120"><template #default="s"><el-tag size="small" :type="['accepted','completed','replayed'].includes(s.row.outcome)?'success':s.row.outcome==='denied'?'danger':'warning'">{{s.row.outcome}}</el-tag></template></el-table-column><el-table-column prop="request_id" label="请求 ID" min-width="220" show-overflow-tooltip/></el-table></div></div></template>
+<style scoped>.filters{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}.filters .muted{margin-left:auto}</style>

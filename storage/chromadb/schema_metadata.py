@@ -11,7 +11,12 @@ Schema Metadata —— 结构化表/字段元信息（人类可读的业务术�
 - 新增表/字段时只需在此处补充
 """
 
+from hashlib import sha256
+import json
 from typing import List, Dict
+
+
+SCHEMA_CATALOG_VERSION = "2026.09.1"
 
 # ============================================================
 # 字段元数据定义
@@ -462,6 +467,92 @@ SCHEMA_FIELDS: List[Dict] = [
 ]
 
 
+# A second business schema hosted in the same MySQL database.  It is kept
+# deliberately small so migration and retrieval behavior remain reproducible.
+SCHEMA_FIELDS.extend([
+    {
+        "table_name": "support_agents", "column_name": "agent_id", "dtype": "VARCHAR",
+        "business_term": "客服坐席唯一标识", "aliases": ["坐席ID", "客服ID", "agent id"],
+        "data_source": "support_ops",
+    },
+    {
+        "table_name": "support_agents", "column_name": "team", "dtype": "VARCHAR",
+        "business_term": "客服坐席所属团队", "aliases": ["客服团队", "坐席组", "team"],
+        "data_source": "support_ops",
+    },
+    {
+        "table_name": "support_agents", "column_name": "region", "dtype": "VARCHAR",
+        "business_term": "客服团队负责区域", "aliases": ["负责区域", "客服区域", "region"],
+        "data_source": "support_ops",
+    },
+    {
+        "table_name": "support_tickets", "column_name": "ticket_id", "dtype": "VARCHAR",
+        "business_term": "客服工单唯一标识", "aliases": ["工单ID", "工单号", "ticket id"],
+        "data_source": "support_ops",
+    },
+    {
+        "table_name": "support_tickets", "column_name": "agent_id", "dtype": "VARCHAR",
+        "business_term": "处理工单的客服坐席，关联 support_agents.agent_id",
+        "aliases": ["处理坐席", "客服关联", "agent id"], "data_source": "support_ops",
+    },
+    {
+        "table_name": "support_tickets", "column_name": "opened_at", "dtype": "DATETIME",
+        "business_term": "工单创建时间", "aliases": ["工单时间", "创建时间", "opened at"],
+        "data_source": "support_ops",
+    },
+    {
+        "table_name": "support_tickets", "column_name": "channel", "dtype": "VARCHAR",
+        "business_term": "工单进入渠道", "aliases": ["工单渠道", "客服渠道", "channel"],
+        "data_source": "support_ops",
+    },
+    {
+        "table_name": "support_tickets", "column_name": "priority", "dtype": "VARCHAR",
+        "business_term": "工单优先级", "aliases": ["优先级", "紧急程度", "priority"],
+        "data_source": "support_ops",
+    },
+    {
+        "table_name": "support_tickets", "column_name": "status", "dtype": "VARCHAR",
+        "business_term": "工单当前状态", "aliases": ["工单状态", "处理状态", "status"],
+        "data_source": "support_ops",
+    },
+    {
+        "table_name": "support_tickets", "column_name": "resolution_hours", "dtype": "DECIMAL",
+        "business_term": "工单解决耗时（小时）", "aliases": ["解决时长", "处理耗时", "resolution time"],
+        "data_source": "support_ops",
+    },
+    {
+        "table_name": "support_tickets", "column_name": "satisfaction_score", "dtype": "DECIMAL",
+        "business_term": "工单满意度评分（1-5）", "aliases": ["客服满意度", "满意度评分", "csat"],
+        "data_source": "support_ops",
+    },
+])
+
+for _field in SCHEMA_FIELDS:
+    _field.setdefault("data_source", "ai_analytics")
+    _field.setdefault("catalog_version", SCHEMA_CATALOG_VERSION)
+    _field.setdefault("source_id", "repo:storage/chromadb/schema_metadata.py")
+    _field.setdefault("access_scope", "public")
+    _field.setdefault("owner_id", "")
+
+
+SCHEMA_RELATIONSHIPS: List[Dict] = [
+    {
+        "data_source": "ai_analytics", "version": "1.0.0",
+        "left_table": "orders", "left_column": "customer_id",
+        "right_table": "customers", "right_column": "customer_id",
+        "cardinality": "many-to-one", "source_id": "repo:storage/mysql/schema.sql",
+        "access_scope": "public", "owner_id": "",
+    },
+    {
+        "data_source": "support_ops", "version": "1.0.0",
+        "left_table": "support_tickets", "left_column": "agent_id",
+        "right_table": "support_agents", "right_column": "agent_id",
+        "cardinality": "many-to-one", "source_id": "repo:storage/mysql/schema.sql",
+        "access_scope": "public", "owner_id": "",
+    },
+]
+
+
 # ============================================================
 # 表级别元数据
 # ============================================================
@@ -490,20 +581,58 @@ TABLE_METADATA: List[Dict] = [
         "row_count": "140",
         "aliases": ["商品表", "产品表", "商品汇总", "product summary"],
     },
+    {
+        "table_name": "support_agents", "data_source": "support_ops",
+        "description": "客服坐席维表：团队和负责区域，每行一个坐席",
+        "row_count": "4", "aliases": ["客服坐席", "客服团队", "agents"],
+    },
+    {
+        "table_name": "support_tickets", "data_source": "support_ops",
+        "description": "客服工单事实表：渠道、优先级、状态、解决耗时和满意度",
+        "row_count": "12", "aliases": ["客服工单", "服务工单", "tickets"],
+    },
 ]
+
+for _table in TABLE_METADATA:
+    _table.setdefault("data_source", "ai_analytics")
+    _table.setdefault("catalog_version", SCHEMA_CATALOG_VERSION)
+    _table.setdefault("source_id", "repo:storage/chromadb/schema_metadata.py")
+    _table.setdefault("access_scope", "public")
+    _table.setdefault("owner_id", "")
 
 
 # ============================================================
 # 辅助函数
 # ============================================================
 
-def get_documents_for_embedding() -> List[str]:
+def is_accessible(item: Dict, principal_id: str | None = None) -> bool:
+    return item.get("access_scope", "public") == "public" or (
+        bool(principal_id) and item.get("owner_id") == principal_id
+    )
+
+
+def get_schema_fields(
+    data_source: str = "ai_analytics", principal_id: str | None = None
+) -> List[Dict]:
+    return [
+        field for field in SCHEMA_FIELDS
+        if field.get("data_source") == data_source and is_accessible(field, principal_id)
+    ]
+
+
+def schema_catalog_fingerprint() -> str:
+    payload = {"version": SCHEMA_CATALOG_VERSION, "fields": SCHEMA_FIELDS,
+               "relationships": SCHEMA_RELATIONSHIPS}
+    return sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+
+
+def get_documents_for_embedding(fields: List[Dict] | None = None) -> List[str]:
     """
     生成所有需要做 embedding 的文本。
     每条记录的文本 = table_name + column_name + business_term + aliases
     """
     docs = []
-    for field in SCHEMA_FIELDS:
+    for field in fields or SCHEMA_FIELDS:
         text = (
             f"表: {field['table_name']} | "
             f"字段: {field['column_name']} | "
@@ -519,9 +648,9 @@ def get_field_by_id(doc_id: int) -> Dict:
     return SCHEMA_FIELDS[doc_id]
 
 
-def get_table_list() -> List[str]:
+def get_table_list(data_source: str = "ai_analytics") -> List[str]:
     """返回所有表名。"""
-    return [t["table_name"] for t in TABLE_METADATA]
+    return [t["table_name"] for t in TABLE_METADATA if t["data_source"] == data_source]
 
 
 def get_table_description(table_name: str) -> str:

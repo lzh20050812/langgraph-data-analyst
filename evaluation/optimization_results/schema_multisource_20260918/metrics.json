@@ -1,0 +1,458 @@
+{
+  "protocol": "second-schema-migration-v1",
+  "created_at": "2026-09-18",
+  "dataset_sha256": "01202b871ce4f7777bcaab42b2c3025ff88d94f83fc0132defc49b9dec670d62",
+  "data_source": "support_ops",
+  "sample_count": 8,
+  "summaries": {
+    "dense": {
+      "n": 8,
+      "field_recall_at_5": 0.9375,
+      "table_recall_at_5": 0.9375,
+      "latency_median_ms": 13.991
+    },
+    "lexical": {
+      "n": 8,
+      "field_recall_at_5": 1.0,
+      "table_recall_at_5": 1.0,
+      "latency_median_ms": 0.542
+    },
+    "hybrid": {
+      "n": 8,
+      "field_recall_at_5": 1.0,
+      "table_recall_at_5": 1.0,
+      "latency_median_ms": 14.529
+    }
+  },
+  "relationship_path_coverage": 1,
+  "downstream_validation": {
+    "scope": "one deterministic support.team_resolution contract",
+    "answer_correct": true,
+    "result": [
+      {
+        "team": "Consumer",
+        "ticket_count": 6,
+        "avg_resolution_hours": 1.36
+      },
+      {
+        "team": "Enterprise",
+        "ticket_count": 6,
+        "avg_resolution_hours": 4.5
+      }
+    ]
+  },
+  "details": [
+    {
+      "id": "S1",
+      "query": "各客服团队处理了多少工单",
+      "expected_tables": [
+        "support_agents",
+        "support_tickets"
+      ],
+      "expected_fields": [
+        "support_agents.team",
+        "support_tickets.ticket_id"
+      ],
+      "requires_join": true,
+      "methods": {
+        "dense": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 20051.191,
+          "ranked_fields": [
+            "support_tickets.channel",
+            "support_tickets.ticket_id",
+            "support_agents.team",
+            "support_tickets.satisfaction_score",
+            "support_tickets.agent_id"
+          ]
+        },
+        "lexical": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 2.493,
+          "ranked_fields": [
+            "support_agents.team",
+            "support_tickets.ticket_id",
+            "support_agents.agent_id",
+            "support_agents.region",
+            "support_tickets.agent_id"
+          ]
+        },
+        "hybrid": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 20053.684,
+          "ranked_fields": [
+            "support_agents.team",
+            "support_tickets.ticket_id",
+            "support_agents.agent_id",
+            "support_agents.region",
+            "support_tickets.channel"
+          ]
+        }
+      },
+      "relationship_path_complete": true
+    },
+    {
+      "id": "S2",
+      "query": "不同工单渠道的平均解决时长",
+      "expected_tables": [
+        "support_tickets"
+      ],
+      "expected_fields": [
+        "support_tickets.channel",
+        "support_tickets.resolution_hours"
+      ],
+      "requires_join": false,
+      "methods": {
+        "dense": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 14.02,
+          "ranked_fields": [
+            "support_tickets.channel",
+            "support_tickets.resolution_hours",
+            "support_tickets.opened_at",
+            "support_tickets.ticket_id",
+            "support_tickets.status"
+          ]
+        },
+        "lexical": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 0.543,
+          "ranked_fields": [
+            "support_tickets.channel",
+            "support_tickets.resolution_hours",
+            "support_tickets.ticket_id",
+            "support_tickets.opened_at",
+            "support_tickets.status"
+          ]
+        },
+        "hybrid": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 14.563,
+          "ranked_fields": [
+            "support_tickets.channel",
+            "support_tickets.resolution_hours",
+            "support_tickets.ticket_id",
+            "support_tickets.opened_at",
+            "support_tickets.status"
+          ]
+        }
+      },
+      "relationship_path_complete": true
+    },
+    {
+      "id": "S3",
+      "query": "各优先级工单的客服满意度",
+      "expected_tables": [
+        "support_tickets"
+      ],
+      "expected_fields": [
+        "support_tickets.priority",
+        "support_tickets.satisfaction_score"
+      ],
+      "requires_join": false,
+      "methods": {
+        "dense": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 13.142,
+          "ranked_fields": [
+            "support_tickets.satisfaction_score",
+            "support_tickets.ticket_id",
+            "support_tickets.priority",
+            "support_tickets.channel",
+            "support_agents.agent_id"
+          ]
+        },
+        "lexical": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 0.539,
+          "ranked_fields": [
+            "support_tickets.satisfaction_score",
+            "support_tickets.priority",
+            "support_tickets.ticket_id",
+            "support_agents.agent_id",
+            "support_tickets.agent_id"
+          ]
+        },
+        "hybrid": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 13.681,
+          "ranked_fields": [
+            "support_tickets.satisfaction_score",
+            "support_tickets.priority",
+            "support_tickets.ticket_id",
+            "support_agents.agent_id",
+            "support_tickets.agent_id"
+          ]
+        }
+      },
+      "relationship_path_complete": true
+    },
+    {
+      "id": "S4",
+      "query": "按处理状态统计工单数量",
+      "expected_tables": [
+        "support_tickets"
+      ],
+      "expected_fields": [
+        "support_tickets.status",
+        "support_tickets.ticket_id"
+      ],
+      "requires_join": false,
+      "methods": {
+        "dense": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 13.963,
+          "ranked_fields": [
+            "support_tickets.status",
+            "support_tickets.satisfaction_score",
+            "support_tickets.ticket_id",
+            "support_tickets.channel",
+            "support_tickets.priority"
+          ]
+        },
+        "lexical": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 0.532,
+          "ranked_fields": [
+            "support_tickets.status",
+            "support_tickets.ticket_id",
+            "support_tickets.agent_id",
+            "support_tickets.channel",
+            "support_tickets.opened_at"
+          ]
+        },
+        "hybrid": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 14.495,
+          "ranked_fields": [
+            "support_tickets.status",
+            "support_tickets.ticket_id",
+            "support_tickets.agent_id",
+            "support_tickets.channel",
+            "support_tickets.opened_at"
+          ]
+        }
+      },
+      "relationship_path_complete": true
+    },
+    {
+      "id": "S5",
+      "query": "不同负责区域的工单解决耗时",
+      "expected_tables": [
+        "support_agents",
+        "support_tickets"
+      ],
+      "expected_fields": [
+        "support_agents.region",
+        "support_tickets.resolution_hours"
+      ],
+      "requires_join": true,
+      "methods": {
+        "dense": {
+          "field_recall_at_5": 0.5,
+          "table_recall_at_5": 0.5,
+          "latency_ms": 13.061,
+          "ranked_fields": [
+            "support_tickets.resolution_hours",
+            "support_tickets.opened_at",
+            "support_tickets.channel",
+            "support_tickets.status",
+            "support_tickets.ticket_id"
+          ]
+        },
+        "lexical": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 0.54,
+          "ranked_fields": [
+            "support_agents.region",
+            "support_tickets.ticket_id",
+            "support_tickets.resolution_hours",
+            "support_tickets.channel",
+            "support_tickets.opened_at"
+          ]
+        },
+        "hybrid": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 13.601,
+          "ranked_fields": [
+            "support_agents.region",
+            "support_tickets.ticket_id",
+            "support_tickets.resolution_hours",
+            "support_tickets.channel",
+            "support_tickets.opened_at"
+          ]
+        }
+      },
+      "relationship_path_complete": true
+    },
+    {
+      "id": "S6",
+      "query": "每个客服坐席的工单工作量",
+      "expected_tables": [
+        "support_agents",
+        "support_tickets"
+      ],
+      "expected_fields": [
+        "support_agents.agent_id",
+        "support_tickets.agent_id",
+        "support_tickets.ticket_id"
+      ],
+      "requires_join": true,
+      "methods": {
+        "dense": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 15.092,
+          "ranked_fields": [
+            "support_agents.agent_id",
+            "support_agents.team",
+            "support_tickets.agent_id",
+            "support_tickets.ticket_id",
+            "support_tickets.channel"
+          ]
+        },
+        "lexical": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 0.541,
+          "ranked_fields": [
+            "support_agents.agent_id",
+            "support_tickets.ticket_id",
+            "support_agents.team",
+            "support_tickets.agent_id",
+            "support_tickets.channel"
+          ]
+        },
+        "hybrid": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 15.633,
+          "ranked_fields": [
+            "support_agents.agent_id",
+            "support_tickets.ticket_id",
+            "support_agents.team",
+            "support_tickets.agent_id",
+            "support_tickets.channel"
+          ]
+        }
+      },
+      "relationship_path_complete": true
+    },
+    {
+      "id": "S7",
+      "query": "按创建时间查看工单量趋势",
+      "expected_tables": [
+        "support_tickets"
+      ],
+      "expected_fields": [
+        "support_tickets.opened_at",
+        "support_tickets.ticket_id"
+      ],
+      "requires_join": false,
+      "methods": {
+        "dense": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 13.565,
+          "ranked_fields": [
+            "support_tickets.opened_at",
+            "support_tickets.status",
+            "support_tickets.channel",
+            "support_tickets.resolution_hours",
+            "support_tickets.ticket_id"
+          ]
+        },
+        "lexical": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 0.569,
+          "ranked_fields": [
+            "support_tickets.opened_at",
+            "support_tickets.ticket_id",
+            "support_tickets.channel",
+            "support_tickets.status",
+            "support_tickets.priority"
+          ]
+        },
+        "hybrid": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 14.134,
+          "ranked_fields": [
+            "support_tickets.opened_at",
+            "support_tickets.ticket_id",
+            "support_tickets.channel",
+            "support_tickets.status",
+            "support_tickets.priority"
+          ]
+        }
+      },
+      "relationship_path_complete": true
+    },
+    {
+      "id": "S8",
+      "query": "各渠道未处理完成工单分布",
+      "expected_tables": [
+        "support_tickets"
+      ],
+      "expected_fields": [
+        "support_tickets.channel",
+        "support_tickets.status"
+      ],
+      "requires_join": false,
+      "methods": {
+        "dense": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 14.099,
+          "ranked_fields": [
+            "support_tickets.channel",
+            "support_tickets.ticket_id",
+            "support_tickets.opened_at",
+            "support_tickets.resolution_hours",
+            "support_tickets.status"
+          ]
+        },
+        "lexical": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 0.544,
+          "ranked_fields": [
+            "support_tickets.ticket_id",
+            "support_tickets.channel",
+            "support_tickets.status",
+            "support_tickets.agent_id",
+            "support_tickets.opened_at"
+          ]
+        },
+        "hybrid": {
+          "field_recall_at_5": 1.0,
+          "table_recall_at_5": 1.0,
+          "latency_ms": 14.643,
+          "ranked_fields": [
+            "support_tickets.ticket_id",
+            "support_tickets.channel",
+            "support_tickets.status",
+            "support_tickets.opened_at",
+            "support_tickets.agent_id"
+          ]
+        }
+      },
+      "relationship_path_complete": true
+    }
+  ]
+}

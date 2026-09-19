@@ -1,0 +1,10 @@
+[
+  {"id": "E1", "category": "condition_loss", "expected_status": "failed", "source_test": "tests/test_evidence_validation.py::test_query_evidence_rejects_lost_conditions_and_wrong_order", "description": "国家和年份条件不得从 SQL 消失"},
+  {"id": "E2", "category": "join_fanout", "expected_status": "failed", "source_test": "tests/test_evidence_validation.py::test_query_evidence_detects_join_fanout_for_customer_count", "description": "一对多关联的客户计数必须按 customer_id 去重"},
+  {"id": "E3", "category": "empty_result", "expected_status": "unverifiable", "source_test": "tests/test_evidence_validation.py::test_empty_and_null_results_are_not_falsely_verified", "description": "空结果不能标记为已验证"},
+  {"id": "E4", "category": "null_result", "expected_status": "unverifiable", "source_test": "tests/test_evidence_validation.py::test_empty_and_null_results_are_not_falsely_verified", "description": "含 NULL 的事实必须暴露验证限制"},
+  {"id": "E5", "category": "missing_refund", "expected_status": "failed", "source_test": "tests/test_evidence_validation.py::test_unavailable_refund_metric_fails_closed", "description": "缺少退款字段时不得声称净销售额"},
+  {"id": "E6", "category": "wrong_period", "expected_status": "failed", "source_test": "tests/test_evidence_validation.py::test_report_claims_verify_values_dimensions_periods_and_rankings", "description": "报告年份必须来自请求或事实维度"},
+  {"id": "E7", "category": "unsupported_number", "expected_status": "failed", "source_test": "tests/test_report_evidence_guard.py::test_report_agent_fails_closed_after_second_invalid_report", "description": "未引用或数值不符的报告失败闭合"},
+  {"id": "E8", "category": "valid_evidence", "expected_status": "verified", "source_test": "tests/test_evidence_validation.py::test_query_evidence_verifies_metric_filters_sort_and_limit", "description": "正确指标、条件、排序和限制通过验证"}
+]

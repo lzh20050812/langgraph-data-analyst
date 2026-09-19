@@ -11,6 +11,7 @@ SQL Agent —— 自然语言 → SQL 生成 → 执行 → 自修正闭环。
 
 import re
 import sqlparse
+from agents.sql_safety import validate_read_only_sql
 from agents.state import AgentState
 from agents.evidence import build_evidence_bundle
 from agents.business_semantics import build_query_contract, validate_result_shape
@@ -53,6 +54,15 @@ def validate_select_only(sql: str) -> tuple[bool, str]:
     if not sql or not sql.strip():
         return False, "SQL 为空"
 
+    # Primary guard: parse the MySQL statement into an AST, reject all
+    # non-query nodes, side-effect functions, and tables outside the catalog.
+    settings = get_settings()
+    ast_safe, ast_reason = validate_read_only_sql(
+        sql, allowed_tables=settings.SQL_ALLOWED_TABLES
+    )
+    if not ast_safe:
+        return False, ast_reason
+
     sql_clean = sql.strip()
 
     # 方法1: sqlparse 解析语句类型
@@ -90,7 +100,10 @@ def validate_select_only(sql: str) -> tuple[bool, str]:
 # SQL 生成
 # ============================================================
 
-def _build_schema_info_str(selected_tables: list[dict], table_context: str = None) -> str:
+def _build_schema_info_str(
+    selected_tables: list[dict], table_context: str = None,
+    business_context: str = None,
+) -> str:
     """
     V4: 将 Schema Agent 选中的字段列表格式化为 LLM 可读的增强文本。
 
@@ -103,6 +116,8 @@ def _build_schema_info_str(selected_tables: list[dict], table_context: str = Non
     # 表级上下文（描述、行数、关系）
     if table_context:
         lines.append(f"=== 表级信息 ===\n{table_context}\n")
+    if business_context:
+        lines.append(f"=== 受控业务口径 ===\n{business_context}\n")
 
     lines.append("=== 字段详细信息 ===")
     seen_tables = set()
@@ -243,7 +258,10 @@ def sql_agent_node(state: AgentState) -> AgentState:
 
     # 构建 schema 描述（V4: 含 dtype + business_term + 表级上下文）
     table_context = state.get("table_context", "")
-    schema_info = _build_schema_info_str(selected_tables, table_context=table_context)
+    schema_info = _build_schema_info_str(
+        selected_tables, table_context=table_context,
+        business_context=state.get("business_context", ""),
+    )
 
     # V4: 日志 — schema 上下文统计
     tables_involved_set = set(item.get("table_name", "") for item in selected_tables)
@@ -397,20 +415,36 @@ def sql_agent_node(state: AgentState) -> AgentState:
                         f"[SQL Agent] 查询形状契约不通过: {shape_issue}"
                     )
                     continue
+            evidence = build_evidence_bundle(
+                user_query=user_query,
+                task_plan=state.get("task_plan") or {},
+                sql=sql,
+                rows=rows,
+            )
+            if evidence["validation"].get("status") == "failed":
+                failed_checks = [
+                    item["message"] for item in evidence["validation"]["checks"]
+                    if item["status"] == "failed"
+                ]
+                error_msg = "；".join(failed_checks)
+                retry_log.append({
+                    "attempt": attempt,
+                    "phase": "request_consistency",
+                    "sql": sql,
+                    "result": "REJECTED",
+                    "reason": error_msg,
+                })
+                state["messages"].append(
+                    f"[SQL Agent] 请求一致性校验不通过: {error_msg}"
+                )
+                continue
             # 成功
             state["sql"] = sql
             state["query_result"] = rows
             state["sql_error"] = None
             state["sql_retries"] = attempt - 1
             state["sql_retry_log"] = retry_log
-            state["evidence"] = build_evidence_bundle(
-                user_query=user_query,
-                task_plan=state.get("task_plan") or {},
-                sql=sql,
-                rows=rows,
-            )
-            if query_contract:
-                state["evidence"]["query_contract"] = query_contract.to_dict()
+            state["evidence"] = evidence
             state["messages"].append(
                 f"[SQL Agent] SQL 执行成功！返回 {len(rows)} 行数据 "
                 f"(尝试 {attempt} 次)"

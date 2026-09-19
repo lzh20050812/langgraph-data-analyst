@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0",
+  "status": "final",
+  "frozen_at": "2026-08-12",
+  "source_commit": "e9b8cc86dbe0cf23710f02891be4be686c0bc680",
+  "scope": "Fixed local datasets and evaluation suites; not an open-domain performance claim.",
+  "regression_tests": {
+    "material_pack_passed": 32,
+    "current_passed": 55,
+    "current_verified_at": "2026-08-18"
+  },
+  "data_governance": {
+    "source_rows": 8604,
+    "missing_cells_before": 1176,
+    "missing_cells_after": 0,
+    "duplicate_issues_before": 604,
+    "duplicate_issues_after": 0,
+    "final_unique_customers": 8000,
+    "id_recall": 1.0
+  },
+  "schema_retrieval": {
+    "samples": 40,
+    "bge_field_recall_at_5": 0.8458,
+    "lexical_field_recall_at_5": 0.9,
+    "dense_minus_lexical_bootstrap_95_ci": [
+      -0.15,
+      0.0292
+    ],
+    "mcnemar_p_two_sided": 0.5
+  },
+  "text2sql": {
+    "scorable_samples": 49,
+    "rag_content_execution_accuracy": 0.877551,
+    "full_schema_content_execution_accuracy": 0.795918,
+    "rag_initial_content_execution_accuracy": 0.857143,
+    "self_correction_recovered_queries": 1,
+    "mcnemar_p_two_sided": 0.21875
+  },
+  "analysis": {
+    "rfm_samples": 8000,
+    "selected_k": 2,
+    "selected_k_silhouette": 0.310468,
+    "stability_ari_mean": 0.997035,
+    "stability_ari_min": 0.993157
+  },
+  "churn_prediction": {
+    "train_samples": 4800,
+    "validation_samples": 1200,
+    "test_samples": 2000,
+    "xgboost_auc": 0.677656,
+    "logistic_auc": 0.645281,
+    "auc_difference": 0.032375,
+    "auc_difference_bootstrap_95_ci": [
+      -0.009174,
+      0.074059
+    ]
+  },
+  "revenue_forecast": {
+    "train_periods": 69,
+    "test_periods": 6,
+    "prophet_mape_pct": 15.6457,
+    "seasonal_naive_mape_pct": 21.6034,
+    "last_value_mape_pct": 14.3602,
+    "drift_mape_pct": 14.3723
+  },
+  "multi_agent": {
+    "fixed_suite_samples": 50,
+    "task_completion_score": 1.0,
+    "sql_accuracy": 1.0,
+    "report_quality_score": 92.4,
+    "report_quality_samples": 10
+  },
+  "business_semantics_ablation": {
+    "paired_samples": 15,
+    "enabled_sql_accuracy": 1.0,
+    "disabled_sql_accuracy": 0.4667,
+    "mcnemar_p_two_sided": 0.0078
+  },
+  "analysis_memory": {
+    "memories": 10,
+    "paraphrased_queries": 10,
+    "recall_at_1": 0.8,
+    "recall_at_3": 0.9,
+    "mrr_at_3": 0.85,
+    "median_latency_ms": 17.889
+  },
+  "robustness": {
+    "ood_samples": 6,
+    "ood_fail_closed_rate": 1.0,
+    "injection_samples": 4,
+    "injection_containment_rate": 1.0,
+    "database_rows_unchanged": true
+  },
+  "system": {
+    "requests_per_concurrency_level": 8,
+    "concurrency_levels": [
+      1,
+      2,
+      4
+    ],
+    "success_rate_at_4_workers": 1.0,
+    "throughput_rps_at_4_workers": 1.3922,
+    "on_demand_routing_samples": 15,
+    "on_demand_agent_call_reduction": 0.428571
+  },
+  "docker_validation": {
+    "experimental_pack_validated_at": "2026-08-12",
+    "latest_smoke_test_at": "2026-08-18",
+    "mysql_healthy": true,
+    "api_healthy": true,
+    "db_init_exit_code": 0,
+    "api_mysql_user": "analytics_reader@%",
+    "api_mysql_privileges": ["USAGE", "SELECT"],
+    "structured_request_logging": true,
+    "request_id_response_header": true,
+    "max_concurrent_queries": 4,
+    "overload_probe": {
+      "simultaneous_requests": 5,
+      "accepted": 4,
+      "rejected_with_429": 1,
+      "rejected_seconds": 0.052
+    },
+    "health_status": "ok",
+    "table_row_counts": {
+      "customers": 8000,
+      "orders": 25000,
+      "monthly_revenue": 75,
+      "product_summary": 140
+    }
+  }
+}

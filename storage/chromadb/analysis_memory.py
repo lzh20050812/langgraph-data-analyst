@@ -31,23 +31,35 @@ class AnalysisMemory:
         except Exception:
             pass
 
-    def remember(self, *, query: str, report: str, category: str = "", source_id: str = "") -> str:
+    def remember(
+        self, *, owner_id: str, query: str, report: str,
+        category: str = "", source_id: str = "",
+    ) -> str:
+        if not owner_id.strip():
+            raise ValueError("owner_id is required for analysis memory")
         if not query.strip() or len(report.strip()) < 50:
             raise ValueError("query/report is too short for durable analysis memory")
-        memory_id = source_id or hashlib.sha256((query + "\n" + report).encode("utf-8")).hexdigest()[:24]
+        memory_id = source_id or hashlib.sha256(
+            (owner_id + "\n" + query + "\n" + report).encode("utf-8")
+        ).hexdigest()[:24]
         document = f"业务问题：{query}\n历史分析报告：{report[:6000]}"
         embedding = self.embedder.model.encode([document]).tolist()
-        metadata = {"query": query[:1000], "category": category[:200],
+        metadata = {"owner_id": owner_id[:128], "query": query[:1000], "category": category[:200],
                     "created_utc": datetime.now(timezone.utc).isoformat(), "source_id": source_id[:100]}
         self.collection.upsert(ids=[memory_id], embeddings=embedding, documents=[document], metadatas=[metadata])
         return memory_id
 
-    def recall(self, query: str, top_k: int = 3) -> List[Dict[str, Any]]:
+    def recall(
+        self, query: str, *, owner_id: str, top_k: int = 3
+    ) -> List[Dict[str, Any]]:
+        if not owner_id.strip():
+            return []
         if self.count() == 0:
             return []
         n = min(max(1, int(top_k)), self.count())
         embedding = self.embedder.model.encode([query]).tolist()
         result = self.collection.query(query_embeddings=embedding, n_results=n,
+            where={"owner_id": owner_id},
             include=["metadatas", "documents", "distances"])
         return [{"memory_id": mid, "query": meta.get("query", ""),
                  "category": meta.get("category", ""), "document": doc,

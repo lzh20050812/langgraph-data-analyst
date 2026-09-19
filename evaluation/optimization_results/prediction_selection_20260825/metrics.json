@@ -1,0 +1,158 @@
+{
+  "protocol": "rolling-origin-selection-independent-holdout-v1",
+  "created_at": "2026-08-25",
+  "dataset_sha256": "1f981dffacf463b02746bd2301cfbd79dd11eed3b3e9100d43b8339e7677c827",
+  "selected_model": "Prophet",
+  "selection_set": "rolling_validation",
+  "test_set": "final_holdout",
+  "candidate_metrics": {
+    "LastValue": {
+      "mape_pct": 13.29,
+      "validation_mape_mean": 13.29,
+      "validation_mape_std": 3.03,
+      "validation_rmse_mean": 4660.43,
+      "validation_mae_mean": 4329.16,
+      "validation_folds": 3
+    },
+    "SeasonalNaive": {
+      "mape_pct": 9.81,
+      "validation_mape_mean": 9.81,
+      "validation_mape_std": 2.75,
+      "validation_rmse_mean": 4551.96,
+      "validation_mae_mean": 3364.31,
+      "validation_folds": 3
+    },
+    "Drift": {
+      "mape_pct": 13.56,
+      "validation_mape_mean": 13.56,
+      "validation_mape_std": 3.23,
+      "validation_rmse_mean": 4741.69,
+      "validation_mae_mean": 4413.97,
+      "validation_folds": 3
+    },
+    "Prophet": {
+      "mape_pct": 9.12,
+      "validation_mape_mean": 9.12,
+      "validation_mape_std": 1.29,
+      "validation_rmse_mean": 4320.14,
+      "validation_mae_mean": 3130.01,
+      "validation_folds": 3
+    }
+  },
+  "test_candidate_metrics": {
+    "LastValue": {
+      "rmse": 5944.96,
+      "mape_pct": 14.36,
+      "mae": 5361.89
+    },
+    "SeasonalNaive": {
+      "rmse": 8536.04,
+      "mape_pct": 21.6,
+      "mae": 8174.73
+    },
+    "Drift": {
+      "rmse": 5961.82,
+      "mape_pct": 14.37,
+      "mae": 5370.95
+    },
+    "Prophet": {
+      "rmse": 6584.95,
+      "mape_pct": 15.65,
+      "mae": 5837.82
+    }
+  },
+  "validation_folds": [
+    {
+      "fold": 1,
+      "train_periods": 51,
+      "validation_periods": 6,
+      "validation_start": "2024-04-01",
+      "validation_end": "2024-09-01",
+      "metrics": {
+        "LastValue": {
+          "rmse": 5886.29437282348,
+          "mape_pct": 17.421558696422245,
+          "mae": 5533.060000000002
+        },
+        "SeasonalNaive": {
+          "rmse": 4467.820624881517,
+          "mape_pct": 10.000936211004731,
+          "mae": 3136.381666666668
+        },
+        "Drift": {
+          "rmse": 6050.164819620968,
+          "mape_pct": 17.995078033190048,
+          "mae": 5721.770900000003
+        },
+        "Prophet": {
+          "rmse": 4238.487366329657,
+          "mape_pct": 10.333045473269024,
+          "mae": 3222.407829351057
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "train_periods": 57,
+      "validation_periods": 6,
+      "validation_start": "2024-10-01",
+      "validation_end": "2025-03-01",
+      "metrics": {
+        "LastValue": {
+          "rmse": 4204.75625667331,
+          "mape_pct": 12.231430550870833,
+          "mae": 3868.6133333333346
+        },
+        "SeasonalNaive": {
+          "rmse": 3359.939665127933,
+          "mape_pct": 6.360681677530559,
+          "mae": 1977.8633333333328
+        },
+        "Drift": {
+          "rmse": 4229.1259416124685,
+          "mape_pct": 12.287814143022068,
+          "mae": 3884.305208333335
+        },
+        "Prophet": {
+          "rmse": 3818.5540107369234,
+          "mape_pct": 7.325467126582828,
+          "mae": 2415.0869717707888
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "train_periods": 63,
+      "validation_periods": 6,
+      "validation_start": "2025-04-01",
+      "validation_end": "2025-09-01",
+      "metrics": {
+        "LastValue": {
+          "rmse": 3890.251500588792,
+          "mape_pct": 10.220333021015964,
+          "mae": 3585.8000000000025
+        },
+        "SeasonalNaive": {
+          "rmse": 5828.1087403319225,
+          "mape_pct": 13.077708405951386,
+          "mae": 4978.696666666668
+        },
+        "Drift": {
+          "rmse": 3945.7750640379077,
+          "mape_pct": 10.388264054150714,
+          "mae": 3635.8291129032264
+        },
+        "Prophet": {
+          "rmse": 4903.379745536733,
+          "mape_pct": 9.696476135249315,
+          "mae": 3752.539323035438
+        }
+      }
+    }
+  ],
+  "selected_test_metrics": {
+    "rmse": 6584.95,
+    "mape_pct": 15.65,
+    "mae": 5837.82
+  }
+}

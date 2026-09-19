@@ -10,6 +10,14 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List
 
+from agents.contracts import validate_task_plan
+from agents.analysis_request import (
+    COUNTRY_ALIASES,
+    build_analysis_request,
+    extract_confirmed_analysis_request,
+    extract_country_filters,
+)
+
 
 def _contains_any(text: str, keywords: tuple[str, ...]) -> bool:
     return any(keyword in text for keyword in keywords)
@@ -29,6 +37,10 @@ def build_task_plan(user_query: str, intent: str) -> Dict[str, Any]:
     prediction_tools: List[str] = []
     filters: Dict[str, Any] = {}
     prediction_horizon_months = None
+    analysis_request = (
+        extract_confirmed_analysis_request(user_query)
+        or build_analysis_request(user_query)
+    )
 
     metric_keywords = {
         "revenue": ("营收", "销售额", "收入", "gmv", "revenue"),
@@ -41,6 +53,8 @@ def build_task_plan(user_query: str, intent: str) -> Dict[str, Any]:
     for metric, keywords in metric_keywords.items():
         if _contains_any(query, keywords):
             metrics.append(metric)
+    for metric in analysis_request.get("metrics") or []:
+        _append_unique(metrics, metric)
 
     dimension_keywords = {
         "category": ("品类", "类别", "商品分类"),
@@ -54,10 +68,17 @@ def build_task_plan(user_query: str, intent: str) -> Dict[str, Any]:
     for dimension, keywords in dimension_keywords.items():
         if _contains_any(query, keywords):
             dimensions.append(dimension)
+    for dimension in analysis_request.get("dimensions") or []:
+        _append_unique(dimensions, dimension)
 
-    years = sorted(set(re.findall(r"(?<!\d)(20\d{2})(?!\d)", query)))
+    years = analysis_request.get("time_scope", {}).get("years") or sorted(
+        {int(value) for value in re.findall(r"(?<!\d)(20\d{2})(?!\d)", query)}
+    )
     if years:
         filters["years"] = [int(year) for year in years]
+    countries = (analysis_request.get("filters") or {}).get("country") or extract_country_filters(query)
+    if countries:
+        filters["countries"] = countries
 
     month_horizon = re.search(r"(?:未来|预测)?\s*(\d+)\s*个?月", query)
     if month_horizon:
@@ -98,7 +119,7 @@ def build_task_plan(user_query: str, intent: str) -> Dict[str, Any]:
     if intent == "prediction" and not prediction_tools:
         prediction_tools.append("sales_forecast")
 
-    return {
+    return validate_task_plan({
         "intent": intent,
         "metrics": metrics,
         "dimensions": dimensions,
@@ -107,7 +128,8 @@ def build_task_plan(user_query: str, intent: str) -> Dict[str, Any]:
         "prediction_tools": prediction_tools,
         "prediction_horizon_months": prediction_horizon_months,
         "need_report": need_report,
-    }
+        "analysis_request": analysis_request,
+    })
 
 
 def planned_nodes(task_plan: Dict[str, Any]) -> List[str]:
@@ -119,8 +141,9 @@ def planned_nodes(task_plan: Dict[str, Any]) -> List[str]:
         nodes.append("Prediction Agent")
     if task_plan.get("need_report"):
         nodes.append("Report Agent")
-    if task_plan.get("analysis_tools") or task_plan.get("prediction_tools"):
-        nodes.append("Chart Renderer")
+    # Every successful query reaches the renderer. Specialist results keep their
+    # dedicated charts; SQL-only requests may receive a generic result chart.
+    nodes.append("Chart Renderer")
     return nodes
 
 
@@ -128,22 +151,42 @@ def deterministic_evidence_sql(task_plan: Dict[str, Any]) -> str | None:
     """Return a reproducible evidence query for fixed-input specialist tools."""
     analysis_tools = set(task_plan.get("analysis_tools") or [])
     prediction_tools = set(task_plan.get("prediction_tools") or [])
+    filters = task_plan.get("filters") or {}
 
     if analysis_tools.intersection({"rfm", "kmeans"}) or "churn_prediction" in prediction_tools:
-        return (
+        sql = (
             "SELECT customer_id, country, age, gender, membership_tier, "
             "total_orders, total_spend_usd, avg_order_value_usd, "
             "days_since_last_purchase, preferred_category, acquisition_channel, "
             "avg_review_score, returns_made, wishlist_items, churned "
             "FROM customers"
         )
+        countries = filters.get("countries") or []
+        if countries:
+            trusted = [
+                value for value in countries if value in set(COUNTRY_ALIASES.values())
+            ]
+            if len(trusted) != len(countries):
+                return None
+            quoted = ", ".join("'" + value.replace("'", "''") + "'" for value in trusted)
+            sql += f" WHERE country IN ({quoted})"
+        # Static customer metrics do not have a defensible historical year
+        # dimension. Fail closed rather than applying registration year as a
+        # silent substitute for the requested business period.
+        if filters.get("years"):
+            return None
+        return sql
 
     if "sales_forecast" in prediction_tools:
-        return (
+        sql = (
             "SELECT year, month, quarter, orders, revenue_usd, "
             "avg_order_value, avg_discount_pct, return_rate, "
             "unique_customers, new_customers "
-            "FROM monthly_revenue ORDER BY year, month"
+            "FROM monthly_revenue"
         )
+        years = filters.get("years") or []
+        if years:
+            sql += " WHERE year IN (" + ", ".join(str(int(year)) for year in years) + ")"
+        return sql + " ORDER BY year, month"
 
     return None

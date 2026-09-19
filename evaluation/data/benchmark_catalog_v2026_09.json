@@ -1,0 +1,75 @@
+{
+  "catalog_version": "2026.09.1",
+  "created_at": "2026-09-18",
+  "label_policy": "Existing repository-curated labels plus deterministic structural audit; no generated labels are counted as human verified.",
+  "total_samples": 179,
+  "datasets": [
+    {
+      "dataset_id": "text2sql-v1",
+      "path": "evaluation/data/text2sql/test_queries.json",
+      "capability": "query",
+      "usage": "frozen_test",
+      "samples": 50,
+      "sha256": "e97ddaba709afa307da2467731b1cc166a41c691f8303e9c47ea213c30896c5a",
+      "audit": ["unique_id", "required_fields", "sql_parse", "known_tables"]
+    },
+    {
+      "dataset_id": "schema-ecommerce-v1",
+      "path": "evaluation/data/rag_schema/test_queries.json",
+      "capability": "retrieval",
+      "usage": "validation_and_frozen_test",
+      "samples": 40,
+      "sha256": "dac29515e83c217c956c8417396b8a3312ad2acfcd2be75a50a5a51e24232a7f",
+      "split": {
+        "validation_ids": [1, 5, 8, 12, 15, 19, 22, 26, 29, 33, 35, 39],
+        "frozen_test_ids": [2, 3, 4, 6, 7, 9, 10, 11, 13, 14, 16, 17, 18, 20, 21, 23, 24, 25, 27, 28, 30, 31, 32, 34, 36, 37, 38, 40]
+      },
+      "audit": ["unique_id", "required_fields", "known_tables", "known_fields", "disjoint_split"]
+    },
+    {
+      "dataset_id": "schema-support-transfer-v1",
+      "path": "evaluation/data/rag_schema/support_queries.json",
+      "capability": "retrieval",
+      "usage": "transfer_test",
+      "samples": 8,
+      "sha256": "01202b871ce4f7777bcaab42b2c3025ff88d94f83fc0132defc49b9dec670d62",
+      "audit": ["unique_id", "required_fields", "known_tables", "known_fields", "relationship_label"]
+    },
+    {
+      "dataset_id": "multi-agent-v1",
+      "path": "evaluation/data/multi_agent/test_queries.json",
+      "capability": "workflow",
+      "usage": "frozen_test",
+      "samples": 50,
+      "sha256": "47536d224b70df844f75afba3b65e220d37f18ecbd35e721b1557d4edc54faf5",
+      "audit": ["unique_id", "required_fields", "task_type", "sql_parse_when_present"]
+    },
+    {
+      "dataset_id": "semantic-paraphrase-v1",
+      "path": "evaluation/data/sql_semantics/paraphrase_queries.json",
+      "capability": "query",
+      "usage": "development_regression",
+      "samples": 15,
+      "sha256": "5e510eb4f3ed68b850111390065961f84194bf20b98e422b199e68b11c0c983b",
+      "audit": ["required_fields", "known_recipe"]
+    },
+    {
+      "dataset_id": "multiturn-v1",
+      "path": "evaluation/data/multiturn/test_cases.json",
+      "capability": "multiturn",
+      "usage": "development_regression",
+      "samples": 8,
+      "sha256": "6d4c1509f666e6a03a4adafc3bb8cdcb4050d75a748e9761074b192b5e59950d",
+      "audit": ["unique_id", "required_fields", "turn_expectations"]
+    },
+    {
+      "dataset_id": "evidence-failures-v1",
+      "path": "evaluation/data/failure_cases/evidence_cases.json",
+      "capability": "report_and_query_guard",
+      "usage": "development_regression",
+      "samples": 8,
+      "sha256": "13312c390c56ec690647e67c69fc44d22b0fc5e9171c382f29b86fa53221a289",
+      "audit": ["unique_id", "required_fields", "expected_status", "source_test"]
+    }
+  ]
+}

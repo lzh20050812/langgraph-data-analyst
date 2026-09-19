@@ -15,6 +15,7 @@ REPORT_SYSTEM_PROMPT = """你是一位资深的企业经营分析顾问。你的
 
 ## 核心原则
 - **证据约束**：事实和数字只能来自基础查询证据、数据分析结果、预测结果和数据质量评估，不得自行补造
+- **事实引用**：每个数值结论必须在同一行引用基础查询事实编号 `[F#]`；没有对应事实编号的数字不得写入报告
 - **解释数据**：每个数据点都要解释"这意味着什么"和"应该怎么应对"
 - **聚焦关键**：只写最关键的 2-4 条发现，不是越多越好
 - **可执行**：建议必须具体、可量化、可落地
@@ -39,7 +40,7 @@ REPORT_SYSTEM_PROMPT = """你是一位资深的企业经营分析顾问。你的
 1. **【高/中/低优先级】建议**
    - 依据：（引用数据）
    - 措施：（具体可执行动作）
-   - 预期效果：（量化改善幅度）
+   - 预期效果：（仅在证据中存在对应事实时量化，否则写“需进一步实验评估”）
 
 ## 风格
 - 专业但不晦涩，面向管理层
@@ -136,6 +137,11 @@ def _format_evidence_for_prompt(evidence: dict) -> str:
         "columns": evidence.get("columns") or [],
         "rows_sample": rows[:30],
         "task_plan": evidence.get("task_plan") or {},
+        "metric_catalog_version": evidence.get("metric_catalog_version"),
+        "source_tables": evidence.get("source_tables") or [],
+        "facts": evidence.get("facts") or [],
+        "validation": evidence.get("validation") or {},
+        "limitations": evidence.get("limitations") or [],
     }
     return json.dumps(payload, ensure_ascii=False, indent=2, default=str)
 
@@ -224,7 +230,8 @@ def _format_prediction_for_prompt(prediction: dict) -> str:
     # 流失预测
     churn = prediction.get("churn", {})
     if churn and "auc" in churn:
-        parts.append("### XGBoost 流失预测模型")
+        churn_model = churn.get("model") or churn.get("selected_model") or "未标注模型"
+        parts.append(f"### {churn_model} 流失预测模型")
         parts.append(f"  - AUC: {churn['auc']}")
         parts.append(f"  - 正样本率（流失客户占比）: {churn.get('positive_rate', 0)*100:.1f}%")
 
@@ -256,7 +263,8 @@ def _format_prediction_for_prompt(prediction: dict) -> str:
     if sales and "rmse" in sales:
         rmse = float(sales['rmse']) if sales.get('rmse') is not None else 0
         mae = float(sales['mae']) if sales.get('mae') is not None else 0
-        parts.append("\n### Prophet 销售预测模型")
+        sales_model = sales.get("model") or sales.get("selected_model") or "未标注模型"
+        parts.append(f"\n### {sales_model} 销售预测模型")
         parts.append(f"  - RMSE: {rmse:,.0f}")
         parts.append(f"  - MAPE: {sales.get('mape_pct', 'N/A')}%")
         parts.append(f"  - MAE: {mae:,.0f}")
@@ -266,18 +274,26 @@ def _format_prediction_for_prompt(prediction: dict) -> str:
         # 未来预测摘要
         forecast = sales.get("forecast", [])
         if forecast:
-            future_only = [f for f in forecast if f.get("ds", "") > "2026"]
+            future_only = [f for f in forecast if f.get("phase") == "future"]
+            backtest_only = [f for f in forecast if f.get("phase") == "backtest"]
+            legacy_rows = [f for f in forecast if not f.get("phase")]
+            if backtest_only:
+                parts.append(f"  - 回测期: {len(backtest_only)} 个周期（不计入未来预测）")
+            if legacy_rows:
+                parts.append("  - 兼容提示: 部分旧结果缺少 phase，未当作未来预测")
             if future_only:
                 parts.append("  - 未来预测摘要:")
                 for f in future_only[:6]:
                     yhat = float(f.get('yhat', 0)) if f.get('yhat') is not None else 0
-                    lo = float(f.get('yhat_lower', 0)) if f.get('yhat_lower') is not None else 0
-                    hi = float(f.get('yhat_upper', 0)) if f.get('yhat_upper') is not None else 0
-                    parts.append(
-                        f"    · {f['ds']}: "
-                        f"预测=${yhat:,.0f} "
-                        f"(区间: ${lo:,.0f} ~ ${hi:,.0f})"
+                    lo, hi = f.get('yhat_lower'), f.get('yhat_upper')
+                    interval = (
+                        f"(区间: ${float(lo):,.0f} ~ ${float(hi):,.0f})"
+                        if lo is not None and hi is not None and float(lo) != float(hi)
+                        else "(未提供有效预测区间)"
                     )
+                    parts.append(f"    · {f['ds']}: 预测=${yhat:,.0f} {interval}")
+            else:
+                parts.append("  - 未来预测: 无标记为 future 的结果")
 
     return "\n".join(parts)
 

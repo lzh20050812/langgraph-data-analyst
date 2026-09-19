@@ -21,6 +21,7 @@ from sklearn.decomposition import PCA
 from agents.state import AgentState
 from agents.evidence import update_evidence
 from storage.db_adapter import get_available_adapter
+from config.settings import get_settings
 
 
 # ============================================================
@@ -299,14 +300,26 @@ def analysis_agent_node(state: AgentState) -> AgentState:
         customers_df = None
         if "rfm" in tools or "kmeans" in tools:
             assert adapter is not None
-            customers_rows = adapter.execute_sql(
-                "SELECT customer_id, age, total_orders, total_spend_usd, "
-                "avg_order_value_usd, days_since_last_purchase, avg_review_score, "
-                "returns_made, wishlist_items, churned, membership_tier, country "
-                "FROM customers"
+            required_customer_fields = {
+                "customer_id", "age", "total_orders", "total_spend_usd",
+                "avg_order_value_usd", "days_since_last_purchase",
+                "avg_review_score", "returns_made", "wishlist_items",
+                "churned", "membership_tier", "country",
+            }
+            customers_rows = (
+                evidence_rows
+                if evidence_rows and required_customer_fields.issubset(evidence_rows[0])
+                else []
             )
+            if len(customers_rows) >= get_settings().SQL_MAX_RESULT_ROWS:
+                state["error"] = (
+                    "Analysis Agent: 客户证据已达行数上限，拒绝将截断样本"
+                    "当作完整人群执行 RFM/聚类"
+                )
+                state["messages"].append(f"[Analysis Agent] ERROR: {state['error']}")
+                return state
             if not customers_rows:
-                state["error"] = "Analysis Agent: customers 表无数据"
+                state["error"] = "Analysis Agent: 当前 SQL 证据不包含可用的客户范围"
                 state["messages"].append(f"[Analysis Agent] ERROR: {state['error']}")
                 return state
             customers_df = pd.DataFrame(customers_rows)

@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Iterable, List, Tuple
 
-from storage.chromadb.schema_metadata import SCHEMA_FIELDS
+from storage.chromadb.schema_metadata import SCHEMA_FIELDS, get_schema_fields
 
 
 # Only include phrases whose meaning is unambiguous in the current schema.
@@ -30,12 +30,15 @@ EXACT_TERM_FIELDS: Tuple[Tuple[str, str, str], ...] = (
 )
 
 
-def find_required_fields(user_query: str) -> List[Dict[str, Any]]:
+def find_required_fields(
+    user_query: str, *, data_source: str = "ai_analytics",
+    principal_id: str | None = None,
+) -> List[Dict[str, Any]]:
     """Return exact schema fields explicitly named by an unambiguous term."""
     query = user_query.lower()
     field_map = {
         (field["table_name"], field["column_name"]): field
-        for field in SCHEMA_FIELDS
+        for field in get_schema_fields(data_source, principal_id)
     }
     required: List[Dict[str, Any]] = []
     seen = set()
@@ -59,7 +62,8 @@ def find_required_fields(user_query: str) -> List[Dict[str, Any]]:
 
 
 def merge_required_fields(
-    selected_fields: Iterable[Dict[str, Any]], user_query: str
+    selected_fields: Iterable[Dict[str, Any]], user_query: str, *,
+    data_source: str = "ai_analytics", principal_id: str | None = None,
 ) -> List[Dict[str, Any]]:
     """Ensure deterministic anchors survive vector retrieval and LLM reranking."""
     merged = [dict(item) for item in selected_fields]
@@ -68,7 +72,9 @@ def merge_required_fields(
         for index, item in enumerate(merged)
     }
 
-    for required in find_required_fields(user_query):
+    for required in find_required_fields(
+        user_query, data_source=data_source, principal_id=principal_id
+    ):
         key = (required["table_name"], required["column_name"])
         if key in positions:
             merged[positions[key]].update(required)

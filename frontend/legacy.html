@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Data Analyst — 智能运营分析平台</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --primary: #4f6ef7;
+    --text: #2c3e50;
+    --text-secondary: #7f8c9b;
+    --border: #e8ecf1;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    --radius: 12px;
+    --success: #27ae60;
+    --warning: #f39c12;
+    --danger: #e74c3c;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ---- Header ---- */
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff;
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .header .badge {
+    background: rgba(255,255,255,0.15);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #a0b4f0;
+  }
+
+  /* ---- Query Bar ---- */
+  .query-bar {
+    max-width: 1200px;
+    margin: -20px auto 0;
+    padding: 0 24px;
+    position: relative;
+    z-index: 10;
+  }
+  .query-bar form {
+    display: flex;
+    gap: 12px;
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .query-bar input {
+    flex: 1;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .query-bar input:focus {
+    border-color: var(--primary);
+  }
+  .query-bar button {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .query-bar button:hover { background: #3d5bd9; }
+  .query-bar button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .quick-links {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .quick-links button {
+    font-size: 13px;
+    color: var(--primary);
+    padding: 4px 12px;
+    background: rgba(79,110,247,0.08);
+    border: 0;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .quick-links button:hover { background: rgba(79,110,247,0.16); }
+  .quick-links button.nav-ops {
+    color: #0f766e;
+    background: rgba(13,148,136,0.10);
+  }
+
+  /* ---- Main Layout ---- */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+  .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 28px 0 16px;
+    padding-left: 12px;
+    border-left: 3px solid var(--primary);
+  }
+
+  /* ---- Status Cards ---- */
+  .status-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .status-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .status-card .label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  .status-card .value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .status-card .value.green { color: var(--success); }
+  .status-card .value.yellow { color: var(--warning); }
+  .status-card .value.red { color: var(--danger); }
+
+  /* ---- Chart Grid ---- */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 20px;
+  }
+  .chart-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .chart-card .chart-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .chart-container {
+    width: 100%;
+    height: 360px;
+  }
+  .chart-container.tall { height: 420px; }
+
+  /* ---- Report ---- */
+  .report-box {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+    line-height: 1.8;
+    font-size: 15px;
+  }
+  .report-box h2 { font-size: 18px; margin: 24px 0 12px; color: #1a1a2e; }
+  .report-box h3 { font-size: 16px; margin: 18px 0 8px; color: #333; }
+  .report-box ul, .report-box ol { padding-left: 22px; margin: 8px 0; }
+  .report-box li { margin: 4px 0; }
+  .report-box strong { color: var(--primary); }
+  .report-box table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12px 0;
+  }
+  .report-box th, .report-box td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 14px;
+  }
+  .report-box th { background: #f8f9fb; font-weight: 600; }
+
+  /* ---- Data and model comparison tables ---- */
+  .data-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .data-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+  .data-toolbar button {
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    background: #fff;
+    border-radius: 7px;
+    padding: 7px 13px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .data-toolbar button:hover { background: rgba(79,110,247,0.08); }
+  .data-table-wrap { overflow: auto; max-height: 460px; }
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .data-table th, .data-table td {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: left;
+  }
+  .data-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #f8f9fb;
+    font-weight: 600;
+  }
+  .data-table tr.selected-model td { background: #f0fdf4; }
+  .selected-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: #166534;
+    background: #dcfce7;
+    font-size: 12px;
+  }
+
+  /* ---- Loading ---- */
+  .loading {
+    text-align: center;
+    padding: 60px;
+    color: var(--text-secondary);
+  }
+  .loading .spinner {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 12px;
+  }
+  .agent-progress {
+    max-width: 560px;
+    margin: 22px auto 0;
+    text-align: left;
+    display: grid;
+    gap: 8px;
+  }
+  .agent-progress-item {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    font-size: 13px;
+  }
+  .agent-progress-item.running { border-color: var(--primary); color: var(--primary); }
+  .agent-progress-item.completed { border-color: #86efac; color: #166534; }
+  .agent-progress-item.failed { border-color: #fca5a5; color: var(--danger); }
+  .cancel-task-btn {
+    margin-top: 18px;
+    padding: 8px 18px;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    color: var(--danger);
+    background: white;
+    cursor: pointer;
+  }
+  .task-history { display: grid; gap: 10px; }
+  .task-history-item {
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: white;
+    cursor: pointer;
+  }
+  .task-history-item:hover { border-color: var(--primary); }
+  .ops-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .ops-toolbar h2 { font-size: 22px; }
+  .ops-toolbar p { color: var(--text-secondary); font-size: 13px; }
+  .secondary-btn {
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: white;
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+  }
+  .secondary-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .ops-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px;
+  }
+  .ops-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+  .ops-card .eyebrow {
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-bottom: 7px;
+  }
+  .ops-card .metric { font-size: 25px; font-weight: 700; }
+  .ops-card .hint { color: var(--text-secondary); font-size: 12px; margin-top: 5px; }
+  .health-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 7px;
+    background: var(--success);
+    box-shadow: 0 0 0 4px rgba(39,174,96,0.12);
+  }
+  .health-dot.degraded { background: var(--danger); box-shadow: 0 0 0 4px rgba(231,76,60,0.12); }
+  .agent-flow {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(110px, 1fr));
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .agent-node {
+    position: relative;
+    min-width: 110px;
+    border: 1px solid #dbe4ff;
+    background: linear-gradient(180deg, #f8faff, #fff);
+    border-radius: 10px;
+    padding: 13px 10px;
+    text-align: center;
+    font-size: 12px;
+  }
+  .agent-node strong { display: block; font-size: 13px; margin-top: 4px; }
+  .agent-node:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -10px;
+    top: 17px;
+    color: #94a3b8;
+    z-index: 2;
+  }
+  .ops-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .ops-panel {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .ops-panel-title {
+    padding: 14px 17px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .ops-list { padding: 4px 17px 12px; }
+  .ops-list-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .ops-list-row:last-child { border-bottom: 0; }
+  .ops-list-row small { display: block; color: var(--text-secondary); }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 11px;
+    background: #eef2ff;
+    color: #4338ca;
+    font-size: 11px;
+  }
+  .pill.green { background: #dcfce7; color: #166534; }
+  .pill.amber { background: #fef3c7; color: #92400e; }
+  .ops-note {
+    padding: 16px;
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+  .preflight-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 22px;
+    padding: 5px 18px 12px;
+  }
+  .preflight-item {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 9px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .preflight-item .check-icon { font-weight: 700; color: var(--success); }
+  .preflight-item.warning .check-icon { color: var(--warning); }
+  .preflight-item.fail .check-icon { color: var(--danger); }
+  .preflight-item strong { display: block; font-size: 13px; }
+  .preflight-item small { color: var(--text-secondary); font-size: 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-secondary);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+
+  /* ---- Error ---- */
+  .error-bar {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: var(--danger);
+    border-radius: var(--radius);
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 768px) {
+    .header { padding: 20px; }
+    .query-bar form { flex-direction: column; }
+    .chart-grid { grid-template-columns: 1fr; }
+    .ops-columns { grid-template-columns: 1fr; }
+    .preflight-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div>
+    <h1>📊 AI Data Analyst — 智能运营分析平台</h1>
+    <div style="margin-top:6px;font-size:13px;color:#8892b0;">
+      基于 LangGraph 的多智能体协同 · Text2SQL · RFM · XGBoost · Prophet
+    </div>
+  </div>
+  <span class="badge" id="healthBadge">● 检测中...</span>
+</div>
+
+<!-- Query Bar -->
+<div class="query-bar">
+  <form id="queryForm">
+    <input type="text" id="queryInput"
+           placeholder="输入你的问题，例如：分析客户价值并预测流失风险，生成综合报告"
+           value="对客户做 RFM 分析和流失预测，生成综合经营报告">
+    <button type="submit" id="submitBtn">🚀 开始分析</button>
+  </form>
+  <div class="quick-links">
+    <span style="font-size:13px;color:var(--text-secondary);padding:4px 0;">快速提问：</span>
+    <button type="button" onclick="quickQuery('查询中国区GMV最高的10个客户')">中国区GMV Top10</button>
+    <button type="button" onclick="quickQuery('各品类的营收分布和退货率')">品类营收与退货</button>
+    <button type="button" onclick="quickQuery('对客户做 RFM 分析和流失预测，生成综合经营报告')">RFM+流失+报告</button>
+    <button type="button" onclick="quickQuery('预测未来6个月的销售趋势')">销售趋势预测</button>
+    <button type="button" onclick="quickQuery('分析客户价值并进行客户聚类')">客户聚类分析</button>
+    <button type="button" onclick="showRecentTasks()">最近任务</button>
+    <button type="button" class="nav-ops" onclick="showOperationsDashboard()">🛡️ 运行态势</button>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main" id="mainContent">
+  <div class="empty-state">
+    <div class="icon">🔍</div>
+    <div style="font-size:18px;font-weight:600;margin-bottom:8px;">输入你的分析问题开始探索</div>
+    <div style="font-size:14px;">支持自然语言查询数据库、客户分析、流失预测、经营报告等功能</div>
+    <button class="secondary-btn" style="margin-top:18px;" onclick="showOperationsDashboard()">查看系统运行态势</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 全局状态
+// ============================================================
+// 双击打开 index.html 时，浏览器没有 HTTP 域名，需要显式连接本地后端。
+const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:8000' : '';
+const API = `${API_BASE}/query`;
+const TASK_API = `${API_BASE}/tasks`;
+let chartInstances = {};
+let currentQueryRows = [];
+let activeTaskId = null;
+
+// ============================================================
+// 初始化
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  checkHealth().then(loadIdentity);
+  document.getElementById('queryForm').addEventListener('submit', handleQuery);
+  const requestedView = new URLSearchParams(window.location.search).get('view');
+  if (requestedView === 'operations') {
+    showOperationsDashboard();
+  } else {
+    resumeActiveTask();
+  }
+  window.addEventListener('resize', () => {
+    Object.values(chartInstances).forEach(chart => chart.resize());
+  });
+});
+
+async function checkHealth() {
+  try {
+    const res = await fetch(`${API_BASE}/health`);
+    const data = await res.json();
+    const badge = document.getElementById('healthBadge');
+    if (data.status === 'ok') {
+      badge.innerHTML = '● 系统就绪';
+      badge.style.color = '#4ade80';
+    } else {
+      badge.innerHTML = '● 部分降级';
+      badge.style.color = '#fbbf24';
+    }
+  } catch(e) {
+    document.getElementById('healthBadge').innerHTML = '● 连接失败';
+    document.getElementById('healthBadge').style.color = '#f87171';
+  }
+}
+
+// ============================================================
+// 查询处理
+// ============================================================
+async function handleQuery(e) {
+  e.preventDefault();
+  const input = document.getElementById('queryInput');
+  const btn = document.getElementById('submitBtn');
+  const query = input.value.trim();
+  if (!query) return;
+
+  btn.disabled = true;
+  btn.textContent = '⏳ 分析中...';
+  showLoading();
+
+  try {
+    const idempotencyKey = getSubmissionKey(query);
+    const res = await apiFetch(TASK_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Idempotency-Key': idempotencyKey,
+      },
+      body: JSON.stringify({ query: query }),
+    });
+    if (res.status === 429) {
+      const retryAfter = res.headers.get('Retry-After') || '稍后';
+      throw new Error(`请求过于频繁，请在 ${retryAfter} 秒后重试`);
+    }
+    if (!res.ok) throw new Error(`任务提交失败 (${res.status})`);
+    const submission = await res.json();
+    localStorage.removeItem('pendingAnalysisSubmission');
+    localStorage.setItem('activeAnalysisTask', submission.task_id);
+    showLoading(submission.task_id);
+    const data = await followTask(submission.task_id);
+    localStorage.removeItem('activeAnalysisTask');
+    renderResults(data);
+  } catch(err) {
+    showError('请求失败: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 开始分析';
+  }
+}
+
+function getSubmissionKey(query) {
+  const pending = localStorage.getItem('pendingAnalysisSubmission');
+  if (pending) {
+    try {
+      const parsed = JSON.parse(pending);
+      if (parsed.query === query && parsed.key) return parsed.key;
+    } catch (_) {
+      // Replace malformed local state below.
+    }
+  }
+  const key = window.crypto?.randomUUID?.()
+    || `web-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  localStorage.setItem(
+    'pendingAnalysisSubmission', JSON.stringify({ query, key })
+  );
+  return key;
+}
+
+async function apiFetch(url, options = {}, allowKeyPrompt = true) {
+  const headers = new Headers(options.headers || {});
+  const apiKey = sessionStorage.getItem('analyticsApiKey');
+  if (apiKey) headers.set('X-API-Key', apiKey);
+  const response = await fetch(url, { ...options, headers });
+  if (response.status === 401 && allowKeyPrompt) {
+    const entered = window.prompt('此服务已启用访问认证，请输入 API Key：');
+    if (entered) {
+      sessionStorage.setItem('analyticsApiKey', entered.trim());
+      const retried = await apiFetch(url, options, false);
+      if (retried.ok) loadIdentity();
+      return retried;
+    }
+  }
+  return response;
+}
+
+async function loadIdentity() {
+  const apiKey = sessionStorage.getItem('analyticsApiKey');
+  if (!apiKey) return;
+  try {
+    const response = await fetch(`${API_BASE}/auth/me`, {
+      headers: { 'X-API-Key': apiKey },
+    });
+    if (!response.ok) return;
+    const identity = await response.json();
+    const badge = document.getElementById('healthBadge');
+    badge.title = `当前身份：${identity.subject} (${identity.role})`;
+    badge.textContent = `● 系统就绪 · ${identity.subject}`;
+  } catch (_) {
+    // Identity is optional in local no-auth mode.
+  }
+}
+
+async function resumeActiveTask() {
+  const taskId = localStorage.getItem('activeAnalysisTask');
+  if (!taskId) return;
+  showLoading(taskId);
+  try {
+    const result = await followTask(taskId);
+    localStorage.removeItem('activeAnalysisTask');
+    renderResults(result);
+  } catch (err) {
+    localStorage.removeItem('activeAnalysisTask');
+    showError('恢复任务失败: ' + err.message);
+  }
+}
+
+async function followTask(taskId) {
+  activeTaskId = taskId;
+  try {
+    const response = await apiFetch(`${TASK_API}/${taskId}/events`);
+    if (!response.ok || !response.body) {
+      throw new Error(`实时进度连接失败 (${response.status})`);
+    }
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    while (true) {
+      const { value, done } = await reader.read();
+      buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+      const blocks = buffer.split(/\r?\n\r?\n/);
+      buffer = blocks.pop() || '';
+      blocks.forEach(processSseBlock);
+      if (done) break;
+    }
+    if (buffer.trim()) processSseBlock(buffer);
+    const finalResponse = await apiFetch(`${TASK_API}/${taskId}`);
+    if (!finalResponse.ok) {
+      throw new Error(`无法读取任务结果 (${finalResponse.status})`);
+    }
+    const task = await finalResponse.json();
+    if (task.result) return task.result;
+    if (task.status === 'cancelled') throw new Error('任务已取消');
+    throw new Error(task.error || '任务未生成结果');
+  } catch (error) {
+    if (String(error.message || '').includes('任务已取消')) throw error;
+    return await pollTask(taskId, updateAgentProgress);
+  } finally {
+    activeTaskId = null;
+  }
+}
+
+function processSseBlock(block) {
+  const eventLine = block.split(/\r?\n/).find(line => line.startsWith('event:'));
+  const dataLine = block.split(/\r?\n/).find(line => line.startsWith('data:'));
+  if (!dataLine) return;
+  try {
+    const event = JSON.parse(dataLine.slice(5).trim());
+    if (eventLine) event.type = eventLine.slice(6).trim();
+    updateAgentProgress(event);
+  } catch (_) {
+    // Ignore malformed progress events; final task state remains authoritative.
+  }
+}
+
+async function pollTask(taskId, onProgress) {
+  while (true) {
+    const response = await apiFetch(`${TASK_API}/${taskId}`);
+    if (!response.ok) throw new Error(`任务状态读取失败 (${response.status})`);
+    const task = await response.json();
+    onProgress({ type: 'task_status', status: task.status });
+    if (['completed', 'failed', 'cancelled', 'interrupted'].includes(task.status)) {
+      if (task.result) return task.result;
+      throw new Error(task.error || '任务执行失败');
+    }
+    await new Promise(resolve => setTimeout(resolve, 500));
+  }
+}
+
+function updateAgentProgress(event) {
+  const container = document.getElementById('agentProgress');
+  if (!container || !event.node) return;
+  const labels = {
+    planner: '需求规划', schema_agent: 'Schema 检索', sql_agent: 'SQL 生成与执行',
+    governance_agent: '数据治理', analysis_agent: '数据分析',
+    prediction_agent: '预测建模', report_agent: '报告生成', chart_renderer: '图表生成',
+  };
+  const key = String(event.node).replace(/[^a-z0-9_-]/gi, '');
+  let item = document.getElementById(`progress-${key}`);
+  if (!item) {
+    item = document.createElement('div');
+    item.id = `progress-${key}`;
+    item.className = 'agent-progress-item';
+    container.appendChild(item);
+  }
+  const label = labels[event.node] || event.node;
+  if (event.type === 'node_started') {
+    item.className = 'agent-progress-item running';
+    item.textContent = `⏳ ${label}正在执行`;
+  } else if (event.type === 'node_completed') {
+    item.className = 'agent-progress-item completed';
+    item.textContent = `✓ ${label}完成 · ${Number(event.duration_ms || 0).toFixed(0)} ms`;
+  } else if (event.type === 'node_failed') {
+    item.className = 'agent-progress-item failed';
+    item.textContent = `✕ ${label}失败`;
+  }
+}
+
+async function cancelActiveTask() {
+  if (!activeTaskId) return;
+  const button = document.getElementById('cancelTaskBtn');
+  if (button) {
+    button.disabled = true;
+    button.textContent = '正在取消...';
+  }
+  try {
+    const response = await apiFetch(`${TASK_API}/${activeTaskId}`, { method: 'DELETE' });
+    if (!response.ok) throw new Error(`取消失败 (${response.status})`);
+    if (button) button.textContent = '已发送取消请求';
+  } catch (error) {
+    if (button) {
+      button.disabled = false;
+      button.textContent = '取消任务';
+    }
+    showError(error.message);
+  }
+}
+
+async function showRecentTasks() {
+  try {
+    destroyAllCharts();
+    const response = await apiFetch(`${TASK_API}?limit=20`);
+    if (!response.ok) throw new Error(`任务列表读取失败 (${response.status})`);
+    const data = await response.json();
+    const summaryResponse = await apiFetch(`${API_BASE}/operations/summary`);
+    const summary = summaryResponse.ok ? await summaryResponse.json() : {};
+    const labels = {
+      queued: '排队中', running: '执行中', cancelling: '取消中',
+      completed: '已完成', failed: '失败', cancelled: '已取消', interrupted: '已中断',
+    };
+    const items = (data.tasks || []).map(task => `
+      <div class="task-history-item" onclick="openTask('${escapeHtml(task.task_id)}')">
+        <div style="font-weight:600;margin-bottom:5px;">${escapeHtml(task.query)}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">
+          ${escapeHtml(labels[task.status] || task.status)} · ${escapeHtml(task.task_id)}
+        </div>
+      </div>`).join('');
+    document.getElementById('mainContent').innerHTML = `
+      <div class="section-title">最近分析任务</div>
+      <div class="status-grid">
+        <div class="status-card"><div class="label">累计任务</div><div class="value">${Number(summary.total_tasks || 0)}</div></div>
+        <div class="status-card"><div class="label">运行中</div><div class="value yellow">${Number(summary.active_tasks || 0)}</div></div>
+        <div class="status-card"><div class="label">平均耗时</div><div class="value" style="font-size:20px;">${Number(summary.completed_avg_seconds || 0).toFixed(1)}s</div></div>
+        <div class="status-card"><div class="label">执行模式</div><div class="value" style="font-size:18px;">${summary.execution_mode === 'external' ? `${Number(summary.active_workers || 0)} Workers` : '内嵌模式'}</div></div>
+      </div>
+      <div class="task-history">${items || '<div class="empty-state">暂无任务记录</div>'}</div>`;
+  } catch (error) {
+    showError(error.message);
+  }
+}
+
+async function showOperationsDashboard() {
+  destroyAllCharts();
+  document.getElementById('mainContent').innerHTML = `
+    <div class="loading"><div class="spinner"></div><div>正在读取运行态势...</div></div>`;
+  try {
+    // Fetch the protected summary first so authentication is resolved once
+    // before the remaining administrator-only calls run in parallel.
+    const summaryResponse = await apiFetch(`${API_BASE}/operations/summary`);
+    if (!summaryResponse.ok) {
+      throw new Error(`运行摘要读取失败 (${summaryResponse.status})`);
+    }
+    const summary = await summaryResponse.json();
+    const [healthResponse, workersResponse, auditResponse, limitsResponse, preflightResponse] = await Promise.all([
+      fetch(`${API_BASE}/health/ready`),
+      apiFetch(`${API_BASE}/operations/workers`, {}, false),
+      apiFetch(`${API_BASE}/operations/audit?limit=8`, {}, false),
+      apiFetch(`${API_BASE}/operations/rate-limits?limit=8`, {}, false),
+      apiFetch(`${API_BASE}/operations/preflight`, {}, false),
+    ]);
+    const health = await healthResponse.json();
+    const workers = workersResponse.ok ? await workersResponse.json() : null;
+    const audit = auditResponse.ok ? await auditResponse.json() : null;
+    const limits = limitsResponse.ok ? await limitsResponse.json() : null;
+    const preflight = preflightResponse.ok ? await preflightResponse.json() : null;
+    renderOperationsDashboard({ summary, health, workers, audit, limits, preflight });
+  } catch (error) {
+    showError('运行态势加载失败: ' + error.message);
+  }
+}
+
+function renderOperationsDashboard({ summary, health, workers, audit, limits, preflight }) {
+  const counts = summary.status_counts || {};
+  const completed = Number(counts.completed || 0);
+  const failed = Number(counts.failed || 0);
+  const successRate = completed + failed > 0
+    ? `${(completed / (completed + failed) * 100).toFixed(1)}%`
+    : '—';
+  const healthOk = health.status === 'ok';
+  const executionMode = summary.execution_mode === 'external'
+    ? `外部 Worker · ${Number(summary.active_workers || 0)} 在线`
+    : '内嵌执行器';
+  const workerRows = workers && workers.workers.length
+    ? workers.workers.map(worker => `
+        <div class="ops-list-row">
+          <div><strong>${escapeHtml(worker.worker_id)}</strong><small>${worker.current_task_id ? `任务 ${escapeHtml(worker.current_task_id)}` : '当前空闲'}</small></div>
+          <span class="pill ${worker.status === 'idle' ? 'green' : 'amber'}">${escapeHtml(worker.status)}</span>
+        </div>`).join('')
+    : `<div class="ops-note">${workers ? '当前为内嵌模式，无独立 Worker。' : '当前身份无 Worker 管理权限。'}</div>`;
+  const auditRows = audit && audit.events.length
+    ? [...audit.events].reverse().map(event => `
+        <div class="ops-list-row">
+          <div><strong>${escapeHtml(event.action)}</strong><small>${escapeHtml(event.owner_id)} · ${formatTimestamp(event.created_at)}</small></div>
+          <span class="pill ${event.outcome === 'accepted' || event.outcome === 'completed' ? 'green' : event.outcome === 'rate_limited' ? 'amber' : ''}">${escapeHtml(event.outcome)}</span>
+        </div>`).join('')
+    : `<div class="ops-note">${audit ? '暂无审计事件。' : '当前身份无审计日志权限。'}</div>`;
+  const limitRows = limits && limits.windows.length
+    ? limits.windows.map(item => `
+        <div class="ops-list-row">
+          <div><strong>${escapeHtml(item.owner_id)}</strong><small>${escapeHtml(item.route_scope)} · ${Number(item.request_count)} 次请求</small></div>
+          <span class="pill">剩余 ${Number(item.remaining)}</span>
+        </div>`).join('')
+    : `<div class="ops-note">${limits ? '当前窗口暂无请求。' : '当前身份无租户配额权限。'}</div>`;
+  const preflightRows = preflight
+    ? preflight.checks.map(check => {
+        const icon = check.status === 'pass' ? '✓' : check.status === 'warning' ? '!' : '×';
+        return `<div class="preflight-item ${escapeHtml(check.status)}">
+          <span class="check-icon">${icon}</span>
+          <div><strong>${escapeHtml(check.label)}${check.critical ? '' : ' · 建议项'}</strong><small>${escapeHtml(check.detail)}</small></div>
+        </div>`;
+      }).join('')
+    : '<div class="ops-note">当前身份无答辩预检权限。</div>';
+
+  document.getElementById('mainContent').innerHTML = `
+    <div class="ops-toolbar">
+      <div><h2>系统运行态势</h2><p>答辩演示视图 · 数据来自实时健康、任务、Worker、配额与审计接口</p></div>
+      <button class="secondary-btn" onclick="showOperationsDashboard()">刷新数据</button>
+    </div>
+    <div class="ops-grid">
+      <div class="ops-card"><div class="eyebrow">系统健康</div><div class="metric"><span class="health-dot ${healthOk ? '' : 'degraded'}"></span>${healthOk ? '就绪' : '降级'}</div><div class="hint">MySQL ${health.mysql ? '已连接' : '不可用'} · LLM ${health.llm ? '已配置' : '未配置'}</div></div>
+      <div class="ops-card"><div class="eyebrow">答辩预检</div><div class="metric" style="font-size:21px;">${preflight ? (preflight.status === 'ready' ? '可以演示' : '需要处理') : '权限受限'}</div><div class="hint">${preflight ? `${Number(preflight.passed)} 通过 · ${Number(preflight.warnings)} 提醒 · ${Number(preflight.failed)} 失败` : '管理员可查看完整清单'}</div></div>
+      <div class="ops-card"><div class="eyebrow">执行模式</div><div class="metric" style="font-size:19px;">${escapeHtml(executionMode)}</div><div class="hint">队列 ${Number(summary.queued_tasks || 0)} / ${Number(summary.queue_capacity || 0)}</div></div>
+      <div class="ops-card"><div class="eyebrow">累计任务</div><div class="metric">${Number(summary.total_tasks || 0)}</div><div class="hint">当前运行 ${Number(summary.active_tasks || 0)}</div></div>
+      <div class="ops-card"><div class="eyebrow">任务成功率</div><div class="metric">${successRate}</div><div class="hint">平均耗时 ${Number(summary.completed_avg_seconds || 0).toFixed(2)} 秒</div></div>
+      <div class="ops-card"><div class="eyebrow">可追溯事件</div><div class="metric">${Number(summary.event_count || 0)}</div><div class="hint">检查点 ${Number(summary.checkpoint_count || 0)} · 审计 ${Number(summary.audit_event_count || 0)} · 拦截 ${Number(summary.rate_limit_rejections || 0)}</div></div>
+    </div>
+
+    <div class="section-title">答辩预检清单</div>
+    <div class="ops-panel"><div class="preflight-grid">${preflightRows}</div></div>
+
+    <div class="section-title">多智能体执行链路</div>
+    <div class="agent-flow">
+      <div class="agent-node">①<strong>需求规划</strong>意图与任务计划</div>
+      <div class="agent-node">②<strong>Schema 检索</strong>混合召回与字段落地</div>
+      <div class="agent-node">③<strong>SQL Agent</strong>生成、校验与执行</div>
+      <div class="agent-node">④<strong>数据治理</strong>质量与风险检查</div>
+      <div class="agent-node">⑤<strong>分析预测</strong>RFM / ML / 时序</div>
+      <div class="agent-node">⑥<strong>报告生成</strong>证据约束的洞察</div>
+      <div class="agent-node">⑦<strong>图表渲染</strong>ECharts 配置输出</div>
+    </div>
+
+    <div class="section-title">运行治理</div>
+    <div class="ops-columns">
+      <div class="ops-panel"><div class="ops-panel-title">Worker 状态</div><div class="ops-list">${workerRows}</div></div>
+      <div class="ops-panel"><div class="ops-panel-title">租户配额窗口</div><div class="ops-list">${limitRows}</div></div>
+    </div>
+    <div class="section-title">最近审计事件</div>
+    <div class="ops-panel"><div class="ops-list">${auditRows}</div></div>`;
+}
+
+function formatTimestamp(value) {
+  if (!value) return '时间未知';
+  return new Date(Number(value) * 1000).toLocaleString('zh-CN', { hour12: false });
+}
+
+async function openTask(taskId) {
+  try {
+    const response = await apiFetch(`${TASK_API}/${taskId}`);
+    if (!response.ok) throw new Error(`任务读取失败 (${response.status})`);
+    const task = await response.json();
+    if (task.result) {
+      renderResults(task.result);
+      return;
+    }
+    if (['queued', 'running', 'cancelling'].includes(task.status)) {
+      localStorage.setItem('activeAnalysisTask', taskId);
+      showLoading(taskId);
+      const result = await followTask(taskId);
+      localStorage.removeItem('activeAnalysisTask');
+      renderResults(result);
+      return;
+    }
+    throw new Error(task.error || `任务状态：${task.status}`);
+  } catch (error) {
+    showError(error.message);
+  }
+}
+
+function quickQuery(text) {
+  document.getElementById('queryInput').value = text;
+  document.getElementById('queryForm').dispatchEvent(new Event('submit'));
+}
+
+// ============================================================
+// 渲染结果
+// ============================================================
+function showLoading(taskId = '') {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <div>正在调用多智能体链路分析数据...</div>
+      ${taskId ? `<div style="font-size:12px;margin-top:8px;">任务 ID：${escapeHtml(taskId)}</div>` : ''}
+      <div class="agent-progress" id="agentProgress"></div>
+      ${taskId ? '<button class="cancel-task-btn" id="cancelTaskBtn" onclick="cancelActiveTask()">取消任务</button>' : ''}
+    </div>`;
+}
+
+function showError(msg) {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="error-bar">⚠ ${escapeHtml(msg)}</div>
+    <div class="empty-state"><div class="icon">🔄</div><div>请重试或检查后端日志</div></div>`;
+}
+
+function renderResults(data) {
+  destroyAllCharts();
+  currentQueryRows = Array.isArray(data.query_result) ? data.query_result : [];
+  let html = '';
+
+  // 错误
+  if (data.error) {
+    html += `<div class="error-bar">⚠ ${escapeHtml(data.error)}</div>`;
+  }
+
+  // 状态卡片
+  html += renderStatusCards(data);
+
+  // 治理结果
+  if (data.governance_result && data.governance_result.quality_score) {
+    html += renderGovernance(data.governance_result);
+  }
+
+  // 原始查询结果
+  if (currentQueryRows.length > 0) {
+    html += renderQueryTable(
+      currentQueryRows,
+      data.query_result_total_rows,
+      data.query_result_truncated,
+    );
+  }
+
+  // 候选模型验证/测试对比
+  html += renderModelComparison(data.prediction_result || {});
+
+  // 报告
+  if (data.report) {
+    html += `<div class="section-title">📝 经营洞察报告</div>`;
+    html += `<div class="report-box">${markdownToHtml(data.report)}</div>`;
+  }
+
+  // 图表
+  if (data.charts && data.charts.length > 0) {
+    html += `<div class="section-title">📈 数据可视化</div>`;
+    html += `<div class="chart-grid">`;
+    data.charts.forEach((chart, i) => {
+      const chartId = `chart_${chart.id || i}`;
+      const heightClass = (chart.type === 'line' && chart.id === 'sales_forecast') ? 'tall' : '';
+      html += `
+        <div class="chart-card">
+          <div class="chart-title">${escapeHtml(chart.title)}</div>
+          <div class="chart-container ${heightClass}" id="${chartId}"></div>
+        </div>`;
+    });
+    html += `</div>`;
+
+    // 延迟渲染图表（等 DOM 就绪）
+    setTimeout(() => {
+      data.charts.forEach((chart, i) => {
+        const chartId = `chart_${chart.id || i}`;
+        renderChart(chartId, chart);
+      });
+    }, 100);
+  }
+
+  // SQL 展示
+  if (data.sql) {
+    html += `<div class="section-title">🔧 生成的 SQL</div>`;
+    html += `<div class="report-box"><pre style="background:#f8f9fb;padding:16px;border-radius:8px;overflow-x:auto;font-size:13px;">${escapeHtml(data.sql)}</pre></div>`;
+  }
+
+  // 无内容
+  if (!data.report && currentQueryRows.length === 0 && (!data.charts || data.charts.length === 0) && !data.error) {
+    html += `<div class="empty-state"><div class="icon">✅</div><div>查询完成，但无可视化输出</div></div>`;
+  }
+
+  document.getElementById('mainContent').innerHTML = html;
+}
+
+function renderQueryTable(rows, totalRows, truncated) {
+  const columns = [...new Set(rows.flatMap(row => Object.keys(row || {})))];
+  if (columns.length === 0) return '';
+  const total = Number.isFinite(totalRows) ? totalRows : rows.length;
+  const note = truncated
+    ? `共 ${total} 行，当前展示并导出前 ${rows.length} 行`
+    : `共 ${total} 行`;
+  let html = `<div class="section-title">📋 查询结果</div>`;
+  html += `<div class="data-card">`;
+  html += `<div class="data-toolbar"><span>${escapeHtml(note)}</span>`;
+  html += `<button type="button" onclick="downloadQueryCsv()">下载 CSV</button></div>`;
+  html += `<div class="data-table-wrap"><table class="data-table"><thead><tr>`;
+  columns.forEach(column => { html += `<th>${escapeHtml(column)}</th>`; });
+  html += `</tr></thead><tbody>`;
+  rows.forEach(row => {
+    html += `<tr>`;
+    columns.forEach(column => {
+      html += `<td>${escapeHtml(formatCellValue(row[column]))}</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table></div></div>`;
+  return html;
+}
+
+function renderModelComparison(prediction) {
+  const rows = [];
+  const churn = prediction.churn || {};
+  Object.entries(churn.candidate_metrics || {}).forEach(([model, metrics]) => {
+    const testValue = model === churn.selected_model && churn.auc !== undefined
+      ? `AUC ${Number(churn.auc).toFixed(4)}` : '—';
+    rows.push({
+      task: '流失预测', model: model,
+      validation: `AUC ${Number(metrics.validation_auc).toFixed(4)}`,
+      test: testValue, selected: model === churn.selected_model,
+    });
+  });
+
+  const sales = prediction.sales || {};
+  const salesTest = sales.test_candidate_metrics || {};
+  Object.entries(sales.candidate_metrics || {}).forEach(([model, metrics]) => {
+    const validationMape = metrics.validation_mape_mean ?? metrics.mape_pct;
+    const std = metrics.validation_mape_std;
+    const validation = std !== undefined
+      ? `MAPE ${Number(validationMape).toFixed(2)}% ± ${Number(std).toFixed(2)}`
+      : `MAPE ${Number(validationMape).toFixed(2)}%`;
+    const test = salesTest[model]
+      ? `MAPE ${Number(salesTest[model].mape_pct).toFixed(2)}%` : '—';
+    rows.push({
+      task: '销售预测', model: model, validation: validation,
+      test: test, selected: model === sales.selected_model,
+    });
+  });
+  if (rows.length === 0) return '';
+
+  let html = `<div class="section-title">🧪 候选模型对比</div>`;
+  html += `<div class="data-card"><div class="data-table-wrap">`;
+  html += `<table class="data-table"><thead><tr><th>任务</th><th>候选模型</th>`;
+  html += `<th>验证结果</th><th>独立测试结果</th><th>选择</th></tr></thead><tbody>`;
+  rows.forEach(row => {
+    html += `<tr class="${row.selected ? 'selected-model' : ''}">`;
+    html += `<td>${escapeHtml(row.task)}</td><td>${escapeHtml(row.model)}</td>`;
+    html += `<td>${escapeHtml(row.validation)}</td><td>${escapeHtml(row.test)}</td>`;
+    html += `<td>${row.selected ? '<span class="selected-badge">已选</span>' : '—'}</td></tr>`;
+  });
+  html += `</tbody></table></div></div>`;
+  return html;
+}
+
+function formatCellValue(value) {
+  if (value === null || value === undefined) return '—';
+  if (typeof value === 'object') return JSON.stringify(value);
+  return String(value);
+}
+
+function csvCell(value) {
+  let text = formatCellValue(value);
+  // Prevent spreadsheet formula execution when exported data is opened.
+  if (/^[=+\-@]/.test(text)) text = `'${text}`;
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+function downloadQueryCsv() {
+  if (currentQueryRows.length === 0) return;
+  const columns = [...new Set(currentQueryRows.flatMap(row => Object.keys(row || {})))];
+  const lines = [columns.map(csvCell).join(',')];
+  currentQueryRows.forEach(row => {
+    lines.push(columns.map(column => csvCell(row[column])).join(','));
+  });
+  const blob = new Blob(['\ufeff' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = `query-result-${Date.now()}.csv`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+// ============================================================
+// 状态卡片
+// ============================================================
+function renderStatusCards(data) {
+  const intent = data.intent || '未知';
+  const gov = data.governance_result || {};
+  const score = gov.overall ? gov.overall.score : null;
+  const scoreClass = score >= 80 ? 'green' : score >= 60 ? 'yellow' : 'red';
+
+  let cards = `<div class="status-row">`;
+  cards += `<div class="status-card"><div class="label">意图识别</div><div class="value" style="font-size:20px;">${intentLabel(intent)}</div></div>`;
+
+  if (data.request_id) {
+    cards += `<div class="status-card"><div class="label">请求 ID</div><div class="value" style="font-size:13px;word-break:break-all;">${escapeHtml(data.request_id)}</div></div>`;
+  }
+
+  if (score !== null) {
+    cards += `<div class="status-card"><div class="label">数据质量评分</div><div class="value ${scoreClass}">${score}/100</div></div>`;
+  }
+
+  const analysis = data.analysis_result || {};
+  const metrics = analysis.metrics || {};
+  if (metrics.gmv_usd) {
+    cards += `<div class="status-card"><div class="label">GMV</div><div class="value" style="font-size:20px;">$${(metrics.gmv_usd/1000000).toFixed(2)}M</div></div>`;
+  }
+  if (metrics.churn_rate !== undefined) {
+    cards += `<div class="status-card"><div class="label">流失率</div><div class="value ${metrics.churn_rate > 0.1 ? 'yellow' : 'green'}" style="font-size:20px;">${(metrics.churn_rate*100).toFixed(1)}%</div></div>`;
+  }
+
+  const pred = data.prediction_result || {};
+  const churn = pred.churn || {};
+  if (churn.selected_model) {
+    cards += `<div class="status-card"><div class="label">流失预测模型</div><div class="value" style="font-size:16px;">${escapeHtml(churn.selected_model)}</div></div>`;
+  }
+  if (churn.auc) {
+    cards += `<div class="status-card"><div class="label">流失预测 AUC</div><div class="value" style="font-size:20px;">${churn.auc}</div></div>`;
+  }
+  const sales = pred.sales || {};
+  if (sales.selected_model) {
+    cards += `<div class="status-card"><div class="label">销售预测模型</div><div class="value" style="font-size:16px;">${escapeHtml(sales.selected_model)}</div></div>`;
+  }
+  if (sales.mape_pct !== undefined) {
+    cards += `<div class="status-card"><div class="label">销售预测 MAPE</div><div class="value" style="font-size:20px;">${sales.mape_pct}%</div></div>`;
+  }
+
+  cards += `</div>`;
+  return cards;
+}
+
+function intentLabel(intent) {
+  const map = {
+    'sql_query': '🔍 数据查询',
+    'analysis': '📊 数据分析',
+    'prediction': '🔮 预测分析',
+    'mixed': '📋 综合分析',
+  };
+  return map[intent] || intent;
+}
+
+// ============================================================
+// 数据治理
+// ============================================================
+function renderGovernance(gov) {
+  let html = `<div class="section-title">🛡 数据质量评估</div>`;
+  html += `<div class="report-box" style="padding:16px 24px;">`;
+  html += `<strong>评分:</strong> ${gov.quality_score} | `;
+  html += `<strong>评估行数:</strong> ${gov.row_count || 0} | `;
+  html += `<strong>字段数:</strong> ${gov.column_count || 0}`;
+
+  const warnings = gov.warnings || [];
+  if (warnings.length > 0) {
+    html += `<ul style="margin-top:8px;">`;
+    warnings.forEach(w => {
+      html += `<li style="color:var(--warning);">⚠ ${escapeHtml(w)}</li>`;
+    });
+    html += `</ul>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+// ============================================================
+// 图表渲染
+// ============================================================
+function renderChart(domId, chartDef) {
+  const dom = document.getElementById(domId);
+  if (!dom) return;
+
+  // 如果是 dashboard 类型（KPI），使用特殊渲染
+  if (chartDef.type === 'dashboard') {
+    renderKpiDashboard(dom, chartDef);
+    return;
+  }
+
+  // The core report remains demonstrable even if the optional CDN asset is
+  // unavailable in an offline defense room.
+  if (!window.echarts) {
+    dom.innerHTML = `
+      <div class="ops-note" style="padding-top:80px;text-align:center;">
+        图表库暂不可用，查询表格与报告数据仍可正常查看。<br>
+        <small>恢复网络连接后刷新页面即可加载交互图表。</small>
+      </div>`;
+    return;
+  }
+
+  const chart = window.echarts.init(dom);
+  chartInstances[domId] = chart;
+
+  // 基础 option + 自定义
+  const baseOption = {
+    tooltip: { trigger: chartDef.type === 'pie' ? 'item' : 'axis' },
+    legend: { bottom: 0, textStyle: { fontSize: 12 } },
+    grid: { left: '3%', right: '4%', bottom: '15%', containLabel: true },
+  };
+
+  const option = Object.assign({}, baseOption, chartDef.option || {});
+
+  // 饼图默认居中
+  if (chartDef.type === 'pie') {
+    option.legend = option.legend || {};
+    option.legend.orient = 'vertical';
+    option.legend.left = 'left';
+    option.legend.top = 'center';
+    option.grid = undefined;
+  }
+
+  // 颜色主题
+  const colors = ['#4f6ef7', '#36cfc9', '#b37feb', '#ffc53d', '#ff7a45', '#52c41a', '#f759ab', '#597ef7'];
+  option.color = option.color || colors;
+
+  chart.setOption(option);
+}
+
+function renderKpiDashboard(dom, chartDef) {
+  const data = chartDef.option || {};
+  const gmv = (data.gmv_usd / 1000000).toFixed(2);
+  const aov = data.avg_order_value_usd ? data.avg_order_value_usd.toFixed(2) : '-';
+  const repeat = data.repeat_purchase_rate ? (data.repeat_purchase_rate * 100).toFixed(1) + '%' : '-';
+  const churn = data.churn_rate ? (data.churn_rate * 100).toFixed(1) + '%' : '-';
+
+  dom.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px;">
+      <div style="text-align:center;">
+        <div style="font-size:32px;font-weight:700;color:#4f6ef7;">$${gmv}M</div>
+        <div style="font-size:13px;color:#7f8c9b;">总 GMV</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:32px;font-weight:700;color:#36cfc9;">$${aov}</div>
+        <div style="font-size:13px;color:#7f8c9b;">客单价</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:32px;font-weight:700;color:#b37feb;">${repeat}</div>
+        <div style="font-size:13px;color:#7f8c9b;">复购率</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:32px;font-weight:700;color:#ff7a45;">${churn}</div>
+        <div style="font-size:13px;color:#7f8c9b;">流失率</div>
+      </div>
+    </div>`;
+}
+
+function destroyAllCharts() {
+  Object.values(chartInstances).forEach(c => c.dispose());
+  chartInstances = {};
+}
+
+// ============================================================
+// 简易 Markdown → HTML
+// ============================================================
+function markdownToHtml(md) {
+  if (!md) return '';
+  // LLM 输出属于不可信输入。先转义 HTML，再做有限 Markdown 替换，
+  // 防止模型输出的 script/event handler 被 innerHTML 执行。
+  let html = escapeHtml(md);
+
+  // 标题
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^# (.+)$/gm, '<h2>$1</h2>');
+
+  // 粗体
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+  // 列表
+  html = html.replace(/^  - (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
+
+  // 编号列表
+  html = html.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
+
+  // 段落
+  html = html.replace(/\n\n/g, '</p><p>');
+  html = '<p>' + html + '</p>';
+
+  // 清理空标签
+  html = html.replace(/<p>\s*<\/p>/g, '');
+  html = html.replace(/<p><h/g, '<h');
+  html = html.replace(/<\/h\d><\/p>/g, '</h$1>');
+  html = html.replace(/<p><ul>/g, '<ul>');
+  html = html.replace(/<\/ul><\/p>/g, '</ul>');
+
+  return html;
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>

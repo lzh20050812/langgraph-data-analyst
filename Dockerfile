@@ -4,6 +4,16 @@
 # 基于 LangGraph + FastAPI + MySQL + ECharts
 # ============================================================
 
+FROM node:22-bookworm-slim AS frontend-builder
+
+WORKDIR /frontend
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/index.html frontend/tsconfig.json frontend/vite.config.ts ./
+COPY frontend/src ./src
+RUN npm run build
+
+
 FROM python:3.11-slim-bookworm
 
 # 系统依赖
@@ -16,10 +26,17 @@ WORKDIR /app
 
 # 先装依赖（利用 Docker 缓存层）
 COPY requirements.txt .
+# The application is CPU-only. Installing torch from PyPI now resolves a CUDA
+# toolchain on Linux, which makes the image unnecessarily large and can exhaust
+# Docker Desktop storage during a clean build.
+RUN pip install --no-cache-dir \
+        --index-url https://download.pytorch.org/whl/cpu \
+        torch==2.13.0
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 复制项目代码
 COPY . .
+COPY --from=frontend-builder /frontend/dist /app/frontend/dist
 
 # 创建数据目录（含模型缓存目录，通过 volume 持久化避免每次重启重下载）
 RUN mkdir -p /app/data/raw /app/data/processed /app/data/chromadb \

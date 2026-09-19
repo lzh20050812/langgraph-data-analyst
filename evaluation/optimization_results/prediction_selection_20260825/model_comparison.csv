@@ -1,0 +1,5 @@
+﻿model,selected,mape_pct,validation_mape_mean,validation_mape_std,validation_rmse_mean,validation_mae_mean,validation_folds,test_rmse,test_mape_pct,test_mae
+LastValue,False,13.29,13.29,3.03,4660.43,4329.16,3,5944.96,14.36,5361.89
+SeasonalNaive,False,9.81,9.81,2.75,4551.96,3364.31,3,8536.04,21.6,8174.73
+Drift,False,13.56,13.56,3.23,4741.69,4413.97,3,5961.82,14.37,5370.95
+Prophet,True,9.12,9.12,1.29,4320.14,3130.01,3,6584.95,15.65,5837.82

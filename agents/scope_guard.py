@@ -36,4 +36,22 @@ def detect_unsupported_request(query: str) -> Optional[UnsupportedRequest]:
             "churn_timeline",
             "customers.churned 只有静态标签，缺少 churn_date，无法将流失归因到具体月份。",
         )
+    if any(term in text for term in ("华东", "华南", "华北", "华中", "西南", "西北", "东北")):
+        return UnsupportedRequest(
+            "subnational_region",
+            "customers 仅含 country，不含省份或华东/华南等区域字段，无法可靠过滤。",
+        )
+    static_customer_terms = (
+        "rfm", "客户分层", "客户价值", "累计消费", "会员等级",
+        "流失预测", "高风险客户",
+    )
+    explicit_period = (
+        any(str(year) in text for year in range(2000, 2100))
+        or any(term in text for term in ("去年", "今年", "上月", "最近一年"))
+    )
+    if explicit_period and any(term in text for term in static_customer_terms):
+        return UnsupportedRequest(
+            "customer_historical_scope",
+            "客户累计特征没有历史快照，不能将当前累计值冒充为指定期间指标。",
+        )
     return None

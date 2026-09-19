@@ -1,0 +1,53 @@
+[
+  {
+    "id": "M1",
+    "turns": ["统计2025年各国家实付金额", "只看美国"],
+    "expected_final": {"metrics": ["paid_amount"], "dimensions": ["country"], "time_scope.years": [2025], "filters.country": ["United States"]},
+    "focus": "inherit_metric_dimension_period_replace_country"
+  },
+  {
+    "id": "M2",
+    "turns": ["统计2025年美国实付金额", "按月拆分"],
+    "expected_final": {"metrics": ["paid_amount"], "dimensions": ["time"], "time_scope.years": [2025], "filters.country": ["United States"]},
+    "focus": "replace_dimension_keep_scope"
+  },
+  {
+    "id": "M3",
+    "turns": ["统计2025年美国实付金额", "不限地区"],
+    "expected_final": {"metrics": ["paid_amount"], "time_scope.years": [2025], "filters.country": null},
+    "focus": "explicit_filter_clear"
+  },
+  {
+    "id": "M4",
+    "turns": ["统计2025年美国实付金额", "新分析 客户数"],
+    "expected_final": {"metrics": ["customer_count"], "dimensions": [], "time_scope.years": [], "filters.country": null},
+    "focus": "new_analysis_resets_context"
+  },
+  {
+    "id": "M5",
+    "turns": ["统计美国客户数", "改成各客服团队平均解决时长"],
+    "expected_final": {"metrics": ["avg_resolution_hours"], "data_source": "support_ops", "dimensions": ["team"], "filters.country": ["United States"]},
+    "expected_issue_contains": "不支持国家筛选",
+    "focus": "cross_source_inherited_filter_rejected"
+  },
+  {
+    "id": "M6",
+    "turns": ["统计客户数", "只看华东"],
+    "expected_final": {"metrics": ["customer_count"]},
+    "expected_issue_contains": "没有华东等国内区域字段",
+    "focus": "unsupported_region_preserved"
+  },
+  {
+    "id": "M7",
+    "turns": ["统计2025年实付金额", "改成流失率"],
+    "expected_final": {"metrics": ["churn_rate"], "time_scope.years": [2025]},
+    "expected_issue_contains": "没有可回溯的时间字段",
+    "focus": "incompatible_inherited_period_rejected"
+  },
+  {
+    "id": "M8",
+    "turns": ["按国家统计", "实付金额"],
+    "expected_final": {"metrics": ["paid_amount"], "dimensions": ["country"]},
+    "focus": "clarification_answer_completes_request"
+  }
+]

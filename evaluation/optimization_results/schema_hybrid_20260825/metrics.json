@@ -1,0 +1,3533 @@
+{
+  "protocol": "held-out-hybrid-schema-retrieval-v1",
+  "created_at": "2026-08-25",
+  "revalidated_at": "2026-09-18",
+  "dataset_sha256": "dac29515e83c217c956c8417396b8a3312ad2acfcd2be75a50a5a51e24232a7f",
+  "runtime_retriever_sha256": "1647a7b940ee5b172131dbffec5c2d9f537fa7377ce99ba2380b0f3ebd9d5d3e",
+  "split": {
+    "strategy": "category-stratified deterministic 1-in-4 validation",
+    "validation_ids": [
+      1,
+      5,
+      8,
+      12,
+      15,
+      19,
+      22,
+      26,
+      29,
+      33,
+      35,
+      39
+    ],
+    "test_ids": [
+      2,
+      3,
+      4,
+      6,
+      7,
+      9,
+      10,
+      11,
+      13,
+      14,
+      16,
+      17,
+      18,
+      20,
+      21,
+      23,
+      24,
+      25,
+      27,
+      28,
+      30,
+      31,
+      32,
+      34,
+      36,
+      37,
+      38,
+      40
+    ]
+  },
+  "parameter_selection": {
+    "selected": {
+      "vector_weight": 0.2,
+      "lexical_weight": 0.8,
+      "rrf_k": 20,
+      "validation_field_recall_at_5": 0.972222,
+      "validation_mrr_at_10": 0.861111
+    },
+    "trials": [
+      {
+        "vector_weight": 0.2,
+        "lexical_weight": 0.8,
+        "rrf_k": 20,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.861111
+      },
+      {
+        "vector_weight": 0.6,
+        "lexical_weight": 0.4,
+        "rrf_k": 5,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.847222
+      },
+      {
+        "vector_weight": 0.6,
+        "lexical_weight": 0.4,
+        "rrf_k": 10,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.840278
+      },
+      {
+        "vector_weight": 0.6,
+        "lexical_weight": 0.4,
+        "rrf_k": 20,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.836111
+      },
+      {
+        "vector_weight": 0.6,
+        "lexical_weight": 0.4,
+        "rrf_k": 40,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.836111
+      },
+      {
+        "vector_weight": 0.6,
+        "lexical_weight": 0.4,
+        "rrf_k": 60,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.836111
+      },
+      {
+        "vector_weight": 0.3,
+        "lexical_weight": 0.7,
+        "rrf_k": 5,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.833333
+      },
+      {
+        "vector_weight": 0.3,
+        "lexical_weight": 0.7,
+        "rrf_k": 10,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.833333
+      },
+      {
+        "vector_weight": 0.3,
+        "lexical_weight": 0.7,
+        "rrf_k": 20,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.819444
+      },
+      {
+        "vector_weight": 0.3,
+        "lexical_weight": 0.7,
+        "rrf_k": 40,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.819444
+      },
+      {
+        "vector_weight": 0.3,
+        "lexical_weight": 0.7,
+        "rrf_k": 60,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.819444
+      },
+      {
+        "vector_weight": 0.2,
+        "lexical_weight": 0.8,
+        "rrf_k": 5,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.819444
+      },
+      {
+        "vector_weight": 0.2,
+        "lexical_weight": 0.8,
+        "rrf_k": 10,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.819444
+      },
+      {
+        "vector_weight": 0.2,
+        "lexical_weight": 0.8,
+        "rrf_k": 40,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.819444
+      },
+      {
+        "vector_weight": 0.2,
+        "lexical_weight": 0.8,
+        "rrf_k": 60,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.819444
+      },
+      {
+        "vector_weight": 0.1,
+        "lexical_weight": 0.9,
+        "rrf_k": 20,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.819444
+      },
+      {
+        "vector_weight": 0.1,
+        "lexical_weight": 0.9,
+        "rrf_k": 40,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.819444
+      },
+      {
+        "vector_weight": 0.1,
+        "lexical_weight": 0.9,
+        "rrf_k": 60,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.819444
+      },
+      {
+        "vector_weight": 0.4,
+        "lexical_weight": 0.6,
+        "rrf_k": 5,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.791667
+      },
+      {
+        "vector_weight": 0.4,
+        "lexical_weight": 0.6,
+        "rrf_k": 10,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.791667
+      },
+      {
+        "vector_weight": 0.5,
+        "lexical_weight": 0.5,
+        "rrf_k": 10,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.777778
+      },
+      {
+        "vector_weight": 0.4,
+        "lexical_weight": 0.6,
+        "rrf_k": 20,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.777778
+      },
+      {
+        "vector_weight": 0.4,
+        "lexical_weight": 0.6,
+        "rrf_k": 40,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.777778
+      },
+      {
+        "vector_weight": 0.4,
+        "lexical_weight": 0.6,
+        "rrf_k": 60,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.777778
+      },
+      {
+        "vector_weight": 0.5,
+        "lexical_weight": 0.5,
+        "rrf_k": 20,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.770833
+      },
+      {
+        "vector_weight": 0.5,
+        "lexical_weight": 0.5,
+        "rrf_k": 40,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.770833
+      },
+      {
+        "vector_weight": 0.5,
+        "lexical_weight": 0.5,
+        "rrf_k": 60,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.770833
+      },
+      {
+        "vector_weight": 0.1,
+        "lexical_weight": 0.9,
+        "rrf_k": 10,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.770833
+      },
+      {
+        "vector_weight": 0.5,
+        "lexical_weight": 0.5,
+        "rrf_k": 5,
+        "validation_field_recall_at_5": 0.972222,
+        "validation_mrr_at_10": 0.763889
+      },
+      {
+        "vector_weight": 0.1,
+        "lexical_weight": 0.9,
+        "rrf_k": 5,
+        "validation_field_recall_at_5": 0.930556,
+        "validation_mrr_at_10": 0.770833
+      },
+      {
+        "vector_weight": 0.7,
+        "lexical_weight": 0.3,
+        "rrf_k": 5,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.875
+      },
+      {
+        "vector_weight": 0.7,
+        "lexical_weight": 0.3,
+        "rrf_k": 10,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.833333
+      },
+      {
+        "vector_weight": 0.7,
+        "lexical_weight": 0.3,
+        "rrf_k": 20,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.833333
+      },
+      {
+        "vector_weight": 0.7,
+        "lexical_weight": 0.3,
+        "rrf_k": 40,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.833333
+      },
+      {
+        "vector_weight": 0.7,
+        "lexical_weight": 0.3,
+        "rrf_k": 60,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.833333
+      },
+      {
+        "vector_weight": 0.8,
+        "lexical_weight": 0.2,
+        "rrf_k": 10,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.831349
+      },
+      {
+        "vector_weight": 0.8,
+        "lexical_weight": 0.2,
+        "rrf_k": 20,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.829861
+      },
+      {
+        "vector_weight": 0.8,
+        "lexical_weight": 0.2,
+        "rrf_k": 40,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.829861
+      },
+      {
+        "vector_weight": 0.8,
+        "lexical_weight": 0.2,
+        "rrf_k": 60,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.829861
+      },
+      {
+        "vector_weight": 0.8,
+        "lexical_weight": 0.2,
+        "rrf_k": 5,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.789683
+      },
+      {
+        "vector_weight": 0.9,
+        "lexical_weight": 0.1,
+        "rrf_k": 60,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.786111
+      },
+      {
+        "vector_weight": 0.9,
+        "lexical_weight": 0.1,
+        "rrf_k": 5,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.744444
+      },
+      {
+        "vector_weight": 0.9,
+        "lexical_weight": 0.1,
+        "rrf_k": 40,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.744444
+      },
+      {
+        "vector_weight": 0.9,
+        "lexical_weight": 0.1,
+        "rrf_k": 10,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.736111
+      },
+      {
+        "vector_weight": 0.9,
+        "lexical_weight": 0.1,
+        "rrf_k": 20,
+        "validation_field_recall_at_5": 0.888889,
+        "validation_mrr_at_10": 0.736111
+      }
+    ]
+  },
+  "validation_summaries": {
+    "dense": {
+      "n": 12,
+      "field_recall_at_1": 0.361111,
+      "field_precision_at_1": 0.583333,
+      "field_recall_at_3": 0.763889,
+      "field_precision_at_3": 0.416667,
+      "field_recall_at_5": 0.888889,
+      "field_precision_at_5": 0.283333,
+      "mrr_at_10": 0.729167,
+      "latency_median_ms": 13.136,
+      "latency_p95_ms": 15.888
+    },
+    "lexical": {
+      "n": 12,
+      "field_recall_at_1": 0.416667,
+      "field_precision_at_1": 0.583333,
+      "field_recall_at_3": 0.736111,
+      "field_precision_at_3": 0.361111,
+      "field_recall_at_5": 0.930556,
+      "field_precision_at_5": 0.283333,
+      "mrr_at_10": 0.770833,
+      "latency_median_ms": 3.241,
+      "latency_p95_ms": 4.311
+    },
+    "hybrid": {
+      "n": 12,
+      "field_recall_at_1": 0.541667,
+      "field_precision_at_1": 0.75,
+      "field_recall_at_3": 0.861111,
+      "field_precision_at_3": 0.416667,
+      "field_recall_at_5": 0.972222,
+      "field_precision_at_5": 0.3,
+      "mrr_at_10": 0.861111,
+      "latency_median_ms": 16.768,
+      "latency_p95_ms": 19.352
+    }
+  },
+  "test_summaries": {
+    "dense": {
+      "n": 28,
+      "field_recall_at_1": 0.47619,
+      "field_precision_at_1": 0.785714,
+      "field_recall_at_3": 0.702381,
+      "field_precision_at_3": 0.416667,
+      "field_recall_at_5": 0.827381,
+      "field_precision_at_5": 0.307143,
+      "mrr_at_10": 0.858929,
+      "latency_median_ms": 12.133,
+      "latency_p95_ms": 14.414
+    },
+    "lexical": {
+      "n": 28,
+      "field_recall_at_1": 0.380952,
+      "field_precision_at_1": 0.642857,
+      "field_recall_at_3": 0.720238,
+      "field_precision_at_3": 0.440476,
+      "field_recall_at_5": 0.857143,
+      "field_precision_at_5": 0.321429,
+      "mrr_at_10": 0.770238,
+      "latency_median_ms": 3.212,
+      "latency_p95_ms": 3.552
+    },
+    "hybrid": {
+      "n": 28,
+      "field_recall_at_1": 0.380952,
+      "field_precision_at_1": 0.642857,
+      "field_recall_at_3": 0.75,
+      "field_precision_at_3": 0.464286,
+      "field_recall_at_5": 0.863095,
+      "field_precision_at_5": 0.321429,
+      "mrr_at_10": 0.789881,
+      "latency_median_ms": 15.564,
+      "latency_p95_ms": 17.857
+    }
+  },
+  "paired_hybrid_vs_validation_selected_baseline": {
+    "reference_method": "lexical",
+    "mean_difference": 0.005952,
+    "bootstrap_95_ci": [
+      -0.035714,
+      0.053571
+    ]
+  },
+  "validation_details": [
+    {
+      "id": 1,
+      "query": "查询不同会员等级客户数量",
+      "category": "用户分析",
+      "expected_fields": [
+        "customers.membership_tier"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "monthly_revenue.new_customers",
+            "customers.membership_tier",
+            "customers.customer_id",
+            "customers.wishlist_items",
+            "monthly_revenue.unique_customers",
+            "customers.total_orders",
+            "orders.customer_id",
+            "orders.order_id",
+            "orders.customer_rating",
+            "orders.session_duration_minutes"
+          ],
+          "latency_seconds": 0.012750600000345003,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.membership_tier",
+            "orders.quantity",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "monthly_revenue.unique_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "customers.churned",
+            "orders.customer_rating"
+          ],
+          "latency_seconds": 0.005014899999878253,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.membership_tier",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "monthly_revenue.unique_customers",
+            "orders.customer_id",
+            "orders.quantity",
+            "orders.customer_rating",
+            "customers.wishlist_items",
+            "customers.churned",
+            "customers.reviews_given"
+          ],
+          "latency_seconds": 0.01785920000020269,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 5,
+      "query": "各获客渠道带来的客户数量和新客户占比",
+      "category": "用户分析",
+      "expected_fields": [
+        "customers.acquisition_channel"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.acquisition_channel",
+            "monthly_revenue.new_customers",
+            "customers.customer_id",
+            "customers.wishlist_items",
+            "customers.total_orders",
+            "orders.is_repeat_customer",
+            "customers.preferred_category",
+            "orders.customer_rating",
+            "orders.order_id",
+            "product_summary.total_orders"
+          ],
+          "latency_seconds": 0.012996400000247377,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "monthly_revenue.new_customers",
+            "orders.quantity",
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "monthly_revenue.unique_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "customers.churned",
+            "orders.customer_rating"
+          ],
+          "latency_seconds": 0.0036130999997112667,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.0,
+          "field_precision_at_3": 0.0,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.25
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "monthly_revenue.new_customers",
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "monthly_revenue.unique_customers",
+            "orders.customer_id",
+            "orders.quantity",
+            "orders.customer_rating",
+            "customers.wishlist_items",
+            "orders.is_repeat_customer",
+            "customers.reviews_given"
+          ],
+          "latency_seconds": 0.016701199999715755,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.3333333333333333
+        }
+      }
+    },
+    {
+      "id": 8,
+      "query": "统计不同支付方式订单数量",
+      "category": "订单分析",
+      "expected_fields": [
+        "orders.payment_method"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "product_summary.total_orders",
+            "customers.total_orders",
+            "orders.subtotal_usd",
+            "orders.total_amount_usd",
+            "monthly_revenue.orders",
+            "orders.shipping_fee_usd",
+            "customers.avg_order_value_usd",
+            "customers.total_spend_usd",
+            "orders.month",
+            "orders.customer_rating"
+          ],
+          "latency_seconds": 0.011663300000236632,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.0,
+          "field_precision_at_3": 0.0,
+          "field_recall_at_5": 0.0,
+          "field_precision_at_5": 0.0,
+          "reciprocal_rank_at_10": 0.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "orders.payment_method",
+            "customers.preferred_payment_method",
+            "customers.total_orders",
+            "orders.quantity",
+            "orders.order_id",
+            "monthly_revenue.orders",
+            "product_summary.total_orders",
+            "orders.order_status",
+            "orders.month",
+            "orders.order_date"
+          ],
+          "latency_seconds": 0.0031660000004194444,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "orders.payment_method",
+            "customers.total_orders",
+            "product_summary.total_orders",
+            "monthly_revenue.orders",
+            "orders.order_id",
+            "customers.preferred_payment_method",
+            "orders.month",
+            "orders.order_status",
+            "orders.quantity",
+            "orders.subtotal_usd"
+          ],
+          "latency_seconds": 0.014918500000476342,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 12,
+      "query": "复购客户和新客户的订单平均评分对比",
+      "category": "订单分析",
+      "expected_fields": [
+        "orders.is_repeat_customer",
+        "orders.customer_rating"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "orders.is_repeat_customer",
+            "orders.customer_rating",
+            "customers.total_orders",
+            "customers.avg_order_value_usd",
+            "monthly_revenue.new_customers",
+            "customers.reviews_given",
+            "monthly_revenue.avg_order_value",
+            "orders.shipping_fee_usd",
+            "customers.avg_review_score",
+            "orders.order_id"
+          ],
+          "latency_seconds": 0.013823300000240124,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "product_summary.avg_rating",
+            "orders.customer_rating",
+            "orders.is_repeat_customer",
+            "customers.avg_review_score",
+            "monthly_revenue.new_customers",
+            "orders.order_id",
+            "customers.customer_id",
+            "orders.customer_id",
+            "customers.total_orders",
+            "customers.avg_order_value_usd"
+          ],
+          "latency_seconds": 0.003734399999757443,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "orders.customer_rating",
+            "orders.is_repeat_customer",
+            "product_summary.avg_rating",
+            "customers.avg_review_score",
+            "monthly_revenue.new_customers",
+            "orders.order_id",
+            "customers.total_orders",
+            "customers.avg_order_value_usd",
+            "orders.customer_id",
+            "orders.order_status"
+          ],
+          "latency_seconds": 0.017644300000029034,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 15,
+      "query": "各品类商品数量统计",
+      "category": "商品分析",
+      "expected_fields": [
+        "product_summary.category"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "product_summary.total_orders",
+            "product_summary.category",
+            "orders.category",
+            "customers.preferred_category",
+            "orders.product_name",
+            "customers.wishlist_items",
+            "product_summary.total_revenue_usd",
+            "orders.quantity",
+            "product_summary.product_name",
+            "product_summary.avg_rating"
+          ],
+          "latency_seconds": 0.011536900000010064,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "lexical": {
+          "ranked_fields": [
+            "orders.category",
+            "product_summary.category",
+            "product_summary.product_name",
+            "orders.product_name",
+            "orders.quantity",
+            "customers.wishlist_items",
+            "customers.preferred_category",
+            "product_summary.total_revenue_usd",
+            "product_summary.avg_rating",
+            "product_summary.return_rate"
+          ],
+          "latency_seconds": 0.0029907000002822315,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "orders.category",
+            "product_summary.category",
+            "product_summary.product_name",
+            "orders.product_name",
+            "orders.quantity",
+            "customers.wishlist_items",
+            "customers.preferred_category",
+            "product_summary.total_revenue_usd",
+            "product_summary.total_orders",
+            "product_summary.avg_rating"
+          ],
+          "latency_seconds": 0.014605300000312127,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.5
+        }
+      }
+    },
+    {
+      "id": 19,
+      "query": "各商品品类的总营收和销量排名",
+      "category": "商品分析",
+      "expected_fields": [
+        "product_summary.category",
+        "product_summary.total_revenue_usd",
+        "product_summary.total_orders"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "product_summary.category",
+            "orders.category",
+            "product_summary.total_orders",
+            "product_summary.product_name",
+            "orders.product_name",
+            "product_summary.total_revenue_usd",
+            "customers.preferred_category",
+            "product_summary.avg_discount_pct",
+            "product_summary.avg_price",
+            "product_summary.avg_rating"
+          ],
+          "latency_seconds": 0.017552899999827787,
+          "field_recall_at_1": 0.3333333333333333,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.6666666666666666,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 0.6666666666666666,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "orders.category",
+            "product_summary.category",
+            "product_summary.product_name",
+            "product_summary.total_orders",
+            "orders.product_name",
+            "customers.total_spend_usd",
+            "product_summary.total_revenue_usd",
+            "monthly_revenue.revenue_usd",
+            "customers.preferred_category",
+            "product_summary.avg_rating"
+          ],
+          "latency_seconds": 0.0031509999998888816,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.3333333333333333,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.6666666666666666,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "orders.category",
+            "product_summary.category",
+            "product_summary.product_name",
+            "product_summary.total_orders",
+            "orders.product_name",
+            "product_summary.total_revenue_usd",
+            "customers.total_spend_usd",
+            "customers.preferred_category",
+            "monthly_revenue.revenue_usd",
+            "product_summary.avg_rating"
+          ],
+          "latency_seconds": 0.020789199999853736,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.3333333333333333,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.6666666666666666,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 0.5
+        }
+      }
+    },
+    {
+      "id": 22,
+      "query": "2025年每月的营收变化趋势",
+      "category": "销售趋势分析",
+      "expected_fields": [
+        "monthly_revenue.revenue_usd"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "monthly_revenue.year",
+            "product_summary.total_revenue_usd",
+            "orders.year",
+            "monthly_revenue.revenue_usd",
+            "monthly_revenue.month",
+            "orders.shipping_fee_usd",
+            "monthly_revenue.new_customers",
+            "product_summary.avg_delivery_days",
+            "monthly_revenue.orders",
+            "monthly_revenue.avg_order_value"
+          ],
+          "latency_seconds": 0.011657000000013795,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.0,
+          "field_precision_at_3": 0.0,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.25
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.total_spend_usd",
+            "monthly_revenue.revenue_usd",
+            "product_summary.total_revenue_usd",
+            "monthly_revenue.month",
+            "monthly_revenue.quarter",
+            "monthly_revenue.year"
+          ],
+          "latency_seconds": 0.00303219999977955,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "monthly_revenue.revenue_usd",
+            "customers.total_spend_usd",
+            "product_summary.total_revenue_usd",
+            "monthly_revenue.month",
+            "monthly_revenue.year",
+            "monthly_revenue.quarter",
+            "orders.year",
+            "orders.shipping_fee_usd",
+            "monthly_revenue.new_customers",
+            "product_summary.avg_delivery_days"
+          ],
+          "latency_seconds": 0.014781599999878381,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 26,
+      "query": "月度平均折扣率和订单量对比",
+      "category": "销售趋势分析",
+      "expected_fields": [
+        "monthly_revenue.avg_discount_pct",
+        "monthly_revenue.orders"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "monthly_revenue.avg_discount_pct",
+            "monthly_revenue.orders",
+            "monthly_revenue.avg_order_value",
+            "orders.month",
+            "orders.quarter",
+            "monthly_revenue.return_rate",
+            "customers.avg_order_value_usd",
+            "product_summary.avg_discount_pct",
+            "customers.total_orders",
+            "monthly_revenue.revenue_usd"
+          ],
+          "latency_seconds": 0.013498500000423519,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "monthly_revenue.avg_discount_pct",
+            "product_summary.avg_discount_pct",
+            "orders.discount_pct",
+            "orders.order_id",
+            "monthly_revenue.avg_order_value",
+            "monthly_revenue.orders",
+            "customers.total_orders",
+            "customers.returns_made",
+            "customers.avg_order_value_usd",
+            "orders.order_status"
+          ],
+          "latency_seconds": 0.0032396999999946274,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "monthly_revenue.avg_discount_pct",
+            "product_summary.avg_discount_pct",
+            "monthly_revenue.avg_order_value",
+            "orders.discount_pct",
+            "monthly_revenue.orders",
+            "customers.total_orders",
+            "customers.avg_order_value_usd",
+            "orders.month",
+            "orders.order_id",
+            "orders.quarter"
+          ],
+          "latency_seconds": 0.016833800000313204,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 29,
+      "query": "已流失客户数量统计",
+      "category": "客户流失分析",
+      "expected_fields": [
+        "customers.churned"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.churned",
+            "orders.customer_rating",
+            "product_summary.total_orders",
+            "monthly_revenue.new_customers",
+            "customers.total_orders",
+            "orders.is_repeat_customer",
+            "monthly_revenue.unique_customers",
+            "customers.wishlist_items",
+            "customers.customer_id",
+            "monthly_revenue.avg_order_value"
+          ],
+          "latency_seconds": 0.01290900000003603,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.churned",
+            "orders.quantity",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "monthly_revenue.unique_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "orders.customer_rating",
+            "customers.reviews_given"
+          ],
+          "latency_seconds": 0.0029291000000739587,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.churned",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "monthly_revenue.unique_customers",
+            "orders.customer_rating",
+            "orders.quantity",
+            "orders.customer_id",
+            "customers.wishlist_items",
+            "customers.reviews_given",
+            "customers.acquisition_channel"
+          ],
+          "latency_seconds": 0.015928400000120746,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 33,
+      "query": "长时间未购买的客户流失率分析",
+      "category": "客户流失分析",
+      "expected_fields": [
+        "customers.days_since_last_purchase",
+        "customers.churned"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "orders.customer_rating",
+            "customers.churned",
+            "orders.is_repeat_customer",
+            "customers.days_since_last_purchase",
+            "customers.customer_id",
+            "product_summary.return_rate",
+            "monthly_revenue.new_customers",
+            "customers.total_orders",
+            "product_summary.avg_delivery_days",
+            "orders.customer_id"
+          ],
+          "latency_seconds": 0.01327560000027006,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.churned",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "customers.days_since_last_purchase",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "orders.quantity",
+            "customers.registration_date",
+            "monthly_revenue.unique_customers"
+          ],
+          "latency_seconds": 0.003241500000058295,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.churned",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "customers.days_since_last_purchase",
+            "orders.customer_id",
+            "orders.customer_rating",
+            "customers.total_orders",
+            "monthly_revenue.unique_customers",
+            "customers.age",
+            "orders.delivery_days"
+          ],
+          "latency_seconds": 0.016607800000201678,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 35,
+      "query": "各获客渠道带来的客户数量和消费总额",
+      "category": "营销渠道分析",
+      "expected_fields": [
+        "customers.acquisition_channel",
+        "customers.total_spend_usd"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.acquisition_channel",
+            "customers.total_spend_usd",
+            "customers.wishlist_items",
+            "customers.total_orders",
+            "product_summary.total_orders",
+            "customers.customer_id",
+            "product_summary.total_revenue_usd",
+            "orders.customer_rating",
+            "orders.shipping_fee_usd",
+            "orders.order_id"
+          ],
+          "latency_seconds": 0.01452640000024985,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.total_spend_usd",
+            "orders.quantity",
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "monthly_revenue.new_customers",
+            "monthly_revenue.unique_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "customers.churned"
+          ],
+          "latency_seconds": 0.0035579000000325323,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.total_spend_usd",
+            "customers.acquisition_channel",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "orders.quantity",
+            "monthly_revenue.unique_customers",
+            "orders.customer_id",
+            "orders.customer_rating",
+            "customers.wishlist_items",
+            "orders.total_amount_usd"
+          ],
+          "latency_seconds": 0.018176100000346196,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 39,
+      "query": "社交媒体渠道获客的客户中订阅邮件的比例",
+      "category": "营销渠道分析",
+      "expected_fields": [
+        "customers.acquisition_channel",
+        "customers.newsletter_subscribed"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.acquisition_channel",
+            "customers.newsletter_subscribed",
+            "orders.customer_rating",
+            "customers.wishlist_items",
+            "customers.customer_id",
+            "orders.order_id",
+            "orders.shipping_fee_usd",
+            "orders.customer_id",
+            "customers.churned",
+            "monthly_revenue.new_customers"
+          ],
+          "latency_seconds": 0.013782199999695877,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.newsletter_subscribed",
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "monthly_revenue.unique_customers",
+            "customers.churned",
+            "orders.customer_rating"
+          ],
+          "latency_seconds": 0.0036148999997749343,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.newsletter_subscribed",
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "orders.customer_rating",
+            "customers.churned",
+            "monthly_revenue.unique_customers",
+            "customers.age",
+            "customers.country"
+          ],
+          "latency_seconds": 0.017488099999354745,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    }
+  ],
+  "test_details": [
+    {
+      "id": 2,
+      "query": "各个国家的客户分布情况",
+      "category": "用户分析",
+      "expected_fields": [
+        "customers.country"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.country",
+            "customers.customer_id",
+            "orders.year",
+            "customers.total_orders",
+            "orders.customer_id",
+            "customers.reviews_given",
+            "monthly_revenue.new_customers",
+            "orders.order_id",
+            "customers.acquisition_channel",
+            "customers.wishlist_items"
+          ],
+          "latency_seconds": 0.012459399999897869,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.country",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "monthly_revenue.unique_customers",
+            "customers.churned",
+            "orders.customer_rating",
+            "customers.acquisition_channel"
+          ],
+          "latency_seconds": 0.0030912000001990236,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.country",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.age",
+            "monthly_revenue.unique_customers",
+            "orders.customer_rating",
+            "customers.acquisition_channel",
+            "customers.gender",
+            "customers.total_orders"
+          ],
+          "latency_seconds": 0.015646600000309263,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "query": "男性客户和女性客户的消费总额对比",
+      "category": "用户分析",
+      "expected_fields": [
+        "customers.gender",
+        "customers.total_spend_usd"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.total_spend_usd",
+            "customers.gender",
+            "monthly_revenue.unique_customers",
+            "monthly_revenue.new_customers",
+            "customers.customer_id",
+            "customers.avg_order_value_usd",
+            "customers.total_orders",
+            "product_summary.total_orders",
+            "monthly_revenue.avg_order_value",
+            "customers.wishlist_items"
+          ],
+          "latency_seconds": 0.013715199999751349,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.total_spend_usd",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "monthly_revenue.unique_customers",
+            "customers.churned",
+            "orders.customer_rating",
+            "orders.total_amount_usd"
+          ],
+          "latency_seconds": 0.003496899999845482,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.total_spend_usd",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "customers.gender",
+            "monthly_revenue.unique_customers",
+            "customers.age",
+            "customers.churned",
+            "orders.customer_rating",
+            "orders.customer_id",
+            "customers.acquisition_channel"
+          ],
+          "latency_seconds": 0.01730989999941812,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 4,
+      "query": "各年龄段客户的平均客单价",
+      "category": "用户分析",
+      "expected_fields": [
+        "customers.age",
+        "customers.avg_order_value_usd"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "monthly_revenue.avg_order_value",
+            "customers.avg_order_value_usd",
+            "customers.age",
+            "orders.year",
+            "customers.total_orders",
+            "customers.total_spend_usd",
+            "customers.acquisition_channel",
+            "customers.wishlist_items",
+            "orders.customer_rating",
+            "orders.quarter"
+          ],
+          "latency_seconds": 0.01312999999981912,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.avg_order_value_usd",
+            "customers.age",
+            "orders.unit_price_usd",
+            "customers.customer_id",
+            "monthly_revenue.avg_order_value",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.gender",
+            "customers.avg_review_score",
+            "product_summary.avg_price"
+          ],
+          "latency_seconds": 0.003166800000144576,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.avg_order_value_usd",
+            "customers.age",
+            "monthly_revenue.avg_order_value",
+            "orders.unit_price_usd",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.customer_id",
+            "monthly_revenue.unique_customers",
+            "orders.customer_rating",
+            "customers.acquisition_channel"
+          ],
+          "latency_seconds": 0.016391999999996187,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 6,
+      "query": "订阅了营销邮件的客户与未订阅客户的消费行为差异",
+      "category": "用户分析",
+      "expected_fields": [
+        "customers.newsletter_subscribed",
+        "customers.total_spend_usd",
+        "customers.total_orders"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.newsletter_subscribed",
+            "orders.customer_rating",
+            "customers.churned",
+            "orders.is_repeat_customer",
+            "customers.total_spend_usd",
+            "orders.shipping_fee_usd",
+            "customers.customer_id",
+            "product_summary.total_revenue_usd",
+            "customers.total_orders",
+            "product_summary.total_orders"
+          ],
+          "latency_seconds": 0.015708100000210834,
+          "field_recall_at_1": 0.3333333333333333,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.3333333333333333,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.6666666666666666,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.newsletter_subscribed",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "customers.total_spend_usd",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "monthly_revenue.unique_customers",
+            "customers.churned",
+            "orders.customer_rating"
+          ],
+          "latency_seconds": 0.004016599999886239,
+          "field_recall_at_1": 0.3333333333333333,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.3333333333333333,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.6666666666666666,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.newsletter_subscribed",
+            "customers.customer_id",
+            "customers.total_spend_usd",
+            "orders.customer_id",
+            "customers.churned",
+            "orders.customer_rating",
+            "monthly_revenue.new_customers",
+            "customers.acquisition_channel",
+            "customers.age",
+            "customers.gender"
+          ],
+          "latency_seconds": 0.01981900000009773,
+          "field_recall_at_1": 0.3333333333333333,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.6666666666666666,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 0.6666666666666666,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 7,
+      "query": "客户使用不同设备购物的偏好分布",
+      "category": "用户分析",
+      "expected_fields": [
+        "customers.preferred_device"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.preferred_device",
+            "customers.preferred_category",
+            "orders.customer_rating",
+            "customers.preferred_payment_method",
+            "orders.device_used",
+            "product_summary.total_orders",
+            "orders.product_name",
+            "customers.total_orders",
+            "orders.shipping_fee_usd",
+            "customers.total_spend_usd"
+          ],
+          "latency_seconds": 0.014122099999895,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "orders.device_used",
+            "customers.customer_id",
+            "customers.preferred_device",
+            "monthly_revenue.new_customers",
+            "customers.preferred_category",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "customers.preferred_payment_method",
+            "monthly_revenue.unique_customers"
+          ],
+          "latency_seconds": 0.003352799999902345,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.3333333333333333
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "orders.device_used",
+            "customers.preferred_device",
+            "customers.customer_id",
+            "customers.preferred_category",
+            "customers.preferred_payment_method",
+            "orders.customer_rating",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.acquisition_channel",
+            "customers.age"
+          ],
+          "latency_seconds": 0.01756969999996727,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.5
+        }
+      }
+    },
+    {
+      "id": 9,
+      "query": "各订单状态下订单数量和金额汇总",
+      "category": "订单分析",
+      "expected_fields": [
+        "orders.order_status",
+        "orders.total_amount_usd"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "product_summary.total_orders",
+            "orders.total_amount_usd",
+            "customers.total_orders",
+            "orders.order_id",
+            "monthly_revenue.orders",
+            "orders.order_status",
+            "orders.subtotal_usd",
+            "orders.year",
+            "orders.month",
+            "orders.order_date"
+          ],
+          "latency_seconds": 0.014498699999876408,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "lexical": {
+          "ranked_fields": [
+            "orders.order_status",
+            "orders.subtotal_usd",
+            "customers.total_orders",
+            "orders.quantity",
+            "orders.order_id",
+            "monthly_revenue.orders",
+            "orders.total_amount_usd",
+            "product_summary.total_orders",
+            "customers.avg_order_value_usd",
+            "orders.discount_amount_usd"
+          ],
+          "latency_seconds": 0.0034206000000267522,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "orders.order_status",
+            "orders.subtotal_usd",
+            "customers.total_orders",
+            "orders.order_id",
+            "monthly_revenue.orders",
+            "orders.total_amount_usd",
+            "orders.quantity",
+            "product_summary.total_orders",
+            "customers.avg_order_value_usd",
+            "orders.month"
+          ],
+          "latency_seconds": 0.018011299999670882,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 10,
+      "query": "退货订单占总订单比例以及退货金额",
+      "category": "订单分析",
+      "expected_fields": [
+        "orders.returned",
+        "orders.total_amount_usd"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "product_summary.return_rate",
+            "orders.customer_rating",
+            "product_summary.total_orders",
+            "customers.returns_made",
+            "customers.total_orders",
+            "orders.order_id",
+            "orders.shipping_fee_usd",
+            "monthly_revenue.orders",
+            "monthly_revenue.return_rate",
+            "orders.returned"
+          ],
+          "latency_seconds": 0.012158200000158104,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.0,
+          "field_precision_at_3": 0.0,
+          "field_recall_at_5": 0.0,
+          "field_precision_at_5": 0.0,
+          "reciprocal_rank_at_10": 0.1
+        },
+        "lexical": {
+          "ranked_fields": [
+            "orders.subtotal_usd",
+            "customers.total_orders",
+            "orders.returned",
+            "orders.order_id",
+            "product_summary.return_rate",
+            "monthly_revenue.return_rate",
+            "orders.total_amount_usd",
+            "customers.returns_made",
+            "customers.avg_order_value_usd",
+            "orders.order_status"
+          ],
+          "latency_seconds": 0.0034009999999398133,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.3333333333333333
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.total_orders",
+            "product_summary.return_rate",
+            "orders.returned",
+            "orders.order_id",
+            "orders.subtotal_usd",
+            "monthly_revenue.return_rate",
+            "customers.returns_made",
+            "orders.total_amount_usd",
+            "customers.avg_order_value_usd",
+            "orders.order_status"
+          ],
+          "latency_seconds": 0.015651599999728205,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.3333333333333333
+        }
+      }
+    },
+    {
+      "id": 11,
+      "query": "不同配送天数的订单分布情况",
+      "category": "订单分析",
+      "expected_fields": [
+        "orders.delivery_days"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "orders.delivery_days",
+            "product_summary.avg_delivery_days",
+            "orders.shipping_fee_usd",
+            "orders.delivery_date",
+            "monthly_revenue.orders",
+            "orders.month",
+            "orders.customer_rating",
+            "customers.total_orders",
+            "orders.day_of_week",
+            "product_summary.total_orders"
+          ],
+          "latency_seconds": 0.011625700000422512,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "orders.delivery_days",
+            "product_summary.avg_delivery_days",
+            "orders.order_id",
+            "customers.total_orders",
+            "orders.shipping_fee_usd",
+            "orders.order_status",
+            "monthly_revenue.orders",
+            "orders.month",
+            "orders.order_date",
+            "orders.quarter"
+          ],
+          "latency_seconds": 0.0031311000002460787,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "orders.delivery_days",
+            "product_summary.avg_delivery_days",
+            "orders.order_id",
+            "orders.shipping_fee_usd",
+            "customers.total_orders",
+            "monthly_revenue.orders",
+            "orders.month",
+            "orders.order_status",
+            "orders.order_date",
+            "orders.quarter"
+          ],
+          "latency_seconds": 0.014853400000447436,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 13,
+      "query": "各季度订单数量和营收趋势",
+      "category": "订单分析",
+      "expected_fields": [
+        "orders.quarter",
+        "orders.total_amount_usd"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "orders.quarter",
+            "monthly_revenue.orders",
+            "monthly_revenue.quarter",
+            "orders.year",
+            "orders.month",
+            "customers.total_orders",
+            "product_summary.total_orders",
+            "monthly_revenue.avg_order_value",
+            "orders.delivery_date",
+            "monthly_revenue.year"
+          ],
+          "latency_seconds": 0.011645000000044092,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "monthly_revenue.quarter",
+            "customers.total_orders",
+            "orders.quarter",
+            "orders.quantity",
+            "customers.total_spend_usd",
+            "orders.order_id",
+            "monthly_revenue.orders",
+            "product_summary.total_orders",
+            "monthly_revenue.revenue_usd",
+            "orders.order_status"
+          ],
+          "latency_seconds": 0.0031808999997338105,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.3333333333333333
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "monthly_revenue.quarter",
+            "orders.quarter",
+            "customers.total_orders",
+            "monthly_revenue.orders",
+            "orders.order_id",
+            "product_summary.total_orders",
+            "monthly_revenue.revenue_usd",
+            "orders.month",
+            "orders.quantity",
+            "customers.total_spend_usd"
+          ],
+          "latency_seconds": 0.014918099999704282,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.5
+        }
+      }
+    },
+    {
+      "id": 14,
+      "query": "使用不同设备下单的客户平均折扣率",
+      "category": "订单分析",
+      "expected_fields": [
+        "orders.device_used",
+        "orders.discount_pct"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.avg_order_value_usd",
+            "product_summary.avg_discount_pct",
+            "orders.customer_rating",
+            "customers.total_orders",
+            "orders.device_used",
+            "monthly_revenue.avg_discount_pct",
+            "orders.shipping_fee_usd",
+            "monthly_revenue.avg_order_value",
+            "customers.total_spend_usd",
+            "orders.discount_pct"
+          ],
+          "latency_seconds": 0.01219489999994039,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.0,
+          "field_precision_at_3": 0.0,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.2
+        },
+        "lexical": {
+          "ranked_fields": [
+            "product_summary.avg_discount_pct",
+            "orders.discount_pct",
+            "orders.device_used",
+            "customers.customer_id",
+            "monthly_revenue.avg_discount_pct",
+            "customers.preferred_device",
+            "monthly_revenue.new_customers",
+            "customers.avg_order_value_usd",
+            "orders.customer_id",
+            "customers.age"
+          ],
+          "latency_seconds": 0.0034350999999333,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "product_summary.avg_discount_pct",
+            "orders.discount_pct",
+            "orders.device_used",
+            "monthly_revenue.avg_discount_pct",
+            "customers.customer_id",
+            "customers.avg_order_value_usd",
+            "customers.preferred_device",
+            "orders.customer_id",
+            "orders.customer_rating",
+            "monthly_revenue.new_customers"
+          ],
+          "latency_seconds": 0.01572249999981068,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 0.5
+        }
+      }
+    },
+    {
+      "id": 16,
+      "query": "评分最高的商品及其平均评分",
+      "category": "商品分析",
+      "expected_fields": [
+        "product_summary.product_name",
+        "product_summary.avg_rating"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "product_summary.avg_rating",
+            "orders.customer_rating",
+            "customers.avg_review_score",
+            "product_summary.avg_discount_pct",
+            "product_summary.avg_price",
+            "customers.reviews_given",
+            "customers.preferred_category",
+            "monthly_revenue.avg_order_value",
+            "product_summary.category",
+            "orders.unit_price_usd"
+          ],
+          "latency_seconds": 0.011350299999776325,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "product_summary.avg_rating",
+            "orders.customer_rating",
+            "product_summary.product_name",
+            "orders.product_name",
+            "customers.avg_review_score",
+            "product_summary.avg_price",
+            "orders.category",
+            "product_summary.avg_discount_pct",
+            "product_summary.total_revenue_usd",
+            "product_summary.category"
+          ],
+          "latency_seconds": 0.003209200000128476,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "product_summary.avg_rating",
+            "orders.customer_rating",
+            "customers.avg_review_score",
+            "product_summary.product_name",
+            "orders.product_name",
+            "product_summary.avg_price",
+            "product_summary.avg_discount_pct",
+            "orders.category",
+            "product_summary.category",
+            "product_summary.total_revenue_usd"
+          ],
+          "latency_seconds": 0.014644800000041869,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 17,
+      "query": "各品类商品的平均价格和平均评分",
+      "category": "商品分析",
+      "expected_fields": [
+        "product_summary.category",
+        "product_summary.avg_price",
+        "product_summary.avg_rating"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "product_summary.avg_rating",
+            "product_summary.avg_price",
+            "orders.category",
+            "product_summary.category",
+            "product_summary.avg_discount_pct",
+            "monthly_revenue.avg_order_value",
+            "customers.preferred_category",
+            "orders.unit_price_usd",
+            "orders.product_name",
+            "product_summary.total_orders"
+          ],
+          "latency_seconds": 0.011920199999622128,
+          "field_recall_at_1": 0.3333333333333333,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.6666666666666666,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.6,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "product_summary.avg_rating",
+            "product_summary.avg_price",
+            "orders.category",
+            "product_summary.category",
+            "orders.customer_rating",
+            "product_summary.product_name",
+            "orders.product_name",
+            "customers.avg_review_score",
+            "orders.unit_price_usd",
+            "customers.preferred_category"
+          ],
+          "latency_seconds": 0.003290999999990163,
+          "field_recall_at_1": 0.3333333333333333,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.6666666666666666,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.6,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "product_summary.avg_rating",
+            "product_summary.avg_price",
+            "orders.category",
+            "product_summary.category",
+            "orders.customer_rating",
+            "product_summary.product_name",
+            "orders.product_name",
+            "customers.avg_review_score",
+            "orders.unit_price_usd",
+            "customers.preferred_category"
+          ],
+          "latency_seconds": 0.015295899999728135,
+          "field_recall_at_1": 0.3333333333333333,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.6666666666666666,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.6,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 18,
+      "query": "退货率最高的商品类别及其退货率",
+      "category": "商品分析",
+      "expected_fields": [
+        "product_summary.category",
+        "product_summary.return_rate"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "product_summary.return_rate",
+            "monthly_revenue.return_rate",
+            "customers.returns_made",
+            "orders.category",
+            "product_summary.category",
+            "customers.preferred_category",
+            "orders.customer_rating",
+            "orders.returned",
+            "orders.discount_pct",
+            "orders.product_name"
+          ],
+          "latency_seconds": 0.011945799999921292,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "orders.category",
+            "product_summary.category",
+            "product_summary.return_rate",
+            "orders.returned",
+            "product_summary.product_name",
+            "orders.product_name",
+            "monthly_revenue.return_rate",
+            "customers.returns_made",
+            "customers.preferred_category",
+            "product_summary.total_revenue_usd"
+          ],
+          "latency_seconds": 0.0032693999996808998,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "orders.category",
+            "product_summary.category",
+            "product_summary.return_rate",
+            "orders.returned",
+            "monthly_revenue.return_rate",
+            "product_summary.product_name",
+            "orders.product_name",
+            "customers.returns_made",
+            "customers.preferred_category",
+            "product_summary.total_orders"
+          ],
+          "latency_seconds": 0.01530079999974987,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 0.5
+        }
+      }
+    },
+    {
+      "id": 20,
+      "query": "折扣率最高的商品和品类折扣率趋势",
+      "category": "商品分析",
+      "expected_fields": [
+        "product_summary.product_name",
+        "product_summary.avg_discount_pct",
+        "product_summary.category"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "product_summary.avg_discount_pct",
+            "orders.discount_pct",
+            "customers.preferred_category",
+            "monthly_revenue.avg_discount_pct",
+            "product_summary.category",
+            "orders.category",
+            "customers.wishlist_items",
+            "product_summary.avg_price",
+            "orders.unit_price_usd",
+            "product_summary.return_rate"
+          ],
+          "latency_seconds": 0.011849200000142446,
+          "field_recall_at_1": 0.3333333333333333,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.3333333333333333,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.6666666666666666,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "orders.discount_pct",
+            "orders.category",
+            "product_summary.category",
+            "product_summary.avg_discount_pct",
+            "product_summary.product_name",
+            "orders.product_name",
+            "monthly_revenue.avg_discount_pct",
+            "customers.preferred_category",
+            "product_summary.total_revenue_usd",
+            "product_summary.avg_rating"
+          ],
+          "latency_seconds": 0.003546800000094663,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.3333333333333333,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.6,
+          "reciprocal_rank_at_10": 0.3333333333333333
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "orders.discount_pct",
+            "orders.category",
+            "product_summary.avg_discount_pct",
+            "product_summary.category",
+            "monthly_revenue.avg_discount_pct",
+            "customers.preferred_category",
+            "orders.product_name",
+            "product_summary.total_revenue_usd",
+            "product_summary.avg_rating",
+            "product_summary.product_name"
+          ],
+          "latency_seconds": 0.015480800000659656,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.3333333333333333,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.6666666666666666,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 0.3333333333333333
+        }
+      }
+    },
+    {
+      "id": 21,
+      "query": "商品平均配送天数统计",
+      "category": "商品分析",
+      "expected_fields": [
+        "product_summary.avg_delivery_days"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "product_summary.avg_delivery_days",
+            "orders.delivery_days",
+            "product_summary.total_orders",
+            "product_summary.total_revenue_usd",
+            "monthly_revenue.avg_order_value",
+            "product_summary.avg_rating",
+            "orders.shipping_fee_usd",
+            "orders.delivery_date",
+            "customers.total_orders",
+            "customers.wishlist_items"
+          ],
+          "latency_seconds": 0.011901399999715068,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "product_summary.avg_delivery_days",
+            "orders.delivery_days",
+            "product_summary.product_name",
+            "orders.product_name",
+            "product_summary.avg_rating",
+            "product_summary.avg_price",
+            "product_summary.avg_discount_pct",
+            "orders.shipping_fee_usd",
+            "orders.category",
+            "product_summary.total_revenue_usd"
+          ],
+          "latency_seconds": 0.0029812000002493733,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "product_summary.avg_delivery_days",
+            "orders.delivery_days",
+            "product_summary.avg_rating",
+            "product_summary.avg_price",
+            "orders.shipping_fee_usd",
+            "product_summary.total_revenue_usd",
+            "product_summary.product_name",
+            "product_summary.avg_discount_pct",
+            "orders.product_name",
+            "product_summary.total_orders"
+          ],
+          "latency_seconds": 0.01497540000036679,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 23,
+      "query": "月度新增客户数量变化",
+      "category": "销售趋势分析",
+      "expected_fields": [
+        "monthly_revenue.new_customers"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "monthly_revenue.new_customers",
+            "monthly_revenue.unique_customers",
+            "monthly_revenue.orders",
+            "monthly_revenue.avg_order_value",
+            "monthly_revenue.month",
+            "orders.month",
+            "monthly_revenue.quarter",
+            "monthly_revenue.revenue_usd",
+            "monthly_revenue.avg_discount_pct",
+            "monthly_revenue.year"
+          ],
+          "latency_seconds": 0.01128789999984292,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "monthly_revenue.new_customers",
+            "orders.quantity",
+            "customers.customer_id",
+            "monthly_revenue.avg_order_value",
+            "monthly_revenue.unique_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "monthly_revenue.orders",
+            "monthly_revenue.revenue_usd"
+          ],
+          "latency_seconds": 0.002907500000219443,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "monthly_revenue.new_customers",
+            "monthly_revenue.avg_order_value",
+            "monthly_revenue.unique_customers",
+            "customers.customer_id",
+            "orders.quantity",
+            "monthly_revenue.orders",
+            "monthly_revenue.revenue_usd",
+            "orders.customer_id",
+            "customers.wishlist_items",
+            "customers.age"
+          ],
+          "latency_seconds": 0.014288599999872531,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 24,
+      "query": "月度活跃客户数和月均客单价趋势",
+      "category": "销售趋势分析",
+      "expected_fields": [
+        "monthly_revenue.unique_customers",
+        "monthly_revenue.avg_order_value"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "monthly_revenue.avg_order_value",
+            "monthly_revenue.unique_customers",
+            "monthly_revenue.orders",
+            "monthly_revenue.new_customers",
+            "monthly_revenue.avg_discount_pct",
+            "customers.avg_order_value_usd",
+            "orders.month",
+            "customers.total_orders",
+            "monthly_revenue.revenue_usd",
+            "monthly_revenue.return_rate"
+          ],
+          "latency_seconds": 0.011918100000002596,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "monthly_revenue.unique_customers",
+            "monthly_revenue.avg_order_value",
+            "customers.avg_order_value_usd",
+            "orders.unit_price_usd",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "monthly_revenue.avg_discount_pct"
+          ],
+          "latency_seconds": 0.003412999999909516,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "monthly_revenue.unique_customers",
+            "monthly_revenue.avg_order_value",
+            "customers.avg_order_value_usd",
+            "monthly_revenue.new_customers",
+            "orders.unit_price_usd",
+            "monthly_revenue.avg_discount_pct",
+            "monthly_revenue.orders",
+            "customers.customer_id",
+            "monthly_revenue.revenue_usd",
+            "orders.customer_id"
+          ],
+          "latency_seconds": 0.01542539999991277,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 25,
+      "query": "各月份退货率变化趋势",
+      "category": "销售趋势分析",
+      "expected_fields": [
+        "monthly_revenue.return_rate"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "monthly_revenue.return_rate",
+            "product_summary.return_rate",
+            "customers.returns_made",
+            "orders.month",
+            "monthly_revenue.orders",
+            "monthly_revenue.new_customers",
+            "monthly_revenue.avg_discount_pct",
+            "orders.returned",
+            "customers.days_since_last_purchase",
+            "orders.delivery_date"
+          ],
+          "latency_seconds": 0.01157599999987724,
+          "field_recall_at_1": 1.0,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "product_summary.return_rate",
+            "orders.returned",
+            "monthly_revenue.month",
+            "orders.month",
+            "monthly_revenue.return_rate",
+            "customers.returns_made"
+          ],
+          "latency_seconds": 0.00291849999985061,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.0,
+          "field_precision_at_3": 0.0,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.2
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "product_summary.return_rate",
+            "orders.returned",
+            "orders.month",
+            "monthly_revenue.return_rate",
+            "monthly_revenue.month",
+            "customers.returns_made",
+            "monthly_revenue.orders",
+            "monthly_revenue.new_customers",
+            "monthly_revenue.avg_discount_pct",
+            "customers.days_since_last_purchase"
+          ],
+          "latency_seconds": 0.014561199999661767,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.0,
+          "field_precision_at_3": 0.0,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.25
+        }
+      }
+    },
+    {
+      "id": 27,
+      "query": "各年度总营收和总订单量汇总",
+      "category": "销售趋势分析",
+      "expected_fields": [
+        "monthly_revenue.revenue_usd",
+        "monthly_revenue.orders"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "orders.year",
+            "monthly_revenue.orders",
+            "monthly_revenue.year",
+            "orders.total_amount_usd",
+            "product_summary.total_orders",
+            "orders.quarter",
+            "customers.total_orders",
+            "monthly_revenue.revenue_usd",
+            "customers.total_spend_usd",
+            "orders.month"
+          ],
+          "latency_seconds": 0.013102900000376394,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.total_orders",
+            "monthly_revenue.year",
+            "customers.total_spend_usd",
+            "orders.order_id",
+            "monthly_revenue.revenue_usd",
+            "customers.returns_made",
+            "orders.order_status",
+            "monthly_revenue.orders",
+            "orders.month",
+            "orders.order_date"
+          ],
+          "latency_seconds": 0.0031819000000723463,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.0,
+          "field_precision_at_3": 0.0,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.2
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.total_orders",
+            "monthly_revenue.year",
+            "customers.total_spend_usd",
+            "orders.order_id",
+            "monthly_revenue.revenue_usd",
+            "monthly_revenue.orders",
+            "orders.month",
+            "orders.year",
+            "orders.quarter",
+            "orders.order_date"
+          ],
+          "latency_seconds": 0.016376400000808644,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.0,
+          "field_precision_at_3": 0.0,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.2
+        }
+      }
+    },
+    {
+      "id": 28,
+      "query": "按季度汇总订单数量和交易金额",
+      "category": "销售趋势分析",
+      "expected_fields": [
+        "orders.quarter",
+        "orders.total_amount_usd"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "orders.quarter",
+            "monthly_revenue.orders",
+            "orders.total_amount_usd",
+            "orders.month",
+            "customers.total_orders",
+            "orders.subtotal_usd",
+            "monthly_revenue.quarter",
+            "orders.year",
+            "product_summary.total_orders",
+            "customers.total_spend_usd"
+          ],
+          "latency_seconds": 0.01209919999973863,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.total_orders",
+            "orders.subtotal_usd",
+            "orders.quarter",
+            "monthly_revenue.quarter",
+            "orders.quantity",
+            "orders.order_id",
+            "monthly_revenue.orders",
+            "orders.total_amount_usd",
+            "product_summary.total_orders",
+            "customers.total_spend_usd"
+          ],
+          "latency_seconds": 0.0032105000000228756,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.3333333333333333
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.total_orders",
+            "orders.quarter",
+            "orders.subtotal_usd",
+            "monthly_revenue.quarter",
+            "monthly_revenue.orders",
+            "orders.total_amount_usd",
+            "orders.quantity",
+            "orders.order_id",
+            "product_summary.total_orders",
+            "customers.total_spend_usd"
+          ],
+          "latency_seconds": 0.01540309999973033,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.5,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.5
+        }
+      }
+    },
+    {
+      "id": 30,
+      "query": "流失客户与未流失客户的消费总额对比",
+      "category": "客户流失分析",
+      "expected_fields": [
+        "customers.churned",
+        "customers.total_spend_usd"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.churned",
+            "customers.total_spend_usd",
+            "orders.customer_rating",
+            "orders.shipping_fee_usd",
+            "orders.is_repeat_customer",
+            "monthly_revenue.new_customers",
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "product_summary.total_revenue_usd",
+            "customers.preferred_payment_method"
+          ],
+          "latency_seconds": 0.01212359999999535,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.churned",
+            "customers.total_spend_usd",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "monthly_revenue.unique_customers",
+            "orders.customer_rating",
+            "orders.total_amount_usd"
+          ],
+          "latency_seconds": 0.0035182999999960884,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.churned",
+            "customers.total_spend_usd",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "orders.customer_rating",
+            "monthly_revenue.unique_customers",
+            "customers.acquisition_channel",
+            "orders.total_amount_usd",
+            "customers.age"
+          ],
+          "latency_seconds": 0.01574350000009872,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 31,
+      "query": "不同会员等级的客户流失率",
+      "category": "客户流失分析",
+      "expected_fields": [
+        "customers.membership_tier",
+        "customers.churned"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.churned",
+            "orders.customer_rating",
+            "monthly_revenue.new_customers",
+            "customers.membership_tier",
+            "monthly_revenue.unique_customers",
+            "customers.customer_id",
+            "customers.total_spend_usd",
+            "monthly_revenue.avg_order_value",
+            "orders.customer_id",
+            "customers.wishlist_items"
+          ],
+          "latency_seconds": 0.011457500000233267,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.membership_tier",
+            "customers.churned",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "monthly_revenue.unique_customers",
+            "orders.customer_rating",
+            "customers.acquisition_channel"
+          ],
+          "latency_seconds": 0.0029838000000381726,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.membership_tier",
+            "customers.churned",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "orders.customer_rating",
+            "monthly_revenue.unique_customers",
+            "customers.acquisition_channel",
+            "customers.country",
+            "customers.age"
+          ],
+          "latency_seconds": 0.014540500000293832,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 32,
+      "query": "退货次数多的客户流失率是否更高",
+      "category": "客户流失分析",
+      "expected_fields": [
+        "customers.returns_made",
+        "customers.churned"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "product_summary.return_rate",
+            "orders.customer_rating",
+            "monthly_revenue.return_rate",
+            "customers.returns_made",
+            "customers.churned",
+            "orders.is_repeat_customer",
+            "orders.returned",
+            "monthly_revenue.new_customers",
+            "orders.delivery_days",
+            "customers.customer_id"
+          ],
+          "latency_seconds": 0.012142999999923632,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.0,
+          "field_precision_at_3": 0.0,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 0.25
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.churned",
+            "customers.returns_made",
+            "orders.returned",
+            "customers.customer_id",
+            "product_summary.return_rate",
+            "monthly_revenue.new_customers",
+            "monthly_revenue.return_rate",
+            "orders.customer_id",
+            "customers.total_orders",
+            "customers.age"
+          ],
+          "latency_seconds": 0.0032129999999597203,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.churned",
+            "customers.returns_made",
+            "orders.returned",
+            "product_summary.return_rate",
+            "customers.customer_id",
+            "monthly_revenue.return_rate",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.total_orders",
+            "orders.customer_rating"
+          ],
+          "latency_seconds": 0.015452000000095722,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 34,
+      "query": "各获客渠道的客户流失率对比",
+      "category": "客户流失分析",
+      "expected_fields": [
+        "customers.acquisition_channel",
+        "customers.churned"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.acquisition_channel",
+            "orders.customer_rating",
+            "customers.churned",
+            "customers.customer_id",
+            "orders.is_repeat_customer",
+            "orders.customer_id",
+            "customers.total_orders",
+            "monthly_revenue.new_customers",
+            "customers.wishlist_items",
+            "product_summary.return_rate"
+          ],
+          "latency_seconds": 0.011334299999816722,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.churned",
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "monthly_revenue.unique_customers",
+            "orders.customer_rating",
+            "customers.country"
+          ],
+          "latency_seconds": 0.0032099999998536077,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.churned",
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "orders.customer_rating",
+            "monthly_revenue.unique_customers",
+            "customers.age",
+            "customers.avg_order_value_usd",
+            "customers.returns_made"
+          ],
+          "latency_seconds": 0.014644299999417854,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 36,
+      "query": "不同渠道获客的客户中高价值客户占比",
+      "category": "营销渠道分析",
+      "expected_fields": [
+        "customers.acquisition_channel",
+        "customers.membership_tier",
+        "customers.total_spend_usd"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.acquisition_channel",
+            "customers.customer_id",
+            "customers.avg_order_value_usd",
+            "customers.preferred_category",
+            "orders.customer_rating",
+            "customers.wishlist_items",
+            "orders.customer_id",
+            "customers.total_orders",
+            "customers.country",
+            "orders.is_repeat_customer"
+          ],
+          "latency_seconds": 0.012990899999749672,
+          "field_recall_at_1": 0.3333333333333333,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.3333333333333333,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.3333333333333333,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "monthly_revenue.unique_customers",
+            "customers.churned",
+            "orders.customer_rating",
+            "customers.country"
+          ],
+          "latency_seconds": 0.0035552999997889856,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.3333333333333333,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.3333333333333333,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.5
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "orders.customer_id",
+            "monthly_revenue.new_customers",
+            "orders.customer_rating",
+            "customers.churned",
+            "customers.country",
+            "customers.avg_order_value_usd",
+            "customers.age",
+            "customers.preferred_category"
+          ],
+          "latency_seconds": 0.016713799999251933,
+          "field_recall_at_1": 0.0,
+          "field_precision_at_1": 0.0,
+          "field_recall_at_3": 0.3333333333333333,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 0.3333333333333333,
+          "field_precision_at_5": 0.2,
+          "reciprocal_rank_at_10": 0.5
+        }
+      }
+    },
+    {
+      "id": 37,
+      "query": "各渠道获客客户的客单价对比",
+      "category": "营销渠道分析",
+      "expected_fields": [
+        "customers.acquisition_channel",
+        "customers.avg_order_value_usd"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.acquisition_channel",
+            "customers.avg_order_value_usd",
+            "customers.total_orders",
+            "orders.customer_rating",
+            "customers.wishlist_items",
+            "monthly_revenue.avg_order_value",
+            "orders.customer_id",
+            "customers.customer_id",
+            "orders.order_id",
+            "orders.is_repeat_customer"
+          ],
+          "latency_seconds": 0.01425619999963601,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.avg_order_value_usd",
+            "orders.unit_price_usd",
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "monthly_revenue.avg_order_value",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "monthly_revenue.unique_customers"
+          ],
+          "latency_seconds": 0.0031874000001153036,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.avg_order_value_usd",
+            "customers.acquisition_channel",
+            "orders.unit_price_usd",
+            "customers.customer_id",
+            "monthly_revenue.avg_order_value",
+            "orders.customer_id",
+            "monthly_revenue.new_customers",
+            "orders.customer_rating",
+            "customers.country",
+            "customers.total_orders"
+          ],
+          "latency_seconds": 0.017545099999551894,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 38,
+      "query": "邮件营销渠道获客的客户复购率",
+      "category": "营销渠道分析",
+      "expected_fields": [
+        "customers.acquisition_channel",
+        "orders.is_repeat_customer"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "orders.is_repeat_customer",
+            "customers.acquisition_channel",
+            "orders.customer_rating",
+            "customers.wishlist_items",
+            "customers.churned",
+            "customers.total_orders",
+            "customers.reviews_given",
+            "customers.customer_id",
+            "customers.returns_made",
+            "product_summary.return_rate"
+          ],
+          "latency_seconds": 0.013248400000065885,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "orders.is_repeat_customer",
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "monthly_revenue.new_customers",
+            "customers.newsletter_subscribed",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender",
+            "monthly_revenue.unique_customers",
+            "customers.churned"
+          ],
+          "latency_seconds": 0.0032074000000648084,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "orders.is_repeat_customer",
+            "customers.acquisition_channel",
+            "customers.customer_id",
+            "monthly_revenue.new_customers",
+            "customers.newsletter_subscribed",
+            "orders.customer_id",
+            "customers.churned",
+            "orders.customer_rating",
+            "customers.country",
+            "customers.returns_made"
+          ],
+          "latency_seconds": 0.01655239999990954,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    },
+    {
+      "id": 40,
+      "query": "不同设备偏好的客户在各渠道的分布",
+      "category": "营销渠道分析",
+      "expected_fields": [
+        "customers.acquisition_channel",
+        "customers.preferred_device"
+      ],
+      "methods": {
+        "dense": {
+          "ranked_fields": [
+            "customers.preferred_device",
+            "customers.acquisition_channel",
+            "customers.preferred_category",
+            "orders.device_used",
+            "customers.preferred_payment_method",
+            "customers.country",
+            "customers.customer_id",
+            "orders.customer_rating",
+            "orders.product_name",
+            "product_summary.category"
+          ],
+          "latency_seconds": 0.012738500000068598,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "lexical": {
+          "ranked_fields": [
+            "customers.preferred_device",
+            "orders.device_used",
+            "customers.customer_id",
+            "customers.acquisition_channel",
+            "monthly_revenue.new_customers",
+            "customers.preferred_category",
+            "customers.preferred_payment_method",
+            "orders.customer_id",
+            "customers.age",
+            "customers.gender"
+          ],
+          "latency_seconds": 0.0033455000002504676,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 0.5,
+          "field_precision_at_3": 0.3333333333333333,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        },
+        "hybrid": {
+          "ranked_fields": [
+            "customers.preferred_device",
+            "orders.device_used",
+            "customers.acquisition_channel",
+            "customers.customer_id",
+            "customers.preferred_category",
+            "customers.preferred_payment_method",
+            "monthly_revenue.new_customers",
+            "orders.customer_id",
+            "orders.customer_rating",
+            "customers.country"
+          ],
+          "latency_seconds": 0.016232100000252103,
+          "field_recall_at_1": 0.5,
+          "field_precision_at_1": 1.0,
+          "field_recall_at_3": 1.0,
+          "field_precision_at_3": 0.6666666666666666,
+          "field_recall_at_5": 1.0,
+          "field_precision_at_5": 0.4,
+          "reciprocal_rank_at_10": 1.0
+        }
+      }
+    }
+  ]
+}

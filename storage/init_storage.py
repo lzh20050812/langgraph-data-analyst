@@ -88,6 +88,19 @@ def init_product_summary(settings) -> int:
     return rows
 
 
+def init_support_schema(settings) -> tuple[int, int]:
+    """Load the reproducible second business schema into the same MySQL DB."""
+    engine = get_engine()
+    agents = load_csv_to_mysql(
+        str(settings.RAW_DIR / "support_agents.csv"), "support_agents", engine
+    )
+    tickets = load_csv_to_mysql(
+        str(settings.RAW_DIR / "support_tickets.csv"), "support_tickets", engine
+    )
+    print(f"  [OK] support_agents: {agents} 行; support_tickets: {tickets} 行")
+    return agents, tickets
+
+
 def create_views() -> None:
     """创建聚合视图。"""
     engine = get_engine()
@@ -100,7 +113,10 @@ def create_views() -> None:
 def print_table_stats() -> None:
     """打印各表的统计信息。"""
     engine = get_engine()
-    tables = ["customers", "orders", "monthly_revenue", "product_summary"]
+    tables = [
+        "customers", "orders", "monthly_revenue", "product_summary",
+        "support_agents", "support_tickets",
+    ]
     print("\n" + "=" * 50)
     print("数据库表统计")
     print("=" * 50)
@@ -150,7 +166,10 @@ def main():
     print("\n[4/5] 导入 product_summary 表...")
     init_product_summary(settings)
 
-    print("\n[5/5] 创建聚合视图...")
+    print("\n[5/6] 导入客服业务 Schema...")
+    init_support_schema(settings)
+
+    print("\n[6/6] 创建聚合视图...")
     create_views()
 
     print_table_stats()

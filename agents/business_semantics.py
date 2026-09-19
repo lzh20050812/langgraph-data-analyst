@@ -8,7 +8,9 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+import re
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
+from agents.task_planning import extract_country_filters
 
 
 @dataclass(frozen=True)
@@ -43,15 +45,22 @@ def _contract(
     return QueryContract(recipe_id, sql, tables, grain, columns, rationale, fallback)
 
 
-def _membership_distribution(_: str) -> QueryContract:
+def _membership_distribution(query: str) -> QueryContract:
+    countries = extract_country_filters(query)
+    where = ""
+    rationale = "会员等级直接来自 customers.membership_tier，占比采用0-100口径。"
+    if countries:
+        quoted = ", ".join("'" + value.replace("'", "''") + "'" for value in countries)
+        where = f"WHERE country IN ({quoted}) "
+        rationale += f" 客户范围限定为: {', '.join(countries)}。"
     return _contract(
         "customer.membership_distribution",
         "SELECT membership_tier, COUNT(*) AS cnt, "
         "COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS pct "
-        "FROM customers GROUP BY membership_tier ORDER BY cnt DESC",
+        f"FROM customers {where}GROUP BY membership_tier ORDER BY cnt DESC",
         "customers", "membership_tier",
         ("membership_tier", "cnt", "pct"),
-        "会员等级直接来自 customers.membership_tier，占比采用0-100口径。",
+        rationale,
     )
 
 
@@ -259,10 +268,25 @@ def _return_cause(_: str) -> QueryContract:
     )
 
 
+def _support_team_resolution(_: str) -> QueryContract:
+    return _contract(
+        "support.team_resolution",
+        "SELECT a.team, COUNT(*) AS ticket_count, "
+        "ROUND(AVG(t.resolution_hours), 2) AS avg_resolution_hours "
+        "FROM support_tickets t JOIN support_agents a ON t.agent_id = a.agent_id "
+        "GROUP BY a.team ORDER BY a.team",
+        ("support_tickets", "support_agents"), "team",
+        ("team", "ticket_count", "avg_resolution_hours"),
+        "工单通过 agent_id 连接坐席维表；未解决工单的 NULL 耗时不进入平均值。",
+    )
+
+
 Recipe = Tuple[Callable[[str], bool], Callable[[str], QueryContract]]
 
 
 RECIPES: Tuple[Recipe, ...] = (
+    (lambda q: _has_all(q, ("客服团队", "坐席组"), ("工单",),
+                        ("平均解决时长", "平均处理耗时")), _support_team_resolution),
     (lambda q: _has_all(q, ("会员等级", "会员层级"), ("数量", "客户数", "用户数", "人数", "分布")), _membership_distribution),
     (lambda q: _has_all(q, ("国家", "地区"), ("客户数量", "客户数", "用户规模", "用户数"), ("平均消费", "消费水平", "人均累计消费")), _country_customer_value),
     (lambda q: _has_all(q, ("年龄段", "年龄区间"), ("分布", "消费行为", "人数", "平均消费")), _age_behavior),
@@ -287,7 +311,27 @@ def build_query_contract(user_query: str) -> Optional[QueryContract]:
     query = user_query.lower().strip()
     for predicate, factory in RECIPES:
         if predicate(query):
-            return factory(query)
+            contract = factory(query)
+            # Fixed recipes must never silently discard extra user scope. The
+            # general constrained SQL path gets the request when a recipe does
+            # not model exclusions, Top-N, or an additional population filter.
+            unsupported_markers = (
+                "排除", "不包含", "除了", "top ", "top-", "前10", "前 10",
+                "最近", "去年", "今年",
+            )
+            if any(marker in query for marker in unsupported_markers):
+                return None
+            population_markers = ("只看", "仅看", "只统计", "仅统计")
+            supported_country_scope = (
+                contract.recipe_id == "customer.membership_distribution"
+                and bool(extract_country_filters(query))
+            )
+            if any(marker in query for marker in population_markers) and not supported_country_scope:
+                return None
+            years = re.findall(r"(?<!\d)20\d{2}(?!\d)", query)
+            if years and contract.recipe_id != "revenue.monthly_year":
+                return None
+            return contract
     return None
 
 

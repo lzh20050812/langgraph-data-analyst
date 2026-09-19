@@ -1,5 +1,5 @@
 """
-图表渲染器 —— 将 Analysis / Prediction Agent 的输出转为 ECharts 配置。
+图表渲染器 —— 将查询、Analysis / Prediction Agent 的输出转为 ECharts 配置。
 
 非 Agent，纯渲染逻辑。接收 analysis_result 或 prediction_result，
 输出 ECharts option JSON 字典列表。
@@ -11,10 +11,162 @@
 - ROC 曲线 / 流失概率分布
 - 销售预测趋势图（历史+预测+置信区间）
 - 运营指标仪表盘
+- SQL 查询结果自动折线图 / 柱状图
 """
 
+from numbers import Number
+import re
 from typing import List, Dict, Any, Optional
 from agents.state import AgentState
+
+
+_TIME_FIELD_PATTERN = re.compile(
+    r"(?:date|time|month|year|quarter|日期|时间|月份|年度|季度)",
+    re.IGNORECASE,
+)
+
+
+def _is_number(value: object) -> bool:
+    return isinstance(value, Number) and not isinstance(value, bool)
+
+
+def _is_identifier(column: str) -> bool:
+    lowered = column.lower()
+    return lowered == "id" or lowered.endswith("_id") or lowered.endswith("编号")
+
+
+def _usable_numeric_columns(rows: list[dict], columns: list[str]) -> list[str]:
+    numeric = []
+    for column in columns:
+        if _is_identifier(column):
+            continue
+        values = [row.get(column) for row in rows if row.get(column) is not None]
+        if values and all(_is_number(value) for value in values):
+            numeric.append(column)
+    return numeric
+
+
+def _time_labels(rows: list[dict], columns: list[str]) -> tuple[list[str], set[str]] | None:
+    lowered = {column.lower(): column for column in columns}
+    if "year" in lowered and "month" in lowered:
+        year_column = lowered["year"]
+        month_column = lowered["month"]
+        try:
+            labels = [
+                f"{int(row[year_column])}-{int(row[month_column]):02d}"
+                for row in rows
+            ]
+            return labels, {year_column, month_column}
+        except (KeyError, TypeError, ValueError):
+            pass
+
+    for column in columns:
+        if not _TIME_FIELD_PATTERN.search(column):
+            continue
+        values = [row.get(column) for row in rows]
+        if all(value is not None for value in values):
+            return [str(value) for value in values], {column}
+    return None
+
+
+def build_query_result_chart(rows: list[dict], max_points: int = 30) -> dict | None:
+    """Build one deterministic chart when specialist agents produced none."""
+    rows = [row for row in (rows or []) if isinstance(row, dict)][:max_points]
+    if not rows:
+        return None
+
+    columns = list(dict.fromkeys(
+        column for row in rows for column in row.keys()
+    ))
+    numeric_columns = _usable_numeric_columns(rows, columns)
+    if not numeric_columns:
+        return None
+
+    # A one-row aggregate is best represented as a compact metric comparison.
+    if len(rows) == 1:
+        metrics = numeric_columns[:10]
+        return {
+            "id": "query_result_auto",
+            "title": "查询结果概览",
+            "type": "bar",
+            "generated_by": "query_result_auto",
+            "option": {
+                "xAxis": {
+                    "type": "category",
+                    "data": metrics,
+                    "axisLabel": {"rotate": 25},
+                },
+                "yAxis": {"type": "value"},
+                "series": [{
+                    "name": "数值",
+                    "type": "bar",
+                    "data": [rows[0].get(column) for column in metrics],
+                }],
+            },
+        }
+
+    time_axis = _time_labels(rows, columns)
+    if time_axis:
+        labels, time_columns = time_axis
+        measures = [
+            column for column in numeric_columns if column not in time_columns
+        ][:4]
+        if measures:
+            return {
+                "id": "query_result_auto",
+                "title": "查询结果趋势",
+                "type": "line",
+                "generated_by": "query_result_auto",
+                "option": {
+                    "xAxis": {"type": "category", "data": labels},
+                    "yAxis": {"type": "value"},
+                    "series": [
+                        {
+                            "name": column,
+                            "type": "line",
+                            "smooth": True,
+                            "data": [row.get(column) for row in rows],
+                        }
+                        for column in measures
+                    ],
+                },
+            }
+
+    category_columns = [
+        column
+        for column in columns
+        if column not in numeric_columns
+        and any(row.get(column) is not None for row in rows)
+    ]
+    category = category_columns[0] if category_columns else None
+    labels = (
+        [str(row.get(category, "")) for row in rows]
+        if category
+        else [str(index + 1) for index in range(len(rows))]
+    )
+    measures = numeric_columns[:4]
+    return {
+        "id": "query_result_auto",
+        "title": "查询结果对比" if category else "查询结果趋势",
+        "type": "bar" if category else "line",
+        "generated_by": "query_result_auto",
+        "option": {
+            "xAxis": {
+                "type": "category",
+                "data": labels,
+                "axisLabel": {"rotate": 25 if category else 0},
+            },
+            "yAxis": {"type": "value"},
+            "series": [
+                {
+                    "name": column,
+                    "type": "bar" if category else "line",
+                    "data": [row.get(column) for row in rows],
+                }
+                for column in measures
+            ],
+        },
+    }
 
 
 def render_charts(state: AgentState) -> AgentState:
@@ -151,7 +303,10 @@ def render_charts(state: AgentState) -> AgentState:
         top10 = importance[:10]
         charts.append({
             "id": "churn_feature_importance",
-            "title": f"流失预测特征重要度 (AUC={churn.get('auc', 'N/A')})",
+            "title": (
+                f"流失预测特征重要度 [{churn.get('model', 'N/A')}] "
+                f"(AUC={churn.get('auc', 'N/A')})"
+            ),
             "type": "bar",
             "option": {
                 "xAxis": {"type": "value"},
@@ -173,7 +328,11 @@ def render_charts(state: AgentState) -> AgentState:
     if hist_data and forecast_data:
         charts.append({
             "id": "sales_forecast",
-            "title": f"销售预测 (RMSE={sales.get('rmse', 'N/A')}, MAPE={sales.get('mape_pct', 'N/A')}%)",
+            "title": (
+                f"销售预测 [{sales.get('model', 'N/A')}] "
+                f"(RMSE={sales.get('rmse', 'N/A')}, "
+                f"MAPE={sales.get('mape_pct', 'N/A')}%)"
+            ),
             "type": "line",
             "option": {
                 "xAxis": {
@@ -199,6 +358,11 @@ def render_charts(state: AgentState) -> AgentState:
                 ],
             },
         })
+
+    if not charts:
+        automatic_chart = build_query_result_chart(state.get("query_result") or [])
+        if automatic_chart:
+            charts.append(automatic_chart)
 
     state["charts"] = charts
     state["messages"].append(f"[Chart Renderer] 生成 {len(charts)} 个图表配置")

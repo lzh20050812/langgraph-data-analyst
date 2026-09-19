@@ -7,10 +7,8 @@ services:
     container_name: ai_analytics_mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: analytics_dev_password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-analytics_dev_password}
       MYSQL_DATABASE: ai_analytics
-    ports:
-      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ../storage/mysql/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
@@ -22,9 +20,36 @@ services:
       retries: 5
 
   # ============================================================
-  # FastAPI 应用服务
+  # 一次性数据库装载与只读账户配置（使用 root，完成后退出）
+  # ============================================================
+  db-init:
+    image: ai_analytics-app:latest
+    container_name: ai_analytics_db_init
+    restart: "no"
+    env_file:
+      - ../.env
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD:-analytics_dev_password}
+      MYSQL_DATABASE: ai_analytics
+      MYSQL_APP_USER: ${MYSQL_APP_USER:-analytics_reader}
+      MYSQL_APP_PASSWORD: ${MYSQL_APP_PASSWORD:-analytics_read_password}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ../data:/app/data
+      - ../.env:/app/.env:ro
+    command: >
+      sh -c "python -m storage.init_storage --skip-etl && python -m storage.mysql.provision_reader"
+
+  # ============================================================
+  # FastAPI 应用服务（仅使用 SELECT 权限账户）
   # ============================================================
   app:
+    image: ai_analytics-app:latest
     build:
       context: ..
       dockerfile: Dockerfile
@@ -37,23 +62,74 @@ services:
     environment:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
-      MYSQL_USER: root
-      MYSQL_PASSWORD: analytics_dev_password
+      MYSQL_USER: ${MYSQL_APP_USER:-analytics_reader}
+      MYSQL_PASSWORD: ${MYSQL_APP_PASSWORD:-analytics_read_password}
       MYSQL_DATABASE: ai_analytics
       CHROMA_PERSIST_DIR: /app/data/chromadb
       HF_HOME: /app/data/hf_cache
       SENTENCE_TRANSFORMERS_HOME: /app/data/st_cache
+      TASK_EXECUTION_MODE: external
+      TASK_DB_PATH: /app/data/runtime/tasks.db
     depends_on:
       mysql:
         condition: service_healthy
+      db-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready', timeout=3)"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     volumes:
       # ChromaDB 向量库 + embedding 模型缓存 + 原始数据，全部通过此 volume 持久化
       # 架构说明：ChromaDB 不做独立容器，而是嵌入 FastAPI 进程内运行，
       # 数据目录 ./data/ 通过 bind mount 映射进容器，与本地开发共享同一份数据。
       - ../data:/app/data
       - ../.env:/app/.env:ro
-    command: >
-      sh -c "sleep 10 && python -m storage.init_storage --skip-etl && uvicorn api.main:app --host 0.0.0.0 --port 8000"
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000
+
+  # ============================================================
+  # Durable task worker (separate from the HTTP process)
+  # ============================================================
+  worker:
+    image: ai_analytics-app:latest
+    container_name: ai_analytics_worker
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: ${MYSQL_APP_USER:-analytics_reader}
+      MYSQL_PASSWORD: ${MYSQL_APP_PASSWORD:-analytics_read_password}
+      MYSQL_DATABASE: ai_analytics
+      CHROMA_PERSIST_DIR: /app/data/chromadb
+      HF_HOME: /app/data/hf_cache
+      SENTENCE_TRANSFORMERS_HOME: /app/data/st_cache
+      TASK_EXECUTION_MODE: external
+      TASK_DB_PATH: /app/data/runtime/tasks.db
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "from api.task_runtime import task_store; import sys; sys.exit(0 if task_store.list_workers(30) else 1)"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - ../data:/app/data
+      - ../.env:/app/.env:ro
+    command: python -m api.task_worker
 
 volumes:
   mysql_data:
