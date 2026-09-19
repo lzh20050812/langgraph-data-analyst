@@ -187,6 +187,7 @@
 | 首次远端 CI 复核 | 推送后 GitHub Actions run `35454693628` 暴露本机存在但被 `.gitignore` 排除的第二 Schema 固定 CSV，导致 3 项回归失败；已仅对白名单合成夹具 `support_agents.csv`、`support_tickets.csv` 解除忽略并纳入版本控制，其他原始 CSV 继续忽略 |
 | 跨平台数据哈希复核 | GitHub Actions run `35455033813` 暴露 Windows CRLF 与 Linux LF 造成的 4 份 JSON 字节哈希差异；目录审计改为对 UTF-8 文本统一 LF 后计算 SHA-256，并新增跨平台换行回归测试 |
 | 跨平台哈希修复后本地回归 | `221 passed`（20.50s，1 条第三方弃用警告）；179 条目录审计和 31 条确定性记录全部通过；0 次 LLM 调用 |
+| 最终远端 CI | GitHub Actions run `35455300271` 在 Linux/Python 3.11 上通过：源码编译、完整回归和版本化数据集审计全部成功；`v2026.09.1` 固定在该绿色提交 `178ac09`，不改写初始标签 `v2026.09` |
 | `python -m evaluation.experiments.stage5_deterministic_regression --check` | 179 条目录审计通过；31 条确定性逐样本回归通过；0 次 LLM 调用 |
 | `python -m evaluation.experiments.architecture_comparison_v2 --max-samples 5` | dry-run 通过；未执行外部模型调用 |
 | V2 `deepseek-v4-flash` 付费小样本对照 | 每组 5 条；15 calls；27,686 tokens；峰值估算 $0.02056；受控组严格答案 5/5 |
