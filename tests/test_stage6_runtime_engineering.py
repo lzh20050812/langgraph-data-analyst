@@ -11,6 +11,7 @@ from api.event_safety import sanitize_event
 from api.task_runtime import TaskRuntime, UnsafeCheckpointResume
 from api.task_state import InvalidTaskTransition
 from api.task_store import TaskStore
+from config.settings import BASE_DIR, get_settings
 
 
 def test_illegal_terminal_transition_is_rejected(tmp_path: Path):
@@ -132,3 +133,11 @@ def test_usage_summary_is_owner_scoped(tmp_path: Path):
     assert summary["llm_calls"] == 1
     assert summary["total_tokens"] == 6
     assert summary["models"] == {"m": 1}
+
+
+def test_pytest_global_task_store_is_isolated_from_runtime_data():
+    task_db_path = get_settings().TASK_DB_PATH.resolve()
+    project_runtime_dir = (BASE_DIR / "data" / "runtime").resolve()
+
+    assert task_db_path.name == "tasks.db"
+    assert project_runtime_dir not in task_db_path.parents

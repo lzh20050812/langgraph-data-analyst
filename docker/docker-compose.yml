@@ -90,6 +90,9 @@ services:
       # 架构说明：ChromaDB 不做独立容器，而是嵌入 FastAPI 进程内运行，
       # 数据目录 ./data/ 通过 bind mount 映射进容器，与本地开发共享同一份数据。
       - ../data:/app/data
+      # SQLite WAL stays on Docker's Linux filesystem and is shared only by
+      # the API and worker; the Windows bind mount remains for datasets/cache.
+      - task_runtime_data:/app/data/runtime
       - ../.env:/app/.env:ro
     command: uvicorn api.main:app --host 0.0.0.0 --port 8000
 
@@ -128,8 +131,10 @@ services:
       start_period: 10s
     volumes:
       - ../data:/app/data
+      - task_runtime_data:/app/data/runtime
       - ../.env:/app/.env:ro
     command: python -m api.task_worker
 
 volumes:
   mysql_data:
+  task_runtime_data:

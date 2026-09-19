@@ -157,6 +157,12 @@ for compatibility with the existing robustness evaluation.
 | `API_KEYS` | empty | Comma-separated accepted API keys |
 | `API_PRINCIPALS_JSON` | empty | Identity, role, and key records as JSON |
 
+In Docker Compose, the API and worker mount the same `task_runtime_data` named
+volume at `/app/data/runtime`. This keeps SQLite WAL on Docker's Linux
+filesystem instead of a Windows bind mount. Pytest overrides `TASK_DB_PATH`
+before application imports and uses a session-scoped temporary database, so a
+local regression run cannot mutate or lock the live task store.
+
 ## Remaining production boundary
 
 Before public deployment, add an external identity provider, TLS at the edge,
