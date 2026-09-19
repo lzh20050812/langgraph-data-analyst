@@ -185,6 +185,8 @@
 | `.env` 容器边界与最终回归 | 移除 db-init/App/Worker 的 `.env` 文件挂载，仅保留 `env_file` 进程注入；容器内 `/app/.env` 均不存在；新增 2 条部署配置回归后 `220 passed`（16.53s），App/Worker 重启均为 0 |
 | 依赖与密钥收口 | 本地及应用镜像 `pip check` 均无冲突；`npm audit --omit=dev --audit-level=high --registry=https://registry.npmjs.org` 返回 0 vulnerabilities；已跟踪源码高置信密钥模式扫描无命中；两项一键验收脚本已固化可离线检查 |
 | 首次远端 CI 复核 | 推送后 GitHub Actions run `35454693628` 暴露本机存在但被 `.gitignore` 排除的第二 Schema 固定 CSV，导致 3 项回归失败；已仅对白名单合成夹具 `support_agents.csv`、`support_tickets.csv` 解除忽略并纳入版本控制，其他原始 CSV 继续忽略 |
+| 跨平台数据哈希复核 | GitHub Actions run `35455033813` 暴露 Windows CRLF 与 Linux LF 造成的 4 份 JSON 字节哈希差异；目录审计改为对 UTF-8 文本统一 LF 后计算 SHA-256，并新增跨平台换行回归测试 |
+| 跨平台哈希修复后本地回归 | `221 passed`（20.50s，1 条第三方弃用警告）；179 条目录审计和 31 条确定性记录全部通过；0 次 LLM 调用 |
 | `python -m evaluation.experiments.stage5_deterministic_regression --check` | 179 条目录审计通过；31 条确定性逐样本回归通过；0 次 LLM 调用 |
 | `python -m evaluation.experiments.architecture_comparison_v2 --max-samples 5` | dry-run 通过；未执行外部模型调用 |
 | V2 `deepseek-v4-flash` 付费小样本对照 | 每组 5 条；15 calls；27,686 tokens；峰值估算 $0.02056；受控组严格答案 5/5 |

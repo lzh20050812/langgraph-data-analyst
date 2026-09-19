@@ -30,7 +30,13 @@ def _read_json(path: Path) -> Any:
 
 
 def _hash(path: Path) -> str:
-    return sha256(path.read_bytes()).hexdigest()
+    """Hash text datasets with platform-independent line endings."""
+    raw = path.read_bytes()
+    try:
+        canonical = raw.decode("utf-8").replace("\r\n", "\n").replace("\r", "\n")
+    except UnicodeDecodeError:
+        return sha256(raw).hexdigest()
+    return sha256(canonical.encode("utf-8")).hexdigest()
 
 
 def _issue(dataset_id: str, sample_id: Any, code: str, message: str) -> dict[str, Any]:

@@ -2,7 +2,7 @@
 
 ## Scope and dataset boundary
 
-The versioned catalog is `evaluation/data/benchmark_catalog_v2026_09.json`. It contains 179 repository-curated and deterministically audited samples. This count is a coverage inventory, not a claim that every label received a new independent human review in September 2026.
+The versioned catalog is `evaluation/data/benchmark_catalog_v2026_09.json`. It contains 179 repository-curated and deterministically audited samples. Text dataset SHA-256 values are computed after normalizing line endings to UTF-8 LF so that Windows and Linux checkouts have the same identity. This count is a coverage inventory, not a claim that every label received a new independent human review in September 2026.
 
 | Usage | Purpose | Rule |
 |---|---|---|

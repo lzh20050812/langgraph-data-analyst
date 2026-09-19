@@ -8,7 +8,7 @@ from evaluation.experiments.architecture_comparison_v2 import (
 )
 from evaluation.experiments.stage5_deterministic_regression import run
 from evaluation.framework.stage5 import (
-    audit_catalog, summarize_records, validate_sample_record,
+    _hash, audit_catalog, summarize_records, validate_sample_record,
 )
 
 
@@ -29,6 +29,14 @@ def test_versioned_catalog_audits_179_samples_and_disjoint_splits():
     assert audit["total_samples"] == 179
     assert audit["dataset_count"] == 7
     assert not audit["issues"]
+
+
+def test_dataset_hash_is_independent_of_platform_line_endings(tmp_path):
+    lf = tmp_path / "lf.json"
+    crlf = tmp_path / "crlf.json"
+    lf.write_bytes(b'[\n  {"id": 1}\n]\n')
+    crlf.write_bytes(b'[\r\n  {"id": 1}\r\n]\r\n')
+    assert _hash(lf) == _hash(crlf)
 
 
 def test_deterministic_stage5_regression_has_no_model_usage():

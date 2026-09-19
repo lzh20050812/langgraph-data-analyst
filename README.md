@@ -370,7 +370,7 @@ All figures below are bounded to the checked-in data snapshot and fixed evaluati
 | API concurrency | 100% success at 1, 2, and 4 workers | Four-worker throughput: 1.392 req/s |
 | Docker | MySQL, API, and Worker healthy; `db-init` exited 0 | Worker restart count remained 0 while the full release suite ran |
 
-Current local regression baseline (2026-09-20): **220 tests passed**. See the [upgrade progress record](docs/UPGRADE_PROGRESS.md) for commands, environment, and remaining verification boundaries. The frozen final-metrics record still contains the earlier **55 tests passed** regression snapshot, while the 2026-08-12 experiment pack recorded the 32-test baseline that existed at the time.
+Current local regression baseline (2026-09-20): **221 tests passed**. See the [upgrade progress record](docs/UPGRADE_PROGRESS.md) for commands, environment, and remaining verification boundaries. The frozen final-metrics record still contains the earlier **55 tests passed** regression snapshot, while the 2026-08-12 experiment pack recorded the 32-test baseline that existed at the time.
 
 #### Post-freeze held-out optimization (2026-08-25)
 
@@ -389,7 +389,7 @@ These results are stored separately and do not overwrite the frozen thesis basel
 The current release was rebuilt and verified on 2026-09-20 with
 `scripts/verify_docker_release.ps1`: MySQL, API, and Worker became healthy,
 `db-init` exited 0, the Worker restart count stayed 0, and the live, ready, and
-frontend HTTP checks passed. The full 220-test release verification then ran
+frontend HTTP checks passed. The full 221-test release verification then ran
 while the containers stayed healthy. API and Worker share a Docker named volume
 for SQLite WAL; pytest uses a separate session-scoped temporary database. The
 local and container Python environments pass `pip check`, and the containers do

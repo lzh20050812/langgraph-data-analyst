@@ -10,7 +10,7 @@
       "capability": "query",
       "usage": "frozen_test",
       "samples": 50,
-      "sha256": "e97ddaba709afa307da2467731b1cc166a41c691f8303e9c47ea213c30896c5a",
+      "sha256": "808d465898dd3926c4471bef20819ec7be42850da73e4d4eb3ec1c90ec40922d",
       "audit": ["unique_id", "required_fields", "sql_parse", "known_tables"]
     },
     {
@@ -19,7 +19,7 @@
       "capability": "retrieval",
       "usage": "validation_and_frozen_test",
       "samples": 40,
-      "sha256": "dac29515e83c217c956c8417396b8a3312ad2acfcd2be75a50a5a51e24232a7f",
+      "sha256": "6235a531c03a8a2bbf5d2fc71564cfca100abe19acbe3672becc1dcebe13f44b",
       "split": {
         "validation_ids": [1, 5, 8, 12, 15, 19, 22, 26, 29, 33, 35, 39],
         "frozen_test_ids": [2, 3, 4, 6, 7, 9, 10, 11, 13, 14, 16, 17, 18, 20, 21, 23, 24, 25, 27, 28, 30, 31, 32, 34, 36, 37, 38, 40]
@@ -41,7 +41,7 @@
       "capability": "workflow",
       "usage": "frozen_test",
       "samples": 50,
-      "sha256": "47536d224b70df844f75afba3b65e220d37f18ecbd35e721b1557d4edc54faf5",
+      "sha256": "55d47b3bff625c0be90f4bf78b89e204ab3e1ab1084b0014aabb12bc9806a4d1",
       "audit": ["unique_id", "required_fields", "task_type", "sql_parse_when_present"]
     },
     {
@@ -50,7 +50,7 @@
       "capability": "query",
       "usage": "development_regression",
       "samples": 15,
-      "sha256": "5e510eb4f3ed68b850111390065961f84194bf20b98e422b199e68b11c0c983b",
+      "sha256": "5a0d2f802c7710eea47a800c00c30e4530adda06494f39e032dc53f4c1e7bcc0",
       "audit": ["required_fields", "known_recipe"]
     },
     {
