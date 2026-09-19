@@ -48,6 +48,8 @@ npm run build
 
 也可一次执行 `powershell -ExecutionPolicy Bypass -File scripts/verify_release.ps1`；该脚本不会运行付费模型评测。
 
+Docker 完整构建与运行态验收使用 `powershell -ExecutionPolicy Bypass -File scripts/verify_docker_release.ps1`；已有镜像的快速复核可附加 `-SkipBuild`。脚本检查 Compose 配置、三项服务健康、db-init 退出码、Worker 零重启以及 live/ready/前端 HTTP 响应。
+
 付费架构对照默认只 dry-run；必须显式确认模型、样本、调用、Token 与美元上限才能执行。
 
 ## 三个完整演示

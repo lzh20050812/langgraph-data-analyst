@@ -110,6 +110,14 @@ docker compose -p ai_analytics -f docker/docker-compose.yml up -d --build
 docker compose -p ai_analytics -f docker/docker-compose.yml ps
 ```
 
+On Windows, the complete build-and-smoke verification can be run with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/verify_docker_release.ps1
+```
+
+Use `-SkipBuild` for a quick check of an already-built image.
+
 Open:
 
 - Dashboard: <http://localhost:8000>
@@ -360,9 +368,9 @@ All figures below are bounded to the checked-in data snapshot and fixed evaluati
 | Analysis memory | R@1 80%; R@3 90%; MRR@3 0.85 | 10 memories and 10 paraphrased queries |
 | Robustness | OOD 6/6 failed closed; injection 4/4 isolated | Core database row counts remained unchanged |
 | API concurrency | 100% success at 1, 2, and 4 workers | Four-worker throughput: 1.392 req/s |
-| Docker | MySQL and API healthy; `db-init` exited 0 | API runs as a SELECT-only MySQL account; `/health = ok` |
+| Docker | MySQL, API, and Worker healthy; `db-init` exited 0 | Worker restart count remained 0 while the full release suite ran |
 
-Current local regression baseline (2026-09-19): **217 tests passed**. See the [upgrade progress record](docs/UPGRADE_PROGRESS.md) for commands, environment, and remaining verification boundaries. The frozen final-metrics record still contains the earlier **55 tests passed** regression snapshot, while the 2026-08-12 experiment pack recorded the 32-test baseline that existed at the time.
+Current local regression baseline (2026-09-20): **218 tests passed**. See the [upgrade progress record](docs/UPGRADE_PROGRESS.md) for commands, environment, and remaining verification boundaries. The frozen final-metrics record still contains the earlier **55 tests passed** regression snapshot, while the 2026-08-12 experiment pack recorded the 32-test baseline that existed at the time.
 
 #### Post-freeze held-out optimization (2026-08-25)
 
@@ -378,7 +386,14 @@ These results are stored separately and do not overwrite the frozen thesis basel
 
 #### Docker validation evidence
 
-Reproduced on 2026-08-18 from a rebuilt `ai_analytics` Compose project:
+The current release was rebuilt and verified on 2026-09-20 with
+`scripts/verify_docker_release.ps1`: MySQL, API, and Worker became healthy,
+`db-init` exited 0, the Worker restart count stayed 0, and the live, ready, and
+frontend HTTP checks passed. The full 218-test release verification then ran
+while the containers stayed healthy. API and Worker share a Docker named volume
+for SQLite WAL; pytest uses a separate session-scoped temporary database.
+
+The earlier 2026-08-18 end-to-end probe additionally verified:
 
 - `docker compose -p ai_analytics -f docker/docker-compose.yml ps -a` reported `mysql` and `app` as healthy and the one-shot `db-init` service as exited 0.
 - `GET /health/live` returned `ok`; `/health/ready` returned `ok` with MySQL `connected` and LLM `configured`.

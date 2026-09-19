@@ -1,6 +1,6 @@
 # 项目升级进度
 
-> 更新日期：2026-09-19
+> 更新日期：2026-09-20
 > 执行基准：`d04fe98b15068b7a389037cfd6fcd6f742cef755`（带用户未提交修改的工作区）
 > 当前阶段：阶段一至阶段七——全部完成并收尾
 
@@ -181,6 +181,7 @@
 | `scripts/verify_release.ps1`（Docker 修正后最终复核） | 217 passed（24.09s，1 条第三方弃用警告）、179 条目录/31 条确定性记录审计、Python 编译、前端类型检查与 Vite 生产构建；全部通过 |
 | `docker compose build app` / `up -d --no-build` | 当前代码镜像构建成功；构建上下文由约 316 MB 降至 65.46 kB；App、Worker、MySQL 均 healthy，db-init 以 0 退出，Worker 重启计数为 0；live/ready 与前端入口返回 200 |
 | `scripts/verify_release.ps1`（任务库隔离后最终复核） | 218 passed（20.93s，1 条第三方弃用警告）、179 条目录/31 条确定性记录审计、Python 编译、前端类型检查与生产构建全部通过；运行中的 Docker Worker 重启计数保持 0 |
+| `scripts/verify_docker_release.ps1` | 完整构建模式与 `-SkipBuild` 快速模式均通过；自动检查 Compose 配置、App/Worker/MySQL healthy、db-init=0、Worker 重启=0、live/ready=ok 和前端 200 |
 | `python -m evaluation.experiments.stage5_deterministic_regression --check` | 179 条目录审计通过；31 条确定性逐样本回归通过；0 次 LLM 调用 |
 | `python -m evaluation.experiments.architecture_comparison_v2 --max-samples 5` | dry-run 通过；未执行外部模型调用 |
 | V2 `deepseek-v4-flash` 付费小样本对照 | 每组 5 条；15 calls；27,686 tokens；峰值估算 $0.02056；受控组严格答案 5/5 |

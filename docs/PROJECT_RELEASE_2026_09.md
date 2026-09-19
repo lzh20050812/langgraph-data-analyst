@@ -25,5 +25,6 @@
 - 无模型确定性记录：31 条，全部通过。
 - 前端：类型检查和 Vite 生产构建通过。
 - Docker：当前代码镜像构建通过；App、Worker、MySQL 均健康，数据库初始化容器正常退出，`/health/live`、`/health/ready` 和前端入口返回 200；完整发布验证并行执行期间 Worker 重启计数保持 0。
+- Docker 一键验收：`scripts/verify_docker_release.ps1` 的完整构建模式与 `-SkipBuild` 快速模式均通过。
 
 数字以 `docs/UPGRADE_PROGRESS.md` 的最后一次实际执行记录为准；历史冻结论文结果不由本发布覆盖。
