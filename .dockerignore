@@ -1,5 +1,7 @@
 .git
 .venv
+frontend/node_modules
+frontend/dist
 .pytest_cache
 __pycache__
 *.pyc
@@ -9,6 +11,7 @@ __pycache__
 .env
 api key.txt
 backups
+research-proposal
 evaluation/results
 *_figures
 data

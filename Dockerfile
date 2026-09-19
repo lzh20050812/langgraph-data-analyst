@@ -30,9 +30,11 @@ COPY requirements.txt .
 # toolchain on Linux, which makes the image unnecessarily large and can exhaust
 # Docker Desktop storage during a clean build.
 RUN pip install --no-cache-dir \
+        --timeout 300 \
+        --retries 5 \
         --index-url https://download.pytorch.org/whl/cpu \
         torch==2.13.0
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --timeout 300 --retries 5 -r requirements.txt
 
 # 复制项目代码
 COPY . .

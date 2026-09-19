@@ -178,6 +178,8 @@
 | `.venv\\Scripts\\python.exe -m pytest -q`（阶段六最终验收） | 214 passed，1 条相同弃用警告，12.49s |
 | `powershell -ExecutionPolicy Bypass -File .\\scripts\\verify_release.ps1`（阶段七最终工程验收） | 一键完成 217 passed（12.02s）、179 条目录/31 条确定性记录审计、Python 编译、前端类型检查与生产构建；全部通过 |
 | `scripts/verify_release.ps1`（提交后发布复核） | 217 passed（23.37s，1 条第三方弃用警告）、179 条目录/31 条确定性记录审计、Python 编译、前端类型检查与 Vite 生产构建；全部通过 |
+| `scripts/verify_release.ps1`（Docker 修正后最终复核） | 217 passed（24.09s，1 条第三方弃用警告）、179 条目录/31 条确定性记录审计、Python 编译、前端类型检查与 Vite 生产构建；全部通过 |
+| `docker compose build app` / `up -d --no-build` | 当前代码镜像构建成功；构建上下文由约 316 MB 降至 65.46 kB；App、Worker、MySQL 均 healthy，db-init 以 0 退出，Worker 重启计数为 0；live/ready 与前端入口返回 200 |
 | `python -m evaluation.experiments.stage5_deterministic_regression --check` | 179 条目录审计通过；31 条确定性逐样本回归通过；0 次 LLM 调用 |
 | `python -m evaluation.experiments.architecture_comparison_v2 --max-samples 5` | dry-run 通过；未执行外部模型调用 |
 | V2 `deepseek-v4-flash` 付费小样本对照 | 每组 5 条；15 calls；27,686 tokens；峰值估算 $0.02056；受控组严格答案 5/5 |
@@ -199,7 +201,6 @@
 
 - 已连接真实 MySQL 并验证数据范围；未调用真实 LLM，避免在未确认费用边界时消耗外部服务。
 - 已使用真实 Ephemeral Chroma 验证 owner `where` 过滤；未对现有持久化记忆集合写入测试数据。
-- Docker Desktop 4.83.0 在本机启动时因陈旧的 `AppData/Local/Docker/run/dockerInference` 重解析点触发 Windows 错误 1920，Linux Engine 未创建；两个限定到该单一路径的清理方式均被系统拒绝，未扩大删除范围或执行 factory reset，因此本轮未执行 Compose 验收。租约竞争使用临时 SQLite 行为测试验证。
 - 未进行真实浏览器人工验收；已完成 Vue 类型检查和生产构建。
 - 自然语言解析仍是受控确定性子集，不声称覆盖任意表达；未知指标、字段或关键口径需继续澄清或拒绝。
 - 未调用真实收费 LLM，因此阶段三没有新增开放式 Text2SQL 下游正确率；客服侧只验证了 1 条确定性业务配方。旧冻结准确率不冒充本次结果。
@@ -214,4 +215,4 @@
 
 ## 收尾状态
 
-阶段一至阶段七已全部完成并收尾，没有待交付的视频文件。升级成果已提交为 `24386dd`（`feat: complete trustworthy analytics platform upgrade`），并创建本地发布标签 `v2026.09`。未跟踪目录 `research-proposal/` 未纳入发布、未修改。完整 50 条付费对照、多主机与真实模型压力测试属于当前范围之外的可选扩展，仍需单独费用和环境授权，不以当前结果替代。
+阶段一至阶段七已全部完成并收尾，没有待交付的视频文件。升级成果从 `24386dd`（`feat: complete trustworthy analytics platform upgrade`）形成，并在最终 Docker 验收后将本地发布标签 `v2026.09` 更新到完整收尾提交。未跟踪目录 `research-proposal/` 未纳入发布、未修改。完整 50 条付费对照、多主机与真实模型压力测试属于当前范围之外的可选扩展，仍需单独费用和环境授权，不以当前结果替代。
