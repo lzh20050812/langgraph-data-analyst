@@ -12,6 +12,9 @@ if (-not (Test-Path -LiteralPath $pythonPath)) {
 
 Push-Location $projectRoot
 try {
+    & $pythonPath -m pip check
+    if ($LASTEXITCODE -ne 0) { throw "Python dependency consistency check failed" }
+
     & $pythonPath -m pytest -q
     if ($LASTEXITCODE -ne 0) { throw "Python regression failed" }
 

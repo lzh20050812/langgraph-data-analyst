@@ -183,6 +183,7 @@
 | `scripts/verify_release.ps1`（任务库隔离后最终复核） | 218 passed（20.93s，1 条第三方弃用警告）、179 条目录/31 条确定性记录审计、Python 编译、前端类型检查与生产构建全部通过；运行中的 Docker Worker 重启计数保持 0 |
 | `scripts/verify_docker_release.ps1` | 完整构建模式与 `-SkipBuild` 快速模式均通过；自动检查 Compose 配置、App/Worker/MySQL healthy、db-init=0、Worker 重启=0、live/ready=ok 和前端 200 |
 | `.env` 容器边界与最终回归 | 移除 db-init/App/Worker 的 `.env` 文件挂载，仅保留 `env_file` 进程注入；容器内 `/app/.env` 均不存在；新增 2 条部署配置回归后 `220 passed`（16.53s），App/Worker 重启均为 0 |
+| 依赖与密钥收口 | 本地及应用镜像 `pip check` 均无冲突；`npm audit --omit=dev --audit-level=high --registry=https://registry.npmjs.org` 返回 0 vulnerabilities；已跟踪源码高置信密钥模式扫描无命中；两项一键验收脚本已固化可离线检查 |
 | `python -m evaluation.experiments.stage5_deterministic_regression --check` | 179 条目录审计通过；31 条确定性逐样本回归通过；0 次 LLM 调用 |
 | `python -m evaluation.experiments.architecture_comparison_v2 --max-samples 5` | dry-run 通过；未执行外部模型调用 |
 | V2 `deepseek-v4-flash` 付费小样本对照 | 每组 5 条；15 calls；27,686 tokens；峰值估算 $0.02056；受控组严格答案 5/5 |

@@ -27,5 +27,6 @@
 - Docker：当前代码镜像构建通过；App、Worker、MySQL 均健康，数据库初始化容器正常退出，`/health/live`、`/health/ready` 和前端入口返回 200；完整发布验证并行执行期间 Worker 重启计数保持 0。
 - Docker 一键验收：`scripts/verify_docker_release.ps1` 的完整构建模式与 `-SkipBuild` 快速模式均通过。
 - 密钥文件边界：Compose 仅通过 `env_file` 注入进程环境，不再把宿主机 `.env` 文件挂载进容器；App、Worker、db-init 的 `/app/.env` 挂载数均为 0。
+- 依赖与密钥审计：本地及容器 `pip check` 均无冲突；前端生产依赖经 npm 官方 registry 审计为 0 漏洞；已跟踪源码的高置信密钥模式扫描无命中。
 
 数字以 `docs/UPGRADE_PROGRESS.md` 的最后一次实际执行记录为准；历史冻结论文结果不由本发布覆盖。

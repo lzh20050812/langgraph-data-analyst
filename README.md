@@ -389,9 +389,11 @@ These results are stored separately and do not overwrite the frozen thesis basel
 The current release was rebuilt and verified on 2026-09-20 with
 `scripts/verify_docker_release.ps1`: MySQL, API, and Worker became healthy,
 `db-init` exited 0, the Worker restart count stayed 0, and the live, ready, and
-frontend HTTP checks passed. The full 218-test release verification then ran
+frontend HTTP checks passed. The full 220-test release verification then ran
 while the containers stayed healthy. API and Worker share a Docker named volume
-for SQLite WAL; pytest uses a separate session-scoped temporary database.
+for SQLite WAL; pytest uses a separate session-scoped temporary database. The
+local and container Python environments pass `pip check`, and the containers do
+not expose `/app/.env` as a file.
 
 The earlier 2026-08-18 end-to-end probe additionally verified:
 

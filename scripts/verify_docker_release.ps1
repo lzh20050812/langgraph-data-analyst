@@ -79,6 +79,19 @@ try {
         throw "Worker restart count is not zero: $workerRestarts"
     }
 
+    & $dockerPath exec ai_analytics_app python -m pip check
+    if ($LASTEXITCODE -ne 0) {
+        throw "Container dependency consistency check failed."
+    }
+
+    $appEnvFile = (& $dockerPath exec ai_analytics_app python -c `
+        "from pathlib import Path; print(str(Path('/app/.env').exists()).lower())").Trim()
+    $workerEnvFile = (& $dockerPath exec ai_analytics_worker python -c `
+        "from pathlib import Path; print(str(Path('/app/.env').exists()).lower())").Trim()
+    if ($LASTEXITCODE -ne 0 -or $appEnvFile -ne "false" -or $workerEnvFile -ne "false") {
+        throw "A container exposes /app/.env: app=$appEnvFile worker=$workerEnvFile"
+    }
+
     $baseUrl = "http://127.0.0.1:8000"
     $live = Invoke-RestMethod -Uri "$baseUrl/health/live" -TimeoutSec 10
     $ready = Invoke-RestMethod -Uri "$baseUrl/health/ready" -TimeoutSec 10
@@ -103,6 +116,8 @@ try {
         live = $live.status
         ready = $ready.status
         frontend_status = $frontend.StatusCode
+        dependencies = "consistent"
+        dotenv_file_present = $false
         build_skipped = [bool]$SkipBuild
     } | ConvertTo-Json
 } finally {
